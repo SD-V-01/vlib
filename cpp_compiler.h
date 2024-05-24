@@ -19,6 +19,17 @@
 #define VLIB_NAMESPACE vlib
 #endif
 
+#if defined(_WIN32)
+#define VLIB_PLATFORM_NT
+
+#elif defined(__unix__) && !defined(__APPLE__)
+#define VLIB_PLATFORM_LINUX
+
+#else
+#error Specify your platform define here
+
+#endif
+
 #ifdef __cplusplus
 #define VCPP
 #define VPP
