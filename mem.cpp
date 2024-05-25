@@ -82,6 +82,11 @@ extern "C" {
 
 	}
 
+	void* memmove(void* Dest, const void* Src, size_t Size) {
+		return vmove(Dest, Src, Size);
+
+	}
+
 }
 
 void* dcpy(void* Dest, const void* Source, size_t Size) {

@@ -16,6 +16,36 @@
 #include "system.h"
 
 #ifdef VLIB_PLATFORM_LINUX
+void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(const char* In, char* Buffer, vsys_size BufferSize){
+//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_breakpoint() {
+	__builtin_debugtrap();
+
+}
+
+vsys_bool vsys_enableLargePage(vsys_size* PageSize) {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_initMemory(vsys_coreMemoryProfile* MemProfile) {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void* vsys_allocSmallPageGeneric(vsys_size Size) {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_freeSmallPageGeneric(void* Ptr) {
+	//    TODO(V): !!!!! STUB
+
+}
+
 
 
 #endif

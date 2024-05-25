@@ -17,6 +17,19 @@
 #ifdef __cplusplus
 extern "C"{
 	#endif
+	static vsys_size vsys_strlen(const char* String) {
+		const char* A = String;
+		for (; *String; String++) {
+
+		}
+		return String - A;
+
+	}
+
+	void vsys_writeConsoleNullStr(const char* InText) {
+		vsys_writeConsole(InText, vsys_strlen(InText));
+
+	}
 
 	void vsys_intToStr(unsigned long int In, char* Target) {
 		if (In == 0) {

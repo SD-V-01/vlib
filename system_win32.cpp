@@ -30,14 +30,7 @@ extern "C"{
 }
 #endif
 
-static vsys_size vsys_strlen(const char* String) {
-	const char* A = String;
-	for (; *String; String++) {
 
-	}
-	return String - A;
-
-}
 
 #ifdef __cplusplus
 extern "C" {
@@ -74,11 +67,6 @@ void vsys_writeConsole(const char* InText, int Length) {
 		WriteConsoleA(StdConsoleHandle, InText, (DWORD)Length, NULL, NULL);
 
 	}
-
-}
-
-void vsys_writeConsoleNullStr(const char* InText) {
-	vsys_writeConsole(InText, vsys_strlen(InText));
 
 }
 

@@ -18,14 +18,10 @@
 #include "dstr.h"
 #include "log.h"
 #include "vrt.h"
+#include "vstr32.h"
 
 #ifndef _BASE_H_
 #define _BASE_H_
 
-VLIB_CABI
-
-extern int v_errno;
-
-VLIB_CABIEND
 
 #endif

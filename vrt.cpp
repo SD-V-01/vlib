@@ -14,7 +14,7 @@
 
 #ifndef VRT_NO_ENTRY_POINT
 
-#ifdef _WIN32
+#if defined(_WIN32)
 
 void vrt_preInitUsr();
 void vrt_usrCode();
@@ -53,18 +53,27 @@ void __stdcall VRuntime_MDos_NTAppInit()
 
     vsys_killProcess(Result);
 }
-
 #endif
 
-#ifdef __unix__
-__attribute__((force_align_arg_pointer))
-void _start() {
+#if defined(__unix__)
+
+#ifdef __cplusplus
+extern "C" {
+	#endif
+
+	__attribute__((force_align_arg_pointer))
+	void __stdcall _start() {
 
 
-	//asm("mov rax,60; mov rdi,0; syscall");
-	//__builtin_unreachable();
+		//asm("mov rax,60; mov rdi,0; syscall");
+		//__builtin_unreachable();
 
+	}
+
+
+	#ifdef __cplusplus
 }
+#endif
 
 #endif
 
