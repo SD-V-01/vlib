@@ -15,6 +15,11 @@
 #ifndef _SYSTEM_H_
 #define _SYSTEM_H_
 
+#ifdef __unix__
+#include "stddef.h"
+
+#endif
+
 #ifdef __cplusplus
 extern "C"{
 	#endif

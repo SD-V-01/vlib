@@ -56,4 +56,16 @@ void __stdcall VRuntime_MDos_NTAppInit()
 
 #endif
 
+#ifdef __unix__
+__attribute__((force_align_arg_pointer))
+void _start() {
+
+
+	//asm("mov rax,60; mov rdi,0; syscall");
+	//__builtin_unreachable();
+
+}
+
+#endif
+
 #endif

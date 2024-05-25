@@ -173,13 +173,13 @@ public:
 
     inline void appendNull() {
         checkSize(ArraySize + 1);
-        dset(Ptr + ArraySize, 0, sizeof(iType));
+        vset(Ptr + ArraySize, 0, sizeof(iType));
         ArraySize++;
 
     }
 
     inline void zeroOut() {
-        dset(Ptr, 0, Allocation * sizeof(iType));
+        vset(Ptr, 0, Allocation * sizeof(iType));
 
     }
 
@@ -201,7 +201,7 @@ public:
     inline void empty() {
         checkSize(MYTH_DEFAULT_VMEM_SIZE);
         ArraySize = 0;
-        dset((void*)Ptr, 0, Allocation);
+        vset((void*)Ptr, 0, Allocation);
 
     }
 

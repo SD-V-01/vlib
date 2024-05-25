@@ -1,0 +1,28 @@
+#///////////////////////////////////////////////////////////////////////////
+#/
+#/  VLIB Source File.
+#/  Copyright (C) 2024 S/N: V-01
+#/ -------------------------------------------------------------------------
+#/  File name:   build.vmake
+#/  Version:     v1.00
+#/  Created:     23/05/24 by V.
+#/  Description: 
+#/ -------------------------------------------------------------------------
+#/  This project is licensed under the MIT License
+#/
+#///////////////////////////////////////////////////////////////////////////
+
+compiler = clang++
+compiler_c = clang
+linker = ld.lld
+bin_folder = bin
+
+rt_flags = -O2 -g -DVLIB_REMOVE_TOSTR_FUNC -DVSYS_DEBUG -nodefaultlibs -I ./ -nostdlib -fno-exceptions -fno-builtin # --for-linker=-nostartfiles
+rt_link = 
+
+# compiling
+: foreach *.cpp |> $(compiler) -c %f -o %o $(rt_flags) |> $(bin_folder)/%B.o
+: foreach mimalloc/alloc.c mimalloc/alloc-aligned.c mimalloc/alloc-posix.c mimalloc/arena.c mimalloc/bitmap.c mimalloc/heap.c mimalloc/init.c mimalloc/libc.c mimalloc/options.c mimalloc/os.c mimalloc/page.c mimalloc/random.c mimalloc/segment.c mimalloc/segment-map.c mimalloc/stats.c mimalloc/prim/prim.c |> $(compiler_c) -c %f -o %o $(rt_flags) |> $(bin_folder)/%B.o
+
+# linking
+: $(bin_folder)/*.o |> $(linker) $(rt_link) %f -o %o |> $(bin_folder)/vlib_test

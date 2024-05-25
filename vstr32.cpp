@@ -23,7 +23,7 @@ namespace VLIB_NAMESPACE{
 
 	}
 
-	st mstrlen(const char32_t* String) {
+	st mstrlen(const vchar* String) {
 		return vstrlen32(String);
 
 	}
@@ -95,7 +95,7 @@ char* vstrchr8(const char* Str, int Char) {
 
 	if (sizeof(Longword) > 8) {
 //        TODO(V): Replace that with string handeling specific logging
-		vsys_writeConsoleNullStr("Something went terribly wrong in legacy strchr implementation");
+		vsys_writeConsoleNullStr("Something went terribly wrong in legacy strchr implementation\n");
 		return NULL;
 
 	}
@@ -271,7 +271,7 @@ void v32to8char(const vchar* Source, char* Target, u32 Size) {
 
 }
 
-void v8to32char(const char* Source, char32_t* Target, u32 Size) {
+void v8to32char(const char* Source, vchar* Target, u32 Size) {
 	for (u32 i = 0; i < Size; i++) {
 		*Target = *Source;
 		Target++;
@@ -312,8 +312,7 @@ char* vLEGACYstrncat(char* Dest, const char* Source, size_t Size) {
 }
 
 char* vLEGACYgcvt(double In, int NumDigits, char* Buf) {
-	//        STUB(V): Implement legacy gcvt c library function
 
-}
+} //        STUB(V): Implement legacy gcvt c library function
 
 VLIB_CABIEND

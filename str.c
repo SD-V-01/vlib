@@ -164,7 +164,7 @@ namespace VLIB_NAMESPACE {
     }
 
     void string::clear() {
-        dset(DataPtr, 0, AllocSize * sizeof(char32_t));
+        vset(DataPtr, 0, AllocSize * sizeof(char32_t));
         StringSize = 0;
         checkSize(0);
 
@@ -1313,7 +1313,7 @@ namespace VLIB_NAMESPACE {
     //    INTERN 
     void string::initinternal(u32 InitSize) {
         DataPtr = (char32_t*)dalloc(InitSize * sizeof(char32_t));
-        dset(DataPtr, 0, InitSize * sizeof(char32_t));
+        vset(DataPtr, 0, InitSize * sizeof(char32_t));
         StringSize = 0;
         AllocSize = InitSize;
 

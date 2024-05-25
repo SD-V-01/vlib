@@ -14,23 +14,108 @@
 
 #include "cpp_compiler.h"
 
+#ifdef VLIB_PLATFORM_LINUX
+#include "stddef.h"
+
+#endif
+
 #ifndef _BASE_TYPES_H_
 #define _BASE_TYPES_H_
+
+#ifdef TENX_PARSER
+#define __clang__
+
+#endif
+
+#ifdef __clang__
+//NOTE(V): 64 bit types are not portable bettwen compilers for some reason ?
+//NOTE(V): I do prefer the clang way of handeling fixed size datatype because glibc is a mess with that !!
+
+typedef __INT8_TYPE__ __int8_t;
+typedef __UINT8_TYPE__ __uint8_t;
+
+typedef __INT16_TYPE__ __int16_t;
+typedef __UINT16_TYPE__ __uint16_t;
+
+#ifdef __INT24_TYPE__
+typedef __INT24_TYPE__ __int24_t;
+typedef __UINT24_TYPE__ __uint24_t;
+#define VLIB_24_BIT_PRESENT
+
+#endif
+
+typedef __INT32_TYPE__ __int32_t;
+typedef __UINT32_TYPE__ __uint32_t;
+
+#ifdef __INT40_TYPE__
+typedef __INT40_TYPE__ __int40_t;
+typedef __UINT40_TYPE__ __uint40_t;
+#define VLIB_40_BIT_PRESENT
+
+#endif
+
+#ifdef __INT48_TYPE__
+typedef __INT48_TYPE__ __int48_t;
+typedef __UINT48_TYPE__ __uint48_t;
+#define VLIB_48_BIT_PRESENT
+
+#endif
+
+#ifdef __INT56_TYPE__
+typedef __INT56_TYPE__ __int56_t;
+typedef __UINT56_TYPE__ __uint56_t;
+#define VLIB_56_BIT_PRESENT
+
+#endif
+
+typedef __INT64_TYPE__ __int64_t;
+typedef __UINT64_TYPE__ __uint64_t;
+
+#else
 
 typedef signed char __int8_t;
 typedef signed short int __int16_t;
 typedef signed int __int32_t;
-
-//NOTE(V): 64 bit types are not portable bettwen compilers for some reason ?
-//typedef signed long int __int64_t;
-typedef __INT64_TYPE__ __int64_t;
-
 typedef unsigned char __uint8_t;
 typedef unsigned short int __uint16_t;
 typedef unsigned int __uint32_t;
+typedef signed long int __int64_t;
+typedef unsigned long int __uint64_t;
 
-//typedef unsigned long int __uint64_t;
-typedef __UINT64_TYPE__ __uint64_t;
+#warning Could not detect compiler for standard integers, this will probabelly cause issues !!
+
+#endif
+
+#ifdef VLIB_24_BIT_PRESENT
+typedef __int24_t int24_t;
+typedef __uint24_t uint24_t;
+typedef uint24_t u24;
+typedef int24_t i24;
+#endif
+
+#ifdef VLIB_40_BIT_PRESENT
+typedef __int40_t int40_t;
+typedef __uint40_t uint40_t;
+typedef uint40_t u40;
+typedef int40_t i40;
+
+#endif
+
+#ifdef VLIB_48_BIT_PRESENT
+typedef __int48_t int48_t;
+typedef __uint48_t uint48_t;
+typedef uint48_t u48;
+typedef int48_t i48;
+
+#endif
+
+#ifdef VLIB_56_BIT_PRESENT
+typedef __int56_t int56_t;
+typedef __uint56_t uint56_t;
+typedef uint56_t u56;
+typedef int56_t i56;
+
+#endif
 
 typedef __int8_t int8_t;
 typedef __int16_t int16_t;
@@ -42,15 +127,15 @@ typedef __uint16_t uint16_t;
 typedef __uint32_t uint32_t;
 typedef __uint64_t uint64_t;
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
-
 typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
+
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
 typedef float f32;
 typedef double f64;
@@ -62,16 +147,28 @@ typedef size_t st;
 typedef void* pvoid;
 typedef const void* cpvoid;
 #ifdef VPP
+#ifndef NULL
 #define NULL 0
 
 #endif
 
-#ifdef VPP
+#endif
+
+
+//NOTE(V): 32bit char
+#ifdef __clang__
+typedef u32 dchar;
+typedef u32 vchar;
+typedef u32 wchar;
+
+#else
 typedef char32_t dchar;
 typedef char32_t vchar;
 typedef char32_t wchar;
 
 #endif
+
+//NOTE(V): Extra standard types
 
 //NOTE(V): This is not portable bettwen compilers
 //typedef unsigned long int uintptr_t;

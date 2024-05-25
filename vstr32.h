@@ -41,7 +41,7 @@ VSTR32_API long int vstrtol8(const char* Str, char** EndPtr, int Base);
 VSTR32_API u32 vdigitlen(u64 In);
 VSTR32_API u32 vdigitlensigned(i64 In);
 VSTR32_API void v32to8char(const vchar* Source, char* Target, u32 Size);
-VSTR32_API void v8to32char(const char* Source, char32_t* Target, u32 Size);
+VSTR32_API void v8to32char(const char* Source, vchar* Target, u32 Size);
 
 VSTR32_API int vLEGACYstrcmp(const char* s1, const char* s2);
 VSTR32_API void vLEGACYstrcopy(const char* Source, char* Dest);
