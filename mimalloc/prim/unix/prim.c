@@ -5,6 +5,9 @@ terms of the MIT license. A copy of the license can be found in the file
 "LICENSE" at the root of this distribution.
 -----------------------------------------------------------------------------*/
 
+#include "../../../system.h"
+#include "../../../mderror.h"
+
 // This file is included in `src/prim/prim.c`
 
 #ifndef _DEFAULT_SOURCE
@@ -173,7 +176,7 @@ void _mi_prim_mem_init( mi_os_mem_config_t* config )
 
 int _mi_prim_free(void* addr, size_t size ) {
   bool err = (munmap(addr, size) == -1);
-  return (err ? errno : 0);
+  return (err ? v_errno : 0);
 }
 
 
@@ -198,7 +201,7 @@ static void* unix_mmap_prim(void* addr, size_t size, size_t try_alignment, int p
     if (((size_t)1 << n) == try_alignment && n >= 12 && n <= 30) {  // alignment is a power of 2 and 4096 <= alignment <= 1GiB
       p = mmap(addr, size, protect_flags, flags | MAP_ALIGNED(n), fd, 0);
       if (p==MAP_FAILED || !_mi_is_aligned(p,try_alignment)) { 
-        int err = errno;
+        int err = v_errno;
         _mi_warning_message("unable to directly request aligned OS memory (error: %d (0x%x), size: 0x%zx bytes, alignment: 0x%zx, hint address: %p)\n", err, err, size, try_alignment, addr);
       }
       if (p!=MAP_FAILED) return p;
@@ -222,7 +225,7 @@ static void* unix_mmap_prim(void* addr, size_t size, size_t try_alignment, int p
         #if MI_TRACK_ENABLED  // asan sometimes does not instrument errno correctly?
         int err = 0;
         #else
-        int err = errno;
+        int err = v_errno;
         #endif
         _mi_warning_message("unable to directly request hinted aligned OS memory (error: %d (0x%x), size: 0x%zx bytes, alignment: 0x%zx, hint address: %p)\n", err, err, size, try_alignment, hint);
       }
@@ -307,7 +310,7 @@ static void* unix_mmap(void* addr, size_t size, size_t try_alignment, int protec
         #ifdef MAP_HUGE_1GB
         if (p == NULL && (lflags & MAP_HUGE_1GB) == MAP_HUGE_1GB) {
           mi_huge_pages_available = false; // don't try huge 1GiB pages again
-          _mi_warning_message("unable to allocate huge (1GiB) page, trying large (2MiB) pages instead (errno: %i)\n", errno);
+          _mi_warning_message("unable to allocate huge (1GiB) page, trying large (2MiB) pages instead (v_errno: %i)\n", v_errno);
           lflags = ((lflags & ~MAP_HUGE_1GB) | MAP_HUGE_2MB);
           p = unix_mmap_prim(addr, size, try_alignment, protect_flags, lflags, lfd);
         }
@@ -360,7 +363,7 @@ int _mi_prim_alloc(size_t size, size_t try_alignment, bool commit, bool allow_la
   *is_zero = true;
   int protect_flags = (commit ? (PROT_WRITE | PROT_READ) : PROT_NONE);  
   *addr = unix_mmap(NULL, size, try_alignment, protect_flags, false, allow_large, is_large);
-  return (*addr != NULL ? 0 : errno);
+  return (*addr != NULL ? 0 : v_errno);
 }
 
 
@@ -393,7 +396,7 @@ int _mi_prim_commit(void* start, size_t size, bool* is_zero) {
   *is_zero = false;  
   int err = mprotect(start, size, (PROT_READ | PROT_WRITE));
   if (err != 0) { 
-    err = errno; 
+    err = v_errno; 
     unix_mprotect_hint(err);
   }
   return err;
@@ -428,8 +431,8 @@ int _mi_prim_reset(void* start, size_t size) {
   static _Atomic(size_t) advice = MI_ATOMIC_VAR_INIT(MADV_FREE);
   int oadvice = (int)mi_atomic_load_relaxed(&advice);
   int err;
-  while ((err = unix_madvise(start, size, oadvice)) != 0 && errno == EAGAIN) { errno = 0;  };
-  if (err != 0 && errno == EINVAL && oadvice == MADV_FREE) {
+  while ((err = unix_madvise(start, size, oadvice)) != 0 && v_errno == EAGAIN) { v_errno = 0;  };
+  if (err != 0 && v_errno == EINVAL && oadvice == MADV_FREE) {
     // if MADV_FREE is not supported, fall back to MADV_DONTNEED from now on
     mi_atomic_store_release(&advice, (size_t)MADV_DONTNEED);
     err = unix_madvise(start, size, MADV_DONTNEED);
@@ -442,7 +445,7 @@ int _mi_prim_reset(void* start, size_t size) {
 
 int _mi_prim_protect(void* start, size_t size, bool protect) {
   int err = mprotect(start, size, protect ? PROT_NONE : (PROT_READ | PROT_WRITE));
-  if (err != 0) { err = errno; }  
+  if (err != 0) { err = v_errno; }  
   unix_mprotect_hint(err);
   return err;
 }
@@ -481,11 +484,11 @@ int _mi_prim_alloc_huge_os_pages(void* hint_addr, size_t size, int numa_node, bo
     // see: <https://lkml.org/lkml/2017/2/9/875>
     long err = mi_prim_mbind(*addr, size, MPOL_PREFERRED, &numa_mask, 8*MI_INTPTR_SIZE, 0);
     if (err != 0) {
-      err = errno;
+      err = v_errno;
       _mi_warning_message("failed to bind huge (1GiB) pages to numa node %d (error: %d (0x%x))\n", numa_node, err, err);
     }    
   }
-  return (*addr != NULL ? 0 : errno);
+  return (*addr != NULL ? 0 : v_errno);
 }
 
 #else
@@ -694,7 +697,10 @@ void _mi_prim_process_info(mi_process_info_t* pinfo)
 //----------------------------------------------------------------
 
 void _mi_prim_out_stderr( const char* msg ) {
-  fputs(msg,stderr);
+//    TODO(V): Implement this better
+	vsys_writeConsoleNullStr(msg);
+  //fputs(msg,stderr);
+
 }
 
 
@@ -713,7 +719,9 @@ static char** mi_get_environ(void) {
 #else
 extern char** environ;
 static char** mi_get_environ(void) {
-  return environ;
+//    TODO(V): !!!!!!!!!!! IMPLEMENT
+	return NULL;
+  //return environ;
 }
 #endif
 bool _mi_prim_getenv(const char* name, char* result, size_t result_size) {
@@ -785,7 +793,6 @@ bool _mi_prim_random_buf(void* buf, size_t buf_len) {
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <errno.h>
 
 bool _mi_prim_random_buf(void* buf, size_t buf_len) {
   // Modern Linux provides `getrandom` but different distributions either use `sys/random.h` or `linux/random.h`
@@ -800,7 +807,7 @@ bool _mi_prim_random_buf(void* buf, size_t buf_len) {
     if (mi_atomic_load_acquire(&no_getrandom)==0) {
       ssize_t ret = syscall(SYS_getrandom, buf, buf_len, GRND_NONBLOCK);
       if (ret >= 0) return (buf_len == (size_t)ret);
-      if (errno != ENOSYS) return false;
+      if (v_errno != ENOSYS) return false;
       mi_atomic_store_release(&no_getrandom, (uintptr_t)1); // don't call again, and fall back to /dev/urandom
     }
   #endif
@@ -814,7 +821,7 @@ bool _mi_prim_random_buf(void* buf, size_t buf_len) {
   while(count < buf_len) {
     ssize_t ret = mi_prim_read(fd, (char*)buf + count, buf_len - count);
     if (ret<=0) {
-      if (errno!=EAGAIN && errno!=EINTR) break;
+      if (v_errno!=EAGAIN && v_errno!=EINTR) break;
     }
     else {
       count += ret;
@@ -851,18 +858,22 @@ static void mi_pthread_done(void* value) {
 
 void _mi_prim_thread_init_auto_done(void) {
   mi_assert_internal(_mi_heap_default_key == (pthread_key_t)(-1));
-  pthread_key_create(&_mi_heap_default_key, &mi_pthread_done);
+
+//  TODO(V): !!!!!!!!!!! IMPLEMENT
+  //pthread_key_create(&_mi_heap_default_key, &mi_pthread_done);
 }
 
 void _mi_prim_thread_done_auto_done(void) {
   if (_mi_heap_default_key != (pthread_key_t)(-1)) {  // do not leak the key, see issue #809
-    pthread_key_delete(_mi_heap_default_key);
+	  //  TODO(V): !!!!!!!!!!! IMPLEMENT
+    //pthread_key_delete(_mi_heap_default_key);
   }
 }
 
 void _mi_prim_thread_associate_default_heap(mi_heap_t* heap) {
   if (_mi_heap_default_key != (pthread_key_t)(-1)) {  // can happen during recursive invocation on freeBSD
-    pthread_setspecific(_mi_heap_default_key, heap);
+	  //  TODO(V): !!!!!!!!!!! IMPLEMENT
+    //pthread_setspecific(_mi_heap_default_key, heap);
   }
 }
 

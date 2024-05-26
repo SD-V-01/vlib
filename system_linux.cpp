@@ -46,6 +46,29 @@ void vsys_freeSmallPageGeneric(void* Ptr) {
 
 }
 
+void vsys_initConsole() {
+	//    TODO(V): !!!!! STUB
 
+}
+
+void vsys_writeConsole(const char* InText, int Length) {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_earlyInit() {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_init() {
+	//    TODO(V): !!!!! STUB
+
+}
+
+void vsys_killProcess(int ReturnCode) {
+	//    TODO(V): !!!!! STUB
+
+}
 
 #endif

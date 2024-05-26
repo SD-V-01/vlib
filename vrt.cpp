@@ -62,7 +62,7 @@ extern "C" {
 	#endif
 
 	__attribute__((force_align_arg_pointer))
-	void __stdcall _start() {
+	void _start() {
 
 
 		//asm("mov rax,60; mov rdi,0; syscall");

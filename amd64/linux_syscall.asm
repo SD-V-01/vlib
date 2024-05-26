@@ -51,3 +51,13 @@ global dlclose
 
 dlclose:
 	ret
+
+global clock_gettime
+
+clock_gettime:
+	ret
+
+global getrusage
+
+getrusage:
+	ret
