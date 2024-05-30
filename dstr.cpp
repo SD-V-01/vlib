@@ -3,6 +3,7 @@
 #include "mem.h"
 #include "dstr.h"
 
+#ifdef VLIB_INCLUDE_DEPRECATED
 namespace VLIB_NAMESPACE {
 
     //    FRW
@@ -163,3 +164,5 @@ namespace VLIB_NAMESPACE {
     }
 
 }
+
+#endif
