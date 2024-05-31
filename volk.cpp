@@ -1,5 +1,6 @@
 /* This file is part of volk library; see volk.h for version/license details */
 /* clang-format off */
+#include "volk_fix.h"
 #include "volk.h"
 
 #ifdef _WIN32
@@ -98,13 +99,13 @@ extern "C" {
 
 		vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)dlsym(module, "vkGetInstanceProcAddr");
 		#else
-		void* module = dlopen("libvulkan.so.1", RTLD_NOW | RTLD_LOCAL);
+		void* module = volk_dlopen("libvulkan.so.1", RTLD_NOW | RTLD_LOCAL);
 		if (!module)
-		module = dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
+		module = volk_dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
 		if (!module)
 		return VK_ERROR_INITIALIZATION_FAILED;
 		VOLK_DISABLE_GCC_PEDANTIC_WARNINGS
-		vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)dlsym(module, "vkGetInstanceProcAddr");
+		vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)volk_dlsym(module, "vkGetInstanceProcAddr");
 		VOLK_RESTORE_GCC_PEDANTIC_WARNINGS
 		#endif
 
@@ -129,7 +130,7 @@ extern "C" {
 			#if defined(_WIN32)
 			FreeLibrary((HMODULE)loadedModule);
 			#else
-			dlclose(loadedModule);
+			volk_dlclose(loadedModule);
 			#endif
 		}
 

@@ -15,6 +15,7 @@ terms of the MIT license. A copy of the license can be found in the file
 
 #include "../system.h"
 #include "../mderror.h"
+#include "../vstr32.h"
 
 #define MI_IN_ALLOC_C
 #include "alloc-override.c"
@@ -396,10 +397,10 @@ static size_t mi_path_max(void) {
 */
 char* mi_heap_realpath(mi_heap_t* heap, const char* fname, char* resolved_name) mi_attr_noexcept {
   if (resolved_name != NULL) {
-    return realpath(fname,resolved_name);
+	  return vLEGACYrealpath(fname,resolved_name);
   }
   else {
-    char* rname = realpath(fname, NULL);
+	  char* rname = vLEGACYrealpath(fname, NULL);
     if (rname == NULL) return NULL;
     char* result = mi_heap_strdup(heap, rname);
     mi_cfree(rname);  // use checked free (which may be redirected to our free but that's ok)

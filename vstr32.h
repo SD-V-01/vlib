@@ -47,6 +47,7 @@ VSTR32_API int vLEGACYstrcmp(const char* s1, const char* s2);
 VSTR32_API void vLEGACYstrcopy(const char* Source, char* Dest);
 VSTR32_API char* vLEGACYstrncat(char* Dest, const char* Source, size_t Size);
 VSTR32_API char* vLEGACYgcvt(double In, int NumDigits, char* Buf);
+VSTR32_API char* vLEGACYrealpath(const char* filename, char* resolved);
 
 VLIB_CABIEND
 

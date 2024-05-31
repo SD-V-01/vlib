@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "system.h"
+#include "cpp_compiler.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -90,7 +91,22 @@ extern "C"{
 
 	}
 
+	
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+//    frw
+	void vlib_mimalloc_preinit();
+	#endif
 
+	void vsys_initCoreMemory() {
+		#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+		vlib_mimalloc_preinit();
+
+		#else
+		#error define allocator implementation
+
+		#endif
+
+	}
 
 	#ifdef __cplusplus
 }

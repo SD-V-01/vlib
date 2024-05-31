@@ -12,27 +12,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#ifndef VRT_NO_ENTRY_POINT
+void vrt_preInitUsr();
+void vrt_usrCode();
+
+#if !defined(VLIB_ON_CRT) && !defined(VLIB_NO_ENTRY)
 
 #if defined(_WIN32)
 
-void vrt_preInitUsr();
-void vrt_usrCode();
+
 
 #include "system.h"
 #include "windows.h"
 #include "cpp_compiler.h"
 
-#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
-//If we are using mimalloc we need to call the init functions first
-void vlib_mimalloc_preinit();
-#endif
 
 void vrt_CoreMemInit() {
-	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
-	vlib_mimalloc_preinit();
-
-	#endif
+	vsys_initCoreMemory();
 
 }
 
@@ -57,16 +52,23 @@ void __stdcall VRuntime_MDos_NTAppInit()
 
 #if defined(__unix__)
 
+#include "system.h"
+
 #ifdef __cplusplus
 extern "C" {
 	#endif
-
+=
 	__attribute__((force_align_arg_pointer))
 	void _start() {
 
+		//vrt_preInitUsr();
 
-		//asm("mov rax,60; mov rdi,0; syscall");
-		//__builtin_unreachable();
+		vsys_appRtInit();
+		vsys_initCoreMemory();
+		//vrt_usrCode();
+
+
+		vsys_killProcess(0);
 
 	}
 
@@ -76,5 +78,20 @@ extern "C" {
 #endif
 
 #endif
+
+#else
+
+#include "system.h"
+#include "mem.h"
+
+int main(int argc, char** argv) {
+	vrt_preInitUsr();
+	vsys_appRtInit();
+	vsys_initCoreMemory();
+	vrt_usrCode();
+
+	return 0;
+
+}
 
 #endif

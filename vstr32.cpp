@@ -311,6 +311,12 @@ char* vLEGACYstrncat(char* Dest, const char* Source, size_t Size) {
 
 }
 
+char* vLEGACYrealpath(const char* filename, char* resolved) {
+	
+	return 0;
+
+} //        STUB(V): Implement legacy realpath !!!!
+
 char* vLEGACYgcvt(double In, int NumDigits, char* Buf) {
 
 } //        STUB(V): Implement legacy gcvt c library function

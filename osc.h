@@ -16,10 +16,7 @@
 
 #ifndef _OSC_H_
 #define _OSC_H_
-namespace VLIB_NAMESPACE{
-	
 
-}
 
 #endif
 

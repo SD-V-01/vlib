@@ -14,7 +14,3 @@
 
 #include "osc.h"
 
-namespace VLIB_NAMESPACE{
-
-
-}
