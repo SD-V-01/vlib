@@ -17,9 +17,14 @@
 #ifndef _MDERROR_H_
 #define _MDERROR_H_
 
+#define MDASSERT(Condition, Message)
+
+#define MDASSERT_FATAL(Condition, Message)
+
 #define VASSERT(Condition, Message)
 
 #define VASSERT_FATAL(Condition, Message)
+
 
 VLIB_CABI
 

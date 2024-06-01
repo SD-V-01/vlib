@@ -16,7 +16,7 @@
 
 VLIBPP_START
 
-#define UINT64_C(c) static_cast<u64>(c ## UL)
+#define UINT64_C(c) static_cast<u64>(c ## LLU)
 
 u64 vfnv64std(const char* Data, u32 Size) {
 	if (Size == 0) {
@@ -207,6 +207,72 @@ u64 vcrc64(u64 crc, const unsigned char *s, u64 l) {
 		crc = crc64_tab_fat[(u8)crc ^ byte] ^ (crc >> 8);
 	}
 	return crc;
+}
+
+u32 vmh332(const void* DataIn, st Length, u32 Seed) {
+	const u8* Data = (const u8 *)DataIn;
+	const st BlocksLength = Length / 4;
+	u32 H1 = Seed;
+	const u32 C1 = 0xcc9e2d51;
+	const u32 C2 = 0x1b873593;
+
+	const u32* Blocks = (const u32 *)(Data + BlocksLength * 4);
+	for (i64 i = -BlocksLength; i; i++) {
+		u32 K1 = Blocks[i];
+		K1 *= C1;
+		K1 = vrotl32(K1, 15);
+		K1 *= C2;
+
+		H1 ^= K1;
+		H1 = vrotl32(H1, 13);
+		H1 = H1 * 5 + 0xe6546b64;
+
+	}
+
+	const u8* Tail = (const u8 *)(Data + BlocksLength * 4);
+	u32 K1 = 0;
+	switch (Length & 3) {
+		case 3:
+			K1 ^= Tail[2] << 16;
+
+		case 2:
+			K1 ^= Tail [1] << 8;
+
+		case 1:
+			K1 ^= Tail[0];
+			K1 *= C1;
+			K1 = vrotl32(K1, 15);
+			K1 *= C2;
+			H1 ^= K1;
+
+	};
+
+	H1 ^= Length;
+	H1 = vfmix32(H1);
+	return H1;
+
+}
+
+u32 vfmix32(u32 In) {
+	In ^= In >> 16;
+	In *= 0x85ebca6b;
+	In ^= In >> 13;
+	In *= 0xc2b2ae35;
+	In ^= In >> 16;
+
+	return In;
+
+}
+
+u64 vfmix64(u64 In) {
+	In ^= In >> 33;
+	In *= UINT64_C(0xff51afd7ed558ccd);
+	In ^= In >> 33;
+	In *= UINT64_C(0xc4ceb9fe1a85ec53);
+	In ^= In >> 33;
+
+	return In;
+
 }
 
 VLIBPP_END
