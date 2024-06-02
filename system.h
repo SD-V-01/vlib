@@ -84,6 +84,9 @@ extern "C"{
 	void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(const char* In, char* Buffer, vsys_size BufferSize);
 	void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv_32(const wchar_t* In, wchar_t* Buffer, vsys_size BufferSize);
 
+//    NOTE(V): LEGACY DO NOT USE !!!
+	int vLEGACYatexit(void(*Func)());
+
 	#ifdef TENX_PARSER
 	#define __linux__
 	#endif

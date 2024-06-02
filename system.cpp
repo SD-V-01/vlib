@@ -91,6 +91,19 @@ extern "C"{
 
 	}
 
+	#include <stdlib.h>
+
+	int vLEGACYatexit(void(*Func)()) {
+		#ifdef VLIB_ON_CRT
+		atexit(Func);
+
+		#else
+		#error implement !!
+
+		#endif
+
+	}
+
 	
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 //    frw

@@ -63,6 +63,10 @@
 #define VRT 0
 #endif
 
+#define VUNDEF(param) ((void)(param))
+#define VALIGNAS(Val) __attribute__((aligned(x)))
+#define VALIGNAS_DEF
+
 #define VLIB_ALLOCATOR_IMPL_NONE 0
 #define VLIB_ALLOCATOR_IMPL_MIMALLOC 3
 #define VLIB_ALLOCATOR_IMPL_VALLOC 4

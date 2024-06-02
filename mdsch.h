@@ -35,6 +35,36 @@
 
 #endif
 
+//SECTION(V): CallOnce
+#ifdef VLIB_PLATFORM_LINUX
+#ifdef VLIB_ON_CRT
+#ifndef MD_THREAD_LOCAL
+#define MD_THREAD_LOCAL __thread
+
+#endif
+#define MD_CALL_ONCE_GUARD_CREATE PTHREAD_ONCE_INIT
+typedef pthread_once_t mdCallOnceGuard;
+
+#else
+#error Implement platform
+
+#endif
+
+#else
+#error Implement platform
+
+#endif
+
+VLIB_CABI
+typedef void(*mdCallOnceFunc)();
+
+MDSCHEDULER_API void mdCallOnce(mdCallOnceGuard* Guard, mdCallOnceFunc Fn);
+
+VLIB_CABIEND
+
+//SECTION(V): Atomics
+//TODO(V): Implement
+
 //SECTION(V): Mutex
 
 VLIB_STRUCT(mdMutex)
@@ -121,7 +151,44 @@ VLIB_CABIEND
 
 //SECTION(V): Thread
 
-VLIB_STRUCT(mdThread)
+#ifdef VLIB_PLATFORM_LINUX
+#ifdef VLIB_ON_CRT
+typedef pthread_t mdThreadHandle;
+typedef u32 mdThreadId;
 
+#else
+#error Implement for platform
+#endif
 
-VLIB_STRUCTEND(mdThread)
+#else
+#error Implement for platform
+#endif
+
+#define MD_THREAD_NAME_LENGTH 31
+typedef void(*mdThreadFunc)(void*);
+
+VLIB_STRUCT(mdThreadInits)
+mdThreadFunc Func;
+void* UsrData;
+char Name[MD_THREAD_NAME_LENGTH];
+
+bool SetAffinityMask;
+u64 AffinityMask[16];
+
+VLIB_STRUCTEND(mdThreadInits)
+
+VLIB_CABI
+MDSCHEDULER_API void mdSetMainThreadId();
+MDSCHEDULER_API mdThreadId mdGetMainThreadId();
+MDSCHEDULER_API mdThreadId mdGetCurrentThreadId();
+MDSCHEDULER_API void mdGetCurrentThreadName(char* Buf, st BufSize);
+MDSCHEDULER_API void mdSetCurrentThreadName(char* Buf);
+MDSCHEDULER_API bool mdIsMainThread();
+MDSCHEDULER_API void mdThreadSleep(u64 TimeMs);
+MDSCHEDULER_API u32 mdGetNumOfCpuCores();
+MDSCHEDULER_API void mdSetCpuAffinity(mdThreadInits* Thread, u64 Id);
+MDSCHEDULER_API bool mdCreateThread(mdThreadInits* Inits, mdThreadHandle* ResultHandle);
+MDSCHEDULER_API void mdJoinThread(mdThreadHandle CallerHandle);
+MDSCHEDULER_API void mdDetatchThread(mdThreadHandle CallerHandle);
+
+VLIB_CABIEND
