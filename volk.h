@@ -41,13 +41,13 @@ typedef struct HWND__* HWND;
 typedef struct HMONITOR__* HMONITOR;
 typedef struct _SECURITY_ATTRIBUTES SECURITY_ATTRIBUTES;
 
-#		include <vulkan/vulkan_win32.h>
+#		include "vulkan/vulkan_win32.h"
 
 #		ifdef VK_ENABLE_BETA_EXTENSIONS
 #			include <vulkan/vulkan_beta.h>
 #		endif
 #	else
-#		include <vulkan/vulkan.h>
+#		include "vulkan/vulkan.h"
 #	endif
 #endif
 
