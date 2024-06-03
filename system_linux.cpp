@@ -17,6 +17,10 @@
 
 #ifdef VLIB_PLATFORM_LINUX
 
+#ifdef VLIB_ON_CRT
+#include <unistd.h>
+#endif
+
 void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(const char* In, char* Buffer, vsys_size BufferSize){
 //    TODO(V): !!!!! STUB
 
@@ -77,14 +81,23 @@ void vsys_init() {
 #define SYSCALL_EXIT 60
 
 void vsys_killProcess(int ReturnCode) {
+	#ifndef VLIB_ON_CRT
 	__syscall1(SYSCALL_EXIT, ReturnCode);
+	#else
+	_exit(ReturnCode);
+	#endif
 
 }
 
 #define SYSCALL_WRITE 1
 
 void vsys_writeConsole(const char* InText, int Length) {
-	__syscall3(SYSCALL_WRITE, 1, (long)InText, (long)Length);
+	//__syscall3(SYSCALL_WRITE, 1, (long)InText, (long)Length);
+	#ifdef VLIB_ON_CRT
+	write(1, InText, Length);
+	#else
+	#error implement
+	#endif
 
 }
 

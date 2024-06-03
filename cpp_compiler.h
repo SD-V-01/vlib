@@ -22,6 +22,13 @@
 #if defined(_WIN32)
 #define VLIB_PLATFORM_NT
 
+#elif defined(__ANDROID__)
+#define VLIB_PLATFORM_LINUX
+#ifndef VLIB_ON_CRT
+#define VLIB_ON_CRT
+#endif
+#define VLIB_ANDROID
+
 #elif defined(__unix__) && !defined(__APPLE__)
 #define VLIB_PLATFORM_LINUX
 
