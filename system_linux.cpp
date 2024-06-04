@@ -19,6 +19,12 @@
 
 #ifdef VLIB_ON_CRT
 #include <unistd.h>
+
+#endif
+
+#ifdef VLIB_ANDROID
+#include "android/log.h"
+
 #endif
 
 void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(const char* In, char* Buffer, vsys_size BufferSize){
@@ -92,11 +98,25 @@ void vsys_killProcess(int ReturnCode) {
 #define SYSCALL_WRITE 1
 
 void vsys_writeConsole(const char* InText, int Length) {
+	
+	#ifndef VLIB_ANDROID
 	//__syscall3(SYSCALL_WRITE, 1, (long)InText, (long)Length);
 	#ifdef VLIB_ON_CRT
 	write(1, InText, Length);
 	#else
 	#error implement
+	#endif
+
+	#else
+	char Temp[Length + 1];
+	//vcpy(Temp, InText, Length);
+	for (unsigned int v = 0; v < Length; v++) {
+		Temp[v] = InText[v];
+
+	}
+	Temp[Length] = 0;
+	__android_log_print(ANDROID_LOG_INFO, "mdos", "%s", Temp);
+
 	#endif
 
 }

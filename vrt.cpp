@@ -95,3 +95,21 @@ int main(int argc, char** argv) {
 }
 
 #endif
+
+#if defined(__ANDROID__)
+
+#include "android_native_app_glue.h"
+#include "android/log.h"
+
+extern "C"{
+    __attribute__((visibility("default"))) void android_main(android_app* AppPtr);
+
+
+	__attribute__((visibility("default"))) void android_main(android_app* AppPtr) {
+		__android_log_print(ANDROID_LOG_WARN, "mdos", "Starting mdos from android_main");
+
+	}
+
+}
+
+#endif
