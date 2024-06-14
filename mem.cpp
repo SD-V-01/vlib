@@ -23,6 +23,19 @@
 void* valloc(st Size){
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC //NOTE(V): Mimalloc
 	return mi_malloc(Size);
+	#else
+	#error implement allocator
+
+	#endif
+
+}
+
+void* vaalloc(st Size, st Alignment) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	return mi_malloc_aligned(Size, Alignment);
+	#else
+	#error implement allocator
+
 	#endif
 
 }
@@ -30,14 +43,29 @@ void* valloc(st Size){
 void vfree(void* Size) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	mi_free(Size);
+	#else
+	#error implement allocator
+
 	#endif
 
 }
 
 void* vrealloc(void* Ptr, st NewSize) {
-	//    STUB(V): Implement
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc(Ptr, NewSize);
+	#else
+	#error implement allocator
+
+	#endif
+
+}
+
+void* varealloc(void* Ptr, st NewSize, st Alignment) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	return mi_realloc_aligned(Ptr, NewSize, Alignment);
+	#else
+	#error implement allocator
+
 	#endif
 
 }
@@ -46,6 +74,9 @@ void* vcalloc(st size, st count){
 	//    STUB(V): Implement
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_calloc(size, count);
+	#else
+	#error implement allocator
+
 	#endif
 }
 

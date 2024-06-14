@@ -30,8 +30,10 @@ MEM_API u32 dpow2(u32 In);
 MEM_API void* dcpy(void* Dest, const void* Source, size_t Size);
 
 MEM_API void* valloc(st Size);
+MEM_API void* vaalloc(st Size, st Alignment);
 MEM_API void vfree(void* Ptr);
 MEM_API void* vrealloc(void* Ptr, st NewSize);
+MEM_API void* varealloc(void* Ptr, st NewSize, st Alignment);
 MEM_API void* vcalloc(st size, st count);
 
 MEM_API void* vcpy(void* Dest, const void* Source, size_t Size);
@@ -42,8 +44,6 @@ MEM_API void* vset(void* Target, u8 Value, size_t Size);
 #ifdef VPP
 
 VLIBPP_START
-
-#define dmem vmem
 
 template <typename iType> struct vmem {
 private:
@@ -206,6 +206,8 @@ public:
     }
 
 };
+
+#define dmem vmem
 
 VLIBPP_END
 
