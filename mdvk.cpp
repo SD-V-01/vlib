@@ -18,7 +18,7 @@
 
 static mdvkState MdvkState;
 
-const mdvkState* getVulkanState() {
+const mdvkState* mdvkGetVulkanState() {
 	return &MdvkState;
 
 }
@@ -40,7 +40,7 @@ static void vkFreeImpl(void* UserData, void* Ptr) {
 
 }
 
-void initVkVmemState() {
+void mdvkInitVkVmemState() {
 	if (MdvkState.isVmemCallbackInit == false) {
 		MdvkState.VmemCallback.pUserData = NULL;
 		MdvkState.VmemCallback.pfnAllocation = &vkAllocImpl;

@@ -29,8 +29,8 @@ bool isVmemCallbackInit;
 
 VLIB_STRUCTEND(mdvkState)
 
-const mdvkState* getVulkanState();
-void initVkVmemState();
+const mdvkState* mdvkGetVulkanState();
+void mdvkInitVkVmemState();
 
 VLIB_STRUCT(mdvkInitStruct)
 const char* AppName;
@@ -72,8 +72,10 @@ enum MDVK_ERROR {
 MDVK_ERROR mdvkInit(const mdvkInitStruct* InitStruct);
 MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysicalDevice* Result);
 MDVK_ERROR mdvkGetFirstQueueIndex(VkPhysicalDevice PhysDevice, VkQueueFlags WantedFlags, i32* Result);
+
 MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
 							  const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result);
+
 MDVK_ERROR mdvkCreateDevice(const char** Layers, st LayerCount, const char** Extensions, st ExtensionCount,
 							const VkDeviceQueueCreateInfo* Queues, st QueueCount, VkPhysicalDevice* PhysDevice,
 							VkAllocationCallbacks* MemCb, VkDevice* Result);
