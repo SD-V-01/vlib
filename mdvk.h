@@ -48,7 +48,7 @@ st DeviceQueueCount;
 
 VLIB_STRUCTEND(mdvkInitStruct)
 
-enum MDVK_ERROR {
+typedef enum MDVK_ERROR {
 	MDVK_ERROR_UNKNOWN = 0,
 	MDVK_ERROR_SUCCESS = 1,
 
@@ -95,11 +95,11 @@ enum MDVK_ERROR {
 	MDVK_ERROR_STDOUT_DUMP_DEVICE_LAYER_COUNT,
 	MDVK_ERROR_STDOUT_DUMP_DEVICE_LAYER_ENUM
 
-};
+} MDVK_ERROR;
 
 MDVK_ERROR mdvkInit(const mdvkInitStruct* InitStruct);
 MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysicalDevice* Result);
-MDVK_ERROR mdvkGetFirstQueueIndex(VkPhysicalDevice PhysDevice, VkQueueFlags WantedFlags, i32* Result);
+MDVK_ERROR mdvkGetFirstQueueIndex(VkPhysicalDevice* PhysDevice, VkQueueFlags WantedFlags, i32* Result);
 
 MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
 							  const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result);

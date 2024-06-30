@@ -17,8 +17,7 @@
 #ifndef _VHASH_H_
 #define _VHASH_H_
 
-VLIBPP_START
-
+VLIB_CABI
 u64 vfnv64std(const char* Data, u32 Size);
 u64 vfnv64(const char* Data, u32 Size);
 
@@ -39,7 +38,7 @@ u32 vfmix32(u32 In);
 u64 vfmix64(u64 In);
 u32 vmh332(const void* Data, st Length, u32 Seed);
 
-VLIBPP_END
+VLIB_CABIEND
 
 #endif
 

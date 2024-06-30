@@ -12,9 +12,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#ifdef TENX_PARSER
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-#include "mem.h"
+#include "vmem.h"
 #include "str.h"
 #include "dstr.h"
 #include "vulkan/vulkan_core.h"
@@ -1056,6 +1057,7 @@ namespace VLIB_NAMESPACE {
 
     }
 
+	/*
     void string::u64tostr(u64 In, string& Target, const u32 Pos) {
         if (In == 0) {
             Target.insert(L'0', Pos);
@@ -1072,8 +1074,9 @@ namespace VLIB_NAMESPACE {
         //printf("%i %i\n", In, In);
         Target.insert(In + 48, Pos);
 
-    }
+    }*/
 	
+	/*
     void string::u64tohex(u64 In, string& Target, const u32 Pos) {
         if (In == 0) {
             Target.insert(L'0', Pos);
@@ -1108,7 +1111,7 @@ namespace VLIB_NAMESPACE {
         Target.insert(L'0', Pos);
 
     }
-	
+	*/
 
     void string::memtohex(const u16* InPtr, u32 InSize, string& Target, const u32 Pos) {
         u32 AdressHelper = 0;
@@ -1297,6 +1300,7 @@ namespace VLIB_NAMESPACE {
 
     }
 
+	/*
     void string::dumpToConsole() {
         //printf("Dumping string, Size: %i Alloc: %i String:", StringSize, AllocSize);
         char32_t* itPtr = DataPtr;
@@ -1309,7 +1313,9 @@ namespace VLIB_NAMESPACE {
         //printf("\n");
 
     }
+	*/
 
+	/*
     //    INTERN 
     void string::initinternal(u32 InitSize) {
         DataPtr = (char32_t*)dalloc(InitSize * sizeof(char32_t));
@@ -1356,6 +1362,7 @@ namespace VLIB_NAMESPACE {
         dcpy(DataPtr, Str, Size * sizeof(char32_t));
 
     }
+	*/
 
 	/*
 	char* vlegacy_gcvt(double In, int NumDigits, char* Buf) {
@@ -1568,3 +1575,4 @@ namespace VLIB_NAMESPACE {
 
 }
 
+#endif

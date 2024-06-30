@@ -15,6 +15,8 @@
 #ifndef _DSTR_H_
 #define _DSTR_H_
 
+#if defined(VLIB_INCLUDE_DEPRECATED) && defined(__cplusplus)
+
 #include "cpp_compiler.h"
 #include "base_types.h"
 
@@ -54,5 +56,7 @@ namespace VLIB_NAMESPACE {
     bool isExactMatch(const char* Lhs, const char* Rhs, u32 Size);
 
 }
+
+#endif
 
 #endif

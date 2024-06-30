@@ -3,7 +3,7 @@
 //  VLib Source File.
 //  Copyright (C) 2024 S/N: V-01
 // -------------------------------------------------------------------------
-//  File name:   mdvk.cpp
+//  File name:   mdosc.cpp
 //  Version:     v1.00
 //  Created:     29/06/24 by V.
 //  Description: 
@@ -12,4 +12,4 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "mdvk.c"
+#include "mdosc.c"

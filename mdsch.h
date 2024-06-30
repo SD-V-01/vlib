@@ -67,7 +67,7 @@ VLIB_CABIEND
 
 //SECTION(V): Mutex
 
-VLIB_STRUCT(mdMutex)
+VLIB_STRUCT(mdHostMutex)
 #ifdef VLIB_PLATFORM_LINUX
 #ifdef VLIB_ON_CRT
 pthread_mutex_t MutexImpl;
@@ -84,8 +84,8 @@ u32 Spin;
 #ifdef VPP
 
 #ifndef VLIB_NO_RAII
-mdMutex();
-~mdMutex();
+mdHostMutex();
+~mdHostMutex();
 
 #endif
 
@@ -97,20 +97,20 @@ MDSCHEDULER_API void release();
 
 #endif
 
-VLIB_STRUCTEND(mdMutex)
+VLIB_STRUCTEND(mdHostMutex)
 
 VLIB_CABI
-MDSCHEDULER_API bool mdCreateMutex(mdMutex* Mutex);
-MDSCHEDULER_API void mdDestroyMutex(mdMutex* Mutex);
-MDSCHEDULER_API void mdAcquireMutex(mdMutex* Mutex);
-MDSCHEDULER_API bool mdTryAcquireMutex(mdMutex* Mutex);
-MDSCHEDULER_API void mdReleaseMutex(mdMutex* Mutex);
+MDSCHEDULER_API bool mdCreateHostMutex(mdHostMutex* Mutex);
+MDSCHEDULER_API void mdDestroyHostMutex(mdHostMutex* Mutex);
+MDSCHEDULER_API void mdAcquireHostMutex(mdHostMutex* Mutex);
+MDSCHEDULER_API bool mdTryAcquireHostMutex(mdHostMutex* Mutex);
+MDSCHEDULER_API void mdReleaseHostMutex(mdHostMutex* Mutex);
 
 VLIB_CABIEND
 
 //SECTION(V): Conditional variable
 
-VLIB_STRUCT(mdCondVar)
+VLIB_STRUCT(mdHostCondVar)
 
 #ifdef VLIB_PLATFORM_LINUX
 #ifdef VLIB_ON_CRT
@@ -126,26 +126,26 @@ pthread_cond_t Impl;
 
 #ifdef VPP
 #ifndef VLIB_NO_RAII
-mdCondVar();
-~mdCondVar();
+mdHostCondVar();
+~mdHostCondVar();
 #endif
 MDSCHEDULER_API bool create();
 MDSCHEDULER_API void destroy();
-MDSCHEDULER_API void wait(mdMutex* Mutex);
+MDSCHEDULER_API void wait(mdHostMutex* Mutex);
 MDSCHEDULER_API void wakeOne();
 MDSCHEDULER_API void wakeAll();
 
 #endif
 
 
-VLIB_STRUCTEND(mdCondVar)
+VLIB_STRUCTEND(mdHostCondVar)
 
 VLIB_CABI
-MDSCHEDULER_API bool mdCreateCondVar(mdCondVar* Var);
-MDSCHEDULER_API void mdDestroyCondVar(mdCondVar* Var);
-MDSCHEDULER_API void mdWaitCondVar(mdCondVar* Var, mdMutex* Mutex);
-MDSCHEDULER_API void mdWakeOneCondVar(mdCondVar* Var);
-MDSCHEDULER_API void mdWakeAllCondVar(mdCondVar* Var);
+MDSCHEDULER_API bool mdCreateHostCondVar(mdHostCondVar* Var);
+MDSCHEDULER_API void mdDestroyHostCondVar(mdHostCondVar* Var);
+MDSCHEDULER_API void mdWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex);
+MDSCHEDULER_API void mdWakeOneHostCondVar(mdHostCondVar* Var);
+MDSCHEDULER_API void mdWakeAllHostCondVar(mdHostCondVar* Var);
 
 VLIB_CABIEND
 
@@ -192,3 +192,7 @@ MDSCHEDULER_API void mdJoinThread(mdThreadHandle CallerHandle);
 MDSCHEDULER_API void mdDetatchThread(mdThreadHandle CallerHandle);
 
 VLIB_CABIEND
+
+//SECTION(V): Scheduler
+
+

@@ -27,6 +27,13 @@
 
 #endif
 
+#ifndef __cplusplus
+#define bool _Bool
+#define true 1
+#define false 0
+
+#endif
+
 #ifdef __clang__
 //NOTE(V): 64 bit types are not portable bettwen compilers for some reason ?
 //NOTE(V): I do prefer the clang way of handeling fixed size datatype because glibc is a mess with that !!

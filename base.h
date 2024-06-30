@@ -13,10 +13,8 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "cpp_compiler.h"
-#include "mem.h"
-#include "str.h"
+#include "vmem.h"
 #include "dstr.h"
-#include "log.h"
 #include "vrt.h"
 #include "vstr32.h"
 

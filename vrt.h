@@ -24,7 +24,7 @@ VLIB_STRUCT(vrt_sysArgs)
 
 VLIB_STRUCTEND(vrt_sysArgs)
 
-void vrt_usrCode(vrt_sysArgs* Args);
+void vrt_usrCode();
 
 void vrt_CoreMemInit();
 

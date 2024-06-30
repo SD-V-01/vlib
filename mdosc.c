@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  VLiB Source File.
+//  Copyright (C), V Studio, 2018-2024.
 // -------------------------------------------------------------------------
-//  File name:   mdvk.cpp
+//  File name:   osc.cpp
 //  Version:     v1.00
-//  Created:     29/06/24 by V.
+//  Created:     30/04/24 by Serial Designation V-X1.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  History:
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "mdvk.c"
+#include "mdosc.h"

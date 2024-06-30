@@ -28,14 +28,46 @@ namespace VLIB_NAMESPACE{
 
 #endif
 
-VLIB_CABI
+#define VLIB_DSTR8_STACK_SPACE 40
 
+VLIB_STRUCT(dstr8)
+char* DataPtr;
+st Size;
+st Alloc;
+char DataStack[VLIB_DSTR8_STACK_SPACE];
+
+VLIB_STRUCTEND(dstr8)
+
+#define VLIB_DSTR32_SMALLEST_SIZE 8
+
+VLIB_STRUCT(dstr32)
+vchar* DataPtr;
+st Size;
+st Alloc;
+
+VLIB_STRUCTEND(dstr32)
+
+VLIB_CABI
+VSTR32_API void dstrinit32(st Size);
+VSTR32_API void dstrdestroy32(dstr32* This);
+VSTR32_API void dstrchecksize32(const st TargetSize, dstr32* This);
+VSTR32_API void dstrset32(const vchar* Str, const st Size, dstr32* This);
+
+VLIB_CABIEND
+
+VLIB_CABI
 VSTR32_API st vstrlen8(const char* String);
 VSTR32_API st vstrlen16(const wchar_t* String);
 VSTR32_API st vstrlen32(const vchar* String);
 
 VSTR32_API char* vstrchr8(const char* Str, int Char);
+VSTR32_API char* vstrchrnul8(const char* Str, int Char);
+VSTR32_API char* vstrrchr8(const char* Str, int Char);
 VSTR32_API char* vstrstr8(const char* In, const char* Search);
+VSTR32_API char* vstrstr2(const unsigned char* In, const unsigned char* Search);
+VSTR32_API char* vstrstr3(const unsigned char* In, const unsigned char* Search);
+VSTR32_API char* vstrstr4(const unsigned char* In, const unsigned char* Search);
+VSTR32_API char* vstrstrtw(const unsigned char* In, const unsigned char* Search);
 VSTR32_API long int vstrtol8(const char* Str, char** EndPtr, int Base);
 
 VSTR32_API u32 vdigitlen(u64 In);
@@ -49,7 +81,11 @@ VSTR32_API char* vLEGACYstrncat(char* Dest, const char* Source, size_t Size);
 VSTR32_API char* vLEGACYgcvt(double In, int NumDigits, char* Buf);
 VSTR32_API char* vLEGACYrealpath(const char* filename, char* resolved);
 
+VSTR32_API st vinttostr8(u64 Var, char* Result, st MaxSize);
+VSTR32_API st vinttostr32(u64 Var, vchar* Result, st MaxSize);
+VSTR32_API st vinttohex8(u64 Var, char* Result, st MaxSize);
+VSTR32_API char* vstrlastchar8(const char* Str, int Char);
+
 VLIB_CABIEND
 
 #endif
-

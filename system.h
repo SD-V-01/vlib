@@ -49,6 +49,8 @@ extern "C"{
 		vsys_bool hasVirtualReserve;
 	} vsys_coreMemoryProfile;
 	
+	vsys_size vsys_strlen(const char* String);
+	void* vsys_copy(void* Dest, const void* Source, size_t Size);
 
 //    NOTE(V): General initialization helpers
 	void vsys_appRtInit();
@@ -63,6 +65,7 @@ extern "C"{
 	void vsys_writeConsole(const char* InText, int Length);
 	void vsys_writeConsoleNullStr(const char* InText);
 	void vsys_initConsole();
+	void vsys_getOsVar(const char* In, char* Buffer, vsys_size BufferSize);
 
 //    NOTE(V): General helpers
 	void vsys_writeConsoleInteger(unsigned long int In);

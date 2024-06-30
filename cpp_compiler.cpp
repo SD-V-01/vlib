@@ -12,13 +12,4 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#ifndef VLIB_ALLOCATOR_IMPL
-#warning No allocator was selected by the build system, building VLIB with mimalloc
-
-#endif
-
-#ifdef VLIB_NO_ALLOCATOR
-#warning Building vlib without an allocator because of VLIB_NO_ALLOCATOR
-#warning This should be only used for runtime debugging/porting purpuses !!!
-
-#endif
+#include "cpp_compiler.c"

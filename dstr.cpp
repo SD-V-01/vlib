@@ -1,9 +1,22 @@
+////////////////////////////////////////////////////////////////////////////
+//
+//  VLib Source File.
+//  Copyright (C) 2024 S/N: V-01
+// -------------------------------------------------------------------------
+//  File name:   dstr.cpp
+//  Version:     v1.00
+//  Created:     29/06/24 by V.
+//  Description: 
+// -------------------------------------------------------------------------
+//  This project is licensed under the MIT License
+//
+////////////////////////////////////////////////////////////////////////////
 
+#if defined(VLIB_INCLUDE_DEPRECATED) && defined(__cplusplus)
 #include "cpp_compiler.h"
-#include "mem.h"
+#include "vmem.h"
 #include "dstr.h"
 
-#ifdef VLIB_INCLUDE_DEPRECATED
 namespace VLIB_NAMESPACE {
 
     //    FRW
