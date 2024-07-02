@@ -342,6 +342,16 @@ void v8to32char(const char* Source, vchar* Target, u32 Size) {
 }
 
 int vLEGACYstrcmp(const char* s1, const char* s2) {
+	if (s1 == NULL) {
+		return -70;
+
+	}
+
+	if (s2 == NULL) {
+		return -70;
+
+	}
+
 	while(*s1 && (*s1 == *s2))
 	{
 		s1++;

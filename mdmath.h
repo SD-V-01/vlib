@@ -68,3 +68,7 @@ VLIB_CABI
 MDMATH_ABI double vround64(double x);
 
 VLIB_CABIEND
+
+//SECTION(V): Vector math
+
+

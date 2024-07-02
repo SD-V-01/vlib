@@ -17,6 +17,7 @@
 #include "dstr.h"
 #include "vrt.h"
 #include "vstr32.h"
+#include "vhash.h"
 
 #ifndef _BASE_H_
 #define _BASE_H_

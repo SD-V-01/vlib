@@ -1,24 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  VLib Source File.
+//  Copyright (C) 2024 S/N: V-01
 // -------------------------------------------------------------------------
-//  File name:   mderror.cpp
+//  File name:   mdmathvec_sse.h
 //  Version:     v1.00
-//  Created:     10/05/24 by Serial Designation V-X1.
+//  Created:     30/06/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  This project is licensed under the MIT License
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "mderror.h"
-
-VLIB_CABI
-
-//TODO(V): Use TLS for errno legacy implementation !!!!!!!!!!!
-int v_errno = 0;
-
-VLIB_CABIEND
-
-//TODO(V): Implement stack backtracing
+#pragma once

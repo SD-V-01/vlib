@@ -21,14 +21,11 @@
 #define MDSCHEDULER_API
 #define MDSCHEDULER_THREAD_NAME_LENGTH 256
 
-#ifdef VLIB_PLATFORM_LINUX
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "pthread.h"
 
-#else
-#error Implement platform
-
-#endif
+#elif defined(VLIB_PLATFORM_NT)
+#include <synchapi.h>
 
 #else
 #error Implement platform
@@ -36,19 +33,26 @@
 #endif
 
 //SECTION(V): CallOnce
-#ifdef VLIB_PLATFORM_LINUX
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+
 #ifndef MD_THREAD_LOCAL
 #define MD_THREAD_LOCAL __thread
 
 #endif
+
 #define MD_CALL_ONCE_GUARD_CREATE PTHREAD_ONCE_INIT
 typedef pthread_once_t mdCallOnceGuard;
 
-#else
-#error Implement platform
+#elif defined(VLIB_PLATFORM_NT)
+
+#ifndef MD_THREAD_LOCAL
+#define MD_THREAD_LOCAL __declspec(thread)
 
 #endif
+
+
+#define MD_CALL_ONCE_GUARD_CREATE INIT_ONCE_STATIC_INIT
+typedef INIT_ONCE mdCallOnceGuard;
 
 #else
 #error Implement platform
@@ -68,14 +72,12 @@ VLIB_CABIEND
 //SECTION(V): Mutex
 
 VLIB_STRUCT(mdHostMutex)
-#ifdef VLIB_PLATFORM_LINUX
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 pthread_mutex_t MutexImpl;
 u32 Spin;
 
-#else
-#error Implement for platform
-#endif
+#elif defined(VLIB_PLATFORM_NT)
+CRITICAL_SECTION MutexImpl;
 
 #else
 #error Implement for platform
@@ -120,6 +122,9 @@ pthread_cond_t Impl;
 #error Implement for platform
 #endif
 
+#elif defined(VLIB_PLATFORM_NT)
+void* Impl;
+
 #else
 #error Implement for platform
 #endif
@@ -159,6 +164,10 @@ typedef u32 mdThreadId;
 #else
 #error Implement for platform
 #endif
+
+#elif defined(VLIB_PLATFORM_NT)
+typedef void* mdThreadHandle;
+typedef unsigned long mdThreadId;
 
 #else
 #error Implement for platform

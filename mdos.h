@@ -31,13 +31,64 @@ VLIB_CABIEND
 #define MDTIME_API
 #define MDCON_API
 
+enum mdConVarFlags {
+	mdConVarFlags_USER MYTH_BIT(0),
+	mdConVarFlags_SAVE MYTH_BIT(16),
+	mdConVarFlags_CHEAT MYTH_BIT(17),
+	mdConVarFlags_WRITE_PROTECTED MYTH_BIT(18),
+	mdConVarFlags_REQUIRE_APP_REBOOT MYTH_BIT(19),
+	mdConVarFlags_MODIFIED MYTH_BIT(20),
+	mdConVarFlags_WAS_IN_CONFIG MYTH_BIT(21),
+	mdConVarFlags_CREATED_THIS_INSTANCE MYTH_BIT(22),
+	mdConVarFlags_INVISIBLE MYTH_BIT(23),
+
+	mdConVarFlags_SERIALIZE_FLAGS = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5)
+	| (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 12) | (1 << 13)
+	| (1 << 14) | (1 << 15) // USER
+	| (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19) | (1 << 23),
+
+};
+
+typedef void(*mdConCmdFunc)(const char*);
+
 VLIB_STRUCT(mdConVar)
 
+union {
+	i64 VarInt;
+	char* VarStr;
+	double VarDouble;
+	mdConCmdFunc VarCmd;
+
+} Var;
+
+u64 Flags;
+u64 Type;
+const char* Name;
+void* StatePtr;
 
 VLIB_STRUCTEND(mdConVar)
 
-VLIB_STRUCT(mdConState)
+typedef void(*mdConVarCallback)(mdConVar*);
+#define MD_CON_STATE_DEFAULT_CAPACITY 128
 
+#define MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH 32
+
+VLIB_STRUCT(mdConEntry)
+const char* Message;
+i64 Time;
+u64 Severity;
+char Subsystem[MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH];
+
+VLIB_STRUCTEND(mdConEntry)
+
+VLIB_STRUCT(mdConState)
+mdConVar* HtPtr;
+st HtAlloc;
+st HtSize;
+
+mdConEntry* EntryPtr;
+st EntryAlloc;
+st EntrySize;
 
 VLIB_STRUCTEND(mdConState)
 
@@ -63,10 +114,14 @@ typedef enum mdConVarType {
 
 } mdConVarType;
 
-typedef void(*mdConVarCallback)(mdConVar*);
-typedef void(*mdConCmdFunc)(const char*);
-
 VLIB_CABI
+MDCON_API void mdConStateCreate(mdConState* State);
+MDCON_API void mdConStateDestroy(mdConState* State);
+MDCON_API mdConVar* mdConStateSearchVar(mdConState* State, const char* Name);
+MDCON_API void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, mdConState* StatePtr);
+MDCON_API void mdConStateResize(mdConState* State);
+MDCON_API void mdConStateSet(mdConState* State, mdConVar* Var);
+
 MDCON_API void mdConStart();
 MDCON_API void mdConEnd();
 
@@ -82,6 +137,10 @@ MDCON_API void mdConVarSetStr(const char* Name, const char* Value);
 MDCON_API void mdConVarSetDouble(const char* Name, const double* Value);
 MDCON_API void mdConVarSetInt(const char* Name, const i64* Value);
 MDCON_API void mdConVarSet(const char* Name, const void* Value, mdConVarType Type);
+MDCON_API void mdConVarRegisterOrSetStr(const char* Name, const char* Value);
+MDCON_API void mdConVarRegisterOrSetDouble(const char* Name, const double* Value);
+MDCON_API void mdConVarRegisterOrSetInt(const char* Name, const i64* Value);
+MDCON_API void mdConVarRegisterOrSet(const char* Name, const void* Value, mdConVarType Type);
 
 MDCON_API st mdConGetNumCmd();
 MDCON_API st mdConGetSortedCmd(char** Array, st ArraySize, st StringSize, const char* Prefix);
@@ -101,9 +160,10 @@ VLIB_CABIEND
 //SECTION(V): System time
 
 VLIB_CABI
+MDTIME_API i64 mdTimeInt64MulDiv(i64 Val, i64 Num, i64 Denom);
 MDTIME_API u32 mdTimeGetMsSystemTime();
 MDTIME_API i64 mdTimeGetMicroSystemTime();
-MDTIME_API u32 mdTimeGetTimeSinceStartup();
+MDTIME_API u32 mdTimeGetUnixTime();
 MDTIME_API i64 mdTimeGetTimerFreq();
 
 VLIB_CABIEND
