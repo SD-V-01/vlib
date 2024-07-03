@@ -195,13 +195,18 @@ typedef __UINTPTR_TYPE__ uintptr_t;
 
 #if defined __STDC_VERSION__ && __STDC_VERSION__ > 201710L
 #define va_start(v, ...) __builtin_va_start(v, 0)
+#define v_varargStart(v, ...) __builtin_va_start(v, 0)
 #else
 #define va_start(v,l) __builtin_va_start(v,l)
+#define v_varargStart(v,l) __builtin_va_start(v,l)
 #endif
 #define va_end(v) __builtin_va_end(v)
+#define v_varargEnd(v) __builtin_va_end(v)
 #define va_arg(v,l) __builtin_va_arg(v,l)
+#define v_vararg(v,l) __builtin_va_arg(v,l)
 
 typedef __builtin_va_list va_list;
+typedef __builtin_va_list v_varargList;
 
 #define MYTH_BIT(Val) = 1 << Val
 

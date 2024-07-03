@@ -243,6 +243,20 @@ void mdConStateSet(mdConState* State, mdConVar* Var) {
 
 }
 
+static mdConState DuniaConsole;
+
+void mdConStart() {
+	mdConStateCreate(&DuniaConsole);
+
+}
+
+void mdConEnd() {
+	mdConStateDestroy(&DuniaConsole);
+
+}
+
+
+
 //SECTION(V): System time
 VLIB_CABI
 void mdTimeCreateStopwatch(mdTimeStopwatch* Watch) {

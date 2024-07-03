@@ -71,6 +71,7 @@ VLIB_STRUCTEND(mdConVar)
 typedef void(*mdConVarCallback)(mdConVar*);
 #define MD_CON_STATE_DEFAULT_CAPACITY 128
 
+//NOTE(V): Larger will not make mdConEntry fit inside a cache line witch would be bad
 #define MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH 32
 
 VLIB_STRUCT(mdConEntry)
