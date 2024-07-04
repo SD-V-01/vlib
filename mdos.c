@@ -80,10 +80,48 @@ void mdosPrintTermHeader() {
 VLIB_CABIEND
 
 //SECTION(V): console
+VLIB_CABI
+const char* mdConSeverityGetUserStr(mdConSeverity In) {
+	switch (In) {
+		case mdConSeverity_none:
+			return "none";
 
-void mdConStateCreate(mdConState* State) {
-	vset(State, 0, sizeof(State));
+		case mdConSeverity_verbose:
+			return "VERBOSE";
+
+		case mdConSeverity_info:
+			return "INFO";
+
+		case mdConSeverity_warning:
+			return "WARNING";
+
+		case mdConSeverity_error:
+			return "ERROR";
+
+		case mdConSeverity_dataVerbose:
+			return "dataVerbose";
+
+		case mdConSeverity_dataInfo:
+			return "dataInfo";
+
+		case mdConSeverity_dataWarning:
+			return "dataWarning";
+
+		case mdConSeverity_dataError:
+			return "dataError";
+
+		case mdConSeverity_bellwether:
+			return "Bellwether";
+
+	}
+	return "";
+
+}
+
+void mdConStateCreate(mdConState* State, const char* Name) {
+	vset(State, 0, sizeof(mdConState));
 	State->HtAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
+	//State->HtSize = 0;
 	State->HtPtr = (mdConVar*)vcalloc(sizeof(mdConVar), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
 	if (State->HtPtr == NULL) {
 		VASSERT(0, "Failed to allocate memory for mdConState ConVar buffer creation");
@@ -93,12 +131,22 @@ void mdConStateCreate(mdConState* State) {
 	}
 
 	State->EntryAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
+	//State->
 	State->EntryPtr = (mdConEntry*)vcalloc(sizeof(mdConEntry), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
 	if (State->EntryPtr == NULL) {
 		VASSERT(0, "Failed to allocate memory for mdConState entry buffer creation");
 		return;
 
 	}
+
+	st NameLength = vstrlen8(Name);
+	if (NameLength > MD_CON_STATE_NAME_LENGTH - 1) {
+		NameLength = MD_CON_STATE_NAME_LENGTH - 1;
+
+	}
+
+	vcpy(State->Name, Name, NameLength);
+	State->Name[NameLength] = 0;
 
 }
 
@@ -125,7 +173,7 @@ void mdConStateDestroy(mdConState* State) {
 
 	vfree((void*)State->HtPtr);
 	vfree((void*)State->EntryPtr);
-	vset(State, 0, sizeof(State));
+	vset(State, 0, sizeof(mdConState));
 
 }
 
@@ -150,7 +198,7 @@ mdConVar* mdConStateSearchVar(mdConState* State, const char* Name) {
 
 }
 
-void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, mdConState* StatePtr) {
+st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, mdConState* StatePtr) {
 	u64 NewHash = vfnv64std(Entry->Name, vstrlen8(Entry->Name));
 	st Index = (st)(NewHash & (u64)(Alloc - 1));
 	while (Entries[Index].Name != NULL) {
@@ -159,8 +207,10 @@ void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length
 			Entries[Index].Var = Entry->Var;
 			Entries[Index].Flags = Entry->Flags;
 			Entries[Index].Type = Entry->Type;
+			Entries[Index].Help = Entry->Help;
 			Entries[Index].StatePtr = StatePtr;
-			return;
+			Entries[Index].CallbackPtr = Entry->CallbackPtr;
+			return Index;
 
 		}
 
@@ -176,7 +226,7 @@ void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length
 	if (Length != NULL) {
 		NewNamePtr = (char*)vcalloc(vstrlen8(Entry->Name) + 1, sizeof(char));
 		if (NewNamePtr == NULL) {
-			return;
+			return 0;
 
 		}
 		vcpy(NewNamePtr, Entry->Name, vstrlen8(Entry->Name));
@@ -185,12 +235,20 @@ void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length
 		(*Length)++;
 
 	}
+	else {
+		VASSERT(0, "The con state is probabelly corupted");
+
+	}
 
 	Entries[Index].Name = NewNamePtr;
 	Entries[Index].Var = Entry->Var;
 	Entries[Index].Flags = Entry->Flags;
 	Entries[Index].Type = Entry->Type;
+	Entries[Index].Help = Entry->Help;
 	Entries[Index].StatePtr = StatePtr;
+	Entries[Index].CallbackPtr = Entry->CallbackPtr;
+
+	return Index;
 
 }
 
@@ -207,11 +265,11 @@ void mdConStateResize(mdConState* State) {
 		return;
 
 	}
-
+	st NewLength = 0;
 	for (st v = 0; v < OldSize; v++) {
 		mdConVar OldVar = State->HtPtr[v];
 		if (OldVar.Name != NULL) {
-			mdConStateSetEntry(NewVars, NewSize, &OldVar, NULL, State);
+			mdConStateSetEntry(NewVars, NewSize, &OldVar, &NewLength, State);
 
 		}
 
@@ -220,6 +278,7 @@ void mdConStateResize(mdConState* State) {
 	vfree((void*)State->HtPtr);
 	State->HtPtr = NewVars;
 	State->HtAlloc = NewSize;
+	State->HtSize = NewLength;
 	return;
 
 }
@@ -234,7 +293,8 @@ void mdConStateSet(mdConState* State, mdConVar* Var) {
 
 	}
 
-	if (State->HtAlloc >= State->HtSize) {
+	if (State->HtAlloc <= State->HtSize) {
+
 		mdConStateResize(State);
 
 	}
@@ -243,10 +303,27 @@ void mdConStateSet(mdConState* State, mdConVar* Var) {
 
 }
 
+void mdConStateDumpToStdout(mdConState* State) {
+	vsys_writeConsoleNullStr("Dumping mdConState to stdout, ");
+	vsys_writeConsoleInteger(State->HtSize);
+	vsys_writeConsoleNullStr(" Found with size ");
+	vsys_writeConsoleInteger(State->HtAlloc);
+	vsys_writeConsoleNullStr("\n");
+
+	for (st v = 0; v < State->HtAlloc; v++) {
+		char Buff[2048] = "";
+		mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
+		vsys_writeConsoleNullStr(Buff);
+		vsys_writeConsoleNullStr("\n");
+
+	}
+
+}
+
 static mdConState DuniaConsole;
 
 void mdConStart() {
-	mdConStateCreate(&DuniaConsole);
+	mdConStateCreate(&DuniaConsole, "DUNIA");
 
 }
 
@@ -255,7 +332,22 @@ void mdConEnd() {
 
 }
 
+void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize) {
+	//vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type \"{mdConVarType}\" \"{u64}\" name \"{cstr}\" help \"{cstr}\" StatePtr{p} CallbackPtr{p}",
+			 //Buffer, BufferSize,
+			 //Var->Var.VarInt, Var->Var.VarDouble, Var->Flags, Var->Flags,
+			 //Var->Type, Var->Type, Var->Name, Var->Help, Var->StatePtr, Var->CallbackPtr);
 
+	if (Var->Name != NULL) {
+		vformat8("mdConVar VarInt \"{i64}\"",
+				 Buffer, BufferSize,
+				 Var->Var.VarInt);
+
+	}
+
+}
+
+VLIB_CABIEND
 
 //SECTION(V): System time
 VLIB_CABI

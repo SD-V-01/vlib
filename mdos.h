@@ -64,15 +64,17 @@ union {
 u64 Flags;
 u64 Type;
 const char* Name;
+const char* Help;
 void* StatePtr;
+void* CallbackPtr;
 
 VLIB_STRUCTEND(mdConVar)
 
 typedef void(*mdConVarCallback)(mdConVar*);
-#define MD_CON_STATE_DEFAULT_CAPACITY 128
+#define MD_CON_STATE_DEFAULT_CAPACITY 64
 
 //NOTE(V): Larger will not make mdConEntry fit inside a cache line witch would be bad
-#define MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH 32
+#define MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH 40
 
 VLIB_STRUCT(mdConEntry)
 const char* Message;
@@ -82,6 +84,8 @@ char Subsystem[MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH];
 
 VLIB_STRUCTEND(mdConEntry)
 
+#define MD_CON_STATE_NAME_LENGTH 32
+
 VLIB_STRUCT(mdConState)
 mdConVar* HtPtr;
 st HtAlloc;
@@ -90,6 +94,9 @@ st HtSize;
 mdConEntry* EntryPtr;
 st EntryAlloc;
 st EntrySize;
+
+
+char Name[MD_CON_STATE_NAME_LENGTH];
 
 VLIB_STRUCTEND(mdConState)
 
@@ -116,16 +123,23 @@ typedef enum mdConVarType {
 } mdConVarType;
 
 VLIB_CABI
-MDCON_API void mdConStateCreate(mdConState* State);
+MDCON_API const char* mdConSeverityGetUserStr(mdConSeverity In);
+
+MDCON_API void mdConStateCreate(mdConState* State, const char* Name);
 MDCON_API void mdConStateDestroy(mdConState* State);
 MDCON_API mdConVar* mdConStateSearchVar(mdConState* State, const char* Name);
-MDCON_API void mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, mdConState* StatePtr);
+MDCON_API st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, mdConState* StatePtr);
 MDCON_API void mdConStateResize(mdConState* State);
 MDCON_API void mdConStateSet(mdConState* State, mdConVar* Var);
+MDCON_API void mdConStateDumpToStdout(mdConState* State);
 
 MDCON_API void mdConStart();
 MDCON_API void mdConEnd();
 
+//NOTE(V): Only the char* Name can be dealocated as we do a copy of it for serialization reasons
+//    but we count on the user to never nullify the char* Help pointer
+//    DO NOT INVALIDATE THE CONST CHAR* HELP POINTER PASSED OR HELP STRING WON'T APPEAR OR CRASH THE RUNTIME
+MDCON_API void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize);
 MDCON_API void mdConVarRegisterStr(const char* Name, const char* Value, const u32 Flags, const char* Help, mdConVarCallback Cb);
 MDCON_API void mdConVarRegisterDouble(const char* Name, const double* Value, const u32 Flags, const char* Help, mdConVarCallback Cb);
 MDCON_API void mdConVarRegisterInt(const char* Name, const i64* Value, const u32 Flags, const char* Help, mdConVarCallback Cb);

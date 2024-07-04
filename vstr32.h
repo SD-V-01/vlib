@@ -84,6 +84,7 @@ VSTR32_API char* vLEGACYrealpath(const char* filename, char* resolved);
 VSTR32_API st vinttostr8(u64 Var, char* Result, st MaxSize);
 VSTR32_API st vinttostr32(u64 Var, vchar* Result, st MaxSize);
 VSTR32_API st vinttohex8(u64 Var, char* Result, st MaxSize);
+VSTR32_API st vinttohex8b32(u32 Var, char* Result, st MaxSize);
 VSTR32_API char* vstrlastchar8(const char* Str, int Char);
 
 VSTR32_API void vformaterror(const char* Message);

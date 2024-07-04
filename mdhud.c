@@ -3,17 +3,17 @@
 //  VLib Source File.
 //  Copyright (C) 2024 S/N: V-01
 // -------------------------------------------------------------------------
-//  File name:   mdosc.h
+//  File name:   mdhud.c
 //  Version:     v1.00
-//  Created:     29/06/24 by V.
+//  Created:     02/07/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
 //  This project is licensed under the MIT License
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "mdhud.h"
 
-#include "base_types.h"
+VLIB_CABI
 
-
+VLIB_CABIEND
