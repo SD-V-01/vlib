@@ -40,7 +40,7 @@ extern "C" {
 
 	//    NOTE(V): More compiler magic
 	ULONG _tls_index = 0;
-	__declspec(thread) bool __tls_guard = false;
+	__declspec(thread) vsys_bool __tls_guard = vsys_false;
 
 	#ifdef __cplusplus
 }
@@ -250,9 +250,9 @@ extern "C"{
 
 	#define _CRTALLOC(x) __declspec(allocate(x))
 
-	static _CRTALLOC(".CRT$XDA") _PVFV __xd_a = nullptr;
+	static _CRTALLOC(".CRT$XDA") _PVFV __xd_a = NULL;
 
-	static _CRTALLOC(".CRT$XDZ") _PVFV __xd_z = nullptr;
+	static _CRTALLOC(".CRT$XDZ") _PVFV __xd_z = NULL;
 
 	//NOTE(V): This is code copied from the visual c runtime, i hate this
 	void WINAPI __dyn_tls_init(PVOID, DWORD dwReason, LPVOID) 
@@ -262,14 +262,14 @@ extern "C"{
 	// namespace-scope thread-local initializer
 	// N4830 [basic.start.dynamic]/7
 	{
-		if (dwReason != DLL_THREAD_ATTACH || __tls_guard == true)
+		if (dwReason != DLL_THREAD_ATTACH || __tls_guard == vsys_true)
         return;
 
 		/*
 		* Guard against repeated initialization by setting the tls guard tested
 		* by the compiler before we run any initializers.
 		*/
-		__tls_guard = true;
+		__tls_guard = vsys_true;
 
 		/* prefast assumes we are overflowing __xd_a */
 		#pragma warning(push)
@@ -287,7 +287,7 @@ extern "C"{
 	noexcept
 	#endif
 	{
-		__dyn_tls_init(nullptr, DLL_THREAD_ATTACH, nullptr);
+		__dyn_tls_init(vsys_nullptr, DLL_THREAD_ATTACH, vsys_nullptr);
 	}
 
 	vsys_size __chkstk(vsys_size StackSpaceSize) {

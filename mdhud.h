@@ -34,7 +34,7 @@ VLIB_STRUCTEND(mdHudCommandBuffer)
 VLIB_CABI
 MDHUD_API void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize);
 MDHUD_API void mdHudDestroyCommandBuffer(mdHudCommandBuffer* Cmd);
-MDHUD_API void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd);
+MDHUD_API void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd, st NewSize);
 MDHUD_API void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API const char* mdHudOpcodeToStr(u32 Opcode);

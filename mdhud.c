@@ -70,7 +70,8 @@ void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd) {
 	}
 
 	const st Offset = Cmd->Size - Cmd->LastOpcodeSize;
-	vset(Cmd->Commands + Offset, 0, Cmd->LastOpcodeSize);
+	char* CharPtr = (char*)Cmd->Commands;
+	vset((void*)(CharPtr + Offset), 0, Cmd->LastOpcodeSize);
 	Cmd->Size -= Cmd->LastOpcodeSize;
 	Cmd->LastOpcodeSize = 0;
 
@@ -78,7 +79,7 @@ void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd) {
 
 void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
 	vsys_writeConsoleNullStr("\n");
-	char* WorkPtr = Cmd->Commands;
+	char* WorkPtr = (char*)Cmd->Commands;
 
 	while (1) {
 		u32* OpCheck = (u32 *)WorkPtr;
@@ -130,7 +131,8 @@ void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data) {
 
 	static st Size = sizeof(mdHudCmdButtonData);
 	mdHudCheckSizeCommandBuffer(Cmd, Size + Cmd->Size);
-	mdHudCmdButtonData* TargetMem = (mdHudCmdButtonData*)(Cmd->Commands + Cmd->Size);
+	char* CharPtr = (char*)Cmd->Commands;
+	mdHudCmdButtonData* TargetMem = (mdHudCmdButtonData*)(CharPtr + Cmd->Size);
 	(*TargetMem) = *Data;
 	Cmd->Size += Size;
 	Cmd->LastOpcodeSize = Size;

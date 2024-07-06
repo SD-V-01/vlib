@@ -12,6 +12,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#include "base_types.h"
 #include "mdio.h"
 #include "mderror.h"
 #include "vstr32.h"
@@ -53,7 +54,6 @@ bool mdioAppendDirAndFilename(const char* Directory, const char* Path, char* Des
 
 }
 
-//TODO(V): Make this MDIO_MAX_PATH independent
 void mdioReplacePathExtension(const char* Path, const char* NewExtension, char* Out, st OutSize){
 	st NewExtensionLength = vstrlen8(NewExtension);
 	const st BaseLength = vstrlen8(Path);
@@ -91,6 +91,7 @@ void mdioReplacePathExtension(const char* Path, const char* NewExtension, char* 
 
 	}
 
+	//TODO(V): Make this MDIO_MAX_PATH independent
 	char CurrentExtension[MDIO_MAX_PATH] = { 0 };
 	mdioGetPathExtension(Path, CurrentExtension, MDIO_MAX_PATH);
 	NewPathLength -= vstrlen8(CurrentExtension);
@@ -448,8 +449,7 @@ bool mdioSeparatorFilter(char Char, char Separator) {
 
 //SECTION(V): System
 
-#if defined(VLIB_PLATFORM_LINUX)
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include <stdio.h>
 #include <sys/stat.h>
 
@@ -474,10 +474,56 @@ bool mdioFileExist(const char* Filename) {
 
 }
 
-#else
-#error Implement for platform
+#elif defined(VLIB_PLATFORM_NT)
+bool mdioDeleteFile(const char* Filename) {
+	st FilePathLen = vstrlen8(Filename);
+	wchar_t* PathStr = (wchar_t*)alloca((FilePathLen + 1) * sizeof(wchar_t));
+	st PathStrlength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLen, PathStr, (int)FilePathLen);
+	PathStr[PathStrlength] = 0;
 
-#endif
+	return !_wremove(PathStr);
+
+}
+
+bool mdioRenameFile(const char* Filename, const char* NewFilename) {
+	wchar_t PathStr = NULL;
+	wchar_t NewPathStr = NULL;
+
+	{
+		st FilePathLen = vstrlen8(Filename);
+		PathStr = (wchar_t*)alloca((FilePathLen + 1) * sizeof(wchar_t));
+		st PathStrLength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLen, PathStr, (int)FilePathLen);
+		PathStr[PathStrLength] = 0;
+
+	}
+
+	{
+		st NewFilePathLen = vstrlen8(NewFilename);
+		NewPathStr = (wchar_t*)alloca((NewFilePathLen + 1) * sizeof(wchar_t));
+		st NewPathStrLength = MultiByteToWideChar(CP_UTF8, 0, NewFilename, (int)NewFilePathLen, NewPathStr, (int)NewFilePathLen);
+		NewPathStr[NewPathStrLength] = 0;
+
+	}
+
+	return !_wrename(PathStr, NewPathStr);
+
+}
+
+bool mdioFileExist(const char* Filename) {
+	st FilePathLength = vstrlen8(Filename);
+	wchar_t* PathStr = (wchar_t*)alloca((FilePathLength + 1) * sizeof(wchar_t));
+	st PathStrLength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLength, PathStr, (int)FilePathLength);
+	PathStr[PathStrLength] = 0;
+
+	struct _stat S = {};
+	int Res = _wstat(PathStr, &S);
+	if (Res != 0) {
+		return false;
+
+	}
+	return true;
+
+}
 
 #else
 #error Implement for platform

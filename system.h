@@ -28,6 +28,7 @@ extern "C"{
 	typedef bool vsys_bool;
 	#define vsys_true true;
 	#define vsys_false false;
+	#define vsys_nullptr nullptr
 	typedef size_t vsys_size;
 	typedef __UINTPTR_TYPE__ vsys_uintptr;
 
@@ -35,7 +36,13 @@ extern "C"{
 	typedef _Bool vsys_bool;
 	#define vsys_true 1;
 	#define vsys_false 0;
+	#define vsys_nullptr 0
+	#ifndef __GNUC__
 	typedef size_t vsys_size;
+	#else
+	typedef __SIZE_TYPE__ vsys_size;
+	#endif
+
 	typedef __UINTPTR_TYPE__ vsys_uintptr;
 
 	#endif
@@ -50,7 +57,7 @@ extern "C"{
 	} vsys_coreMemoryProfile;
 	
 	vsys_size vsys_strlen(const char* String);
-	void* vsys_copy(void* Dest, const void* Source, size_t Size);
+	void* vsys_copy(void* Dest, const void* Source, vsys_size Size);
 
 //    NOTE(V): General initialization helpers
 	void vsys_appRtInit();
@@ -82,6 +89,11 @@ extern "C"{
 
 //    NOTE(V): Debugging api
 	void vsys_breakpoint();
+
+	#if defined(__GNUC__) && defined(_WIN32)
+	typedef __WCHAR_TYPE__ wchar_t;
+
+	#endif
 
 //    NOTE(V): Only for porting purpuses, DO NOT USE
 	void _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(const char* In, char* Buffer, vsys_size BufferSize);

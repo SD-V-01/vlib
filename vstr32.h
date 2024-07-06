@@ -57,7 +57,7 @@ VLIB_CABIEND
 
 VLIB_CABI
 VSTR32_API st vstrlen8(const char* String);
-VSTR32_API st vstrlen16(const wchar_t* String);
+VSTR32_API st vstrlen16(const char16* String);
 VSTR32_API st vstrlen32(const vchar* String);
 
 VSTR32_API char* vstrchr8(const char* Str, int Char);

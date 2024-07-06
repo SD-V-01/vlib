@@ -27,8 +27,8 @@ extern "C"{
 
 	}
 
-	void* vsys_copy(void* Dest, const void* Source, size_t Size) {
-		size_t i;
+	void* vsys_copy(void* Dest, const void* Source, vsys_size Size) {
+		vsys_size i;
 
 		if ((vsys_uintptr) Dest % sizeof(long) == 0 && (vsys_uintptr) Source % sizeof(long) == 0 && Size % sizeof(long) == 0) {
 			long* DIt = (long*)Dest;

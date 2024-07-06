@@ -43,8 +43,8 @@ st vstrlen8(const char* String) {
 
 }
 
-st vstrlen16(const wchar_t* String) {
-	const wchar_t* A = String;
+st vstrlen16(const char16* String) {
+	const char16* A = String;
 	for (; *String; String++) {
 
 	}
