@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
+#include "vmeowhash.h"
 
 VLIB_CABI
 
@@ -280,6 +281,15 @@ u64 vfmix64(u64 In) {
 	In ^= In >> 33;
 
 	return In;
+
+}
+
+vhash128 vmeowhash128(void* Seed, st Length, void* Source) {
+	meow_u128 Result = MeowHash(Seed, Length, Source);
+	vhash128 FinalResult;
+	vhash128* ResultPtr = (vhash128*)&Result;
+	FinalResult = *ResultPtr;
+	return FinalResult;
 
 }
 

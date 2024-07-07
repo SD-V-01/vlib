@@ -39,7 +39,13 @@ u32 vfmix32(u32 In);
 u64 vfmix64(u64 In);
 u32 vmh332(const void* Data, st Length, u32 Seed);
 
+VLIB_STRUCT(vhash128)
+u64 Val[2];
+
+VLIB_STRUCTEND(vhash128)
+
+vhash128 vmeowhash128(void* Seed, st Length, void* Source);
+
 VLIB_CABIEND
 
 #endif
-
