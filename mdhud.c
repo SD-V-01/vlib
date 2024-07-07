@@ -17,9 +17,10 @@
 #include "mderror.h"
 #include "system.h"
 
-VLIB_CABI
-
+//SECTION(V): Command buffer
 #define MD_HUD_CREATE_COMMAND_BUFFER_FALLBACK_SIZE 512
+
+VLIB_CABI
 
 void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize){
 	VASSERT(Cmd, "Cmd pointer passed to mdHudCreateCommandBuffer is invalid");
@@ -35,6 +36,9 @@ void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize){
 	VASSERT(Cmd->Commands, "Valloc failed to allocate new command buffer");
 	Cmd->Size = 0;
 	Cmd->Alloc = Size;
+
+	//vset(Cmd->Commands, 0, 8);
+	mdHudClearCommandBuffer(Cmd);
 
 }
 
@@ -52,8 +56,11 @@ void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd, st NewSize) {
 	VASSERT(Cmd, "Cmd pointer passed to mdHudCheckSizeCommandBuffer is invalid");
 	if (Cmd->Size < NewSize) {
 		NewSize = dpow2(NewSize);
-		Cmd->Commands = vrealloc(Cmd->Commands, NewSize);
-		VASSERT(Cmd->Commands, "Failed to allocate memory for command buffer resize");
+		void* NewPtr = valloc(NewSize);
+		VASSERT(NewPtr, "Failed to allocate memory for command buffer resize");
+		vset(NewPtr, 0, NewSize);
+		vcpy(NewPtr, Cmd->Commands, Cmd->Size);
+		Cmd->Commands = NewPtr;
 		Cmd->Alloc = NewSize;
 
 	}
@@ -64,7 +71,7 @@ void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd, st NewSize) {
 void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd) {
 	VASSERT(Cmd, "mdHudCommandBuffer pointer passed to mdHudPopLastCommandBuffer is invalid");
 	if (Cmd->LastOpcodeSize == 0) {
-		VASSERT(0, "Cannot pop more than the last opcode that was added");
+		VASSERT(0, "Cannot pop more than the last opcode that was added with fast pop function");
 		return;
 
 	}
@@ -78,7 +85,13 @@ void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd) {
 }
 
 void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
-	vsys_writeConsoleNullStr("\n");
+	vsys_writeConsoleNullStr("Dumping MdHud command buffer with size \"");
+	vsys_writeConsoleInteger(Cmd->Size);
+	vsys_writeConsoleNullStr("\" alloc \"");
+	vsys_writeConsoleInteger(Cmd->Alloc);
+	vsys_writeConsoleNullStr("\" last command size \"");
+	vsys_writeConsoleInteger(Cmd->LastOpcodeSize);
+	vsys_writeConsoleNullStr("\"\n");
 	char* WorkPtr = (char*)Cmd->Commands;
 
 	while (1) {
@@ -105,10 +118,36 @@ void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
 
 }
 
+void mdHudAppendCommandCommandBuffer(mdHudCommandBuffer* Buf, void* Command, st Size) {
+	VASSERT(Buf, "Command buffer pointer passed to mdHudAppendCommandCommandBuffer is invalid");
+	VASSERT(Command, "Command pointer passed to mdHudAppendCommandCommandBuffer is invalid");
+	if (Size == 0) {
+		VASSERT(0, "Size passed to mdHudAppendCommandCommandBuffer is 0");
+		return;
+
+	}
+
+	mdHudCheckSizeCommandBuffer(Buf, Buf->Size + Size);
+	char* CharPtr = (char*)Buf->Commands;
+	vcpy(CharPtr + Buf->Size, Command, Size);
+	Buf->Size += Size;
+
+}
+
+void mdHudClearCommandBuffer(mdHudCommandBuffer* Cmd) {
+	VASSERT(Cmd, "Pointer passed to mdHudClearCommandBuffer is invalid");
+	VASSERT(Cmd->Alloc, "Command buffer is invalid, the number of bytes allocated is 0");
+
+	vset(Cmd->Commands, 0, Cmd->Alloc);
+	Cmd->Size = 0;
+	Cmd->LastOpcodeSize = 0;
+
+}
+
 const char* mdHudOpcodeToStr(u32 Opcode) {
 	switch (Opcode) {
-		case MD_HUD_BUTTON_OPCODE:
-			return "mdHud_opcode_button";
+		//case MD_HUD_BUTTON_OPCODE:
+			//return "mdHud_opcode_button";
 
 		default:
 			return "mdHud_opcode_tostrerror";
@@ -119,13 +158,14 @@ const char* mdHudOpcodeToStr(u32 Opcode) {
 
 VLIB_CABIEND
 
-//SECTION(V): Opcodes
-VLIB_CABI
+/*
 void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data) {
-	VASSERT(Data->Opcode == MD_HUD_BUTTON_OPCODE, "Bad opcode passed to mdHudCmdButton");
-	if (Data->Size != sizeof(mdHudCmdButtonData)) {
+	u32* OpcodePtr = (u32*)Data;
+	VASSERT(*OpcodePtr == MD_HUD_BUTTON_OPCODE, "Bad opcode passed to mdHudCmdButton");
+	OpcodePtr++;
+	if (*OpcodePtr != sizeof(mdHudCmdButtonData)) {
 		VASSERT(0, "Bad size for fixed size command passed to mdHudCmdButton");
-		Data->Size = sizeof(mdHudCmdButtonData);
+		*OpcodePtr = sizeof(mdHudCmdButtonData);
 
 	}
 
@@ -137,6 +177,6 @@ void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data) {
 	Cmd->Size += Size;
 	Cmd->LastOpcodeSize = Size;
 
-}
+}*/
 
-VLIB_CABIEND
+

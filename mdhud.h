@@ -23,6 +23,8 @@ u8 R, G, B, A;
 
 VLIB_STRUCTEND(mdHudColor)
 
+//SECTION(V): Command buffer
+
 VLIB_STRUCT(mdHudCommandBuffer)
 void* Commands;
 st Size;
@@ -32,25 +34,14 @@ st LastOpcodeSize;
 VLIB_STRUCTEND(mdHudCommandBuffer)
 
 VLIB_CABI
+#define MD_HUD_COMMAND_BUFFER_DEFAULT_SIZE 512
 MDHUD_API void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize);
 MDHUD_API void mdHudDestroyCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd, st NewSize);
 MDHUD_API void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd);
+MDHUD_API void mdHudAppendCommandCommandBuffer(mdHudCommandBuffer* Buf, void* Command, st Size);
+MDHUD_API void mdHudClearCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API const char* mdHudOpcodeToStr(u32 Opcode);
-
-VLIB_CABIEND
-
-#define MD_HUD_BUTTON_OPCODE 256
-VLIB_STRUCT(mdHudCmdButtonData)
-u32 Opcode;
-u32 Size;
-mdHudColor Color;
-
-VLIB_STRUCTEND(mdHudCmdButtonData)
-
-//SECTION(V): Opcodes
-VLIB_CABI
-MDHUD_API void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data);
 
 VLIB_CABIEND
