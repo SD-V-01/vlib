@@ -18,6 +18,8 @@
 
 #define MDHUD_API
 
+//SECTION(V): General
+
 VLIB_STRUCT(mdHudColor)
 u8 R, G, B, A;
 
