@@ -65,7 +65,6 @@ extern "C"{
 	unsigned int vsys_getNumberOfDigits(unsigned long int In);
 
 	//NOTE(V): System specific init
-	void vsys_earlyInit();
 	void vsys_init();
 
 	//NOTE(V): Console/Logging syscall wrapper

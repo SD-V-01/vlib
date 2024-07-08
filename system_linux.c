@@ -94,11 +94,6 @@ void vsys_getOsVar(const char* In, char* Buffer, vsys_size BufferSize) {
 
 }
 
-void vsys_earlyInit() {
-	//    TODO(V): !!!!! STUB
-
-}
-
 void vsys_init() {
 	#ifdef VLIB_ON_CRT
 	vsys_writeConsoleNullStr("Initializing V Runtime enviroment for Linux on CRT\n");

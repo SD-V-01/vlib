@@ -108,7 +108,6 @@ extern "C"{
 	}
 
 	void vsys_appRtInit() {
-		vsys_earlyInit();
 		vsys_initConsole();
 
 		vsys_init();
@@ -141,6 +140,9 @@ extern "C"{
 	void vsys_initCoreMemory() {
 		#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 		vlib_mimalloc_preinit();
+
+		#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+//        NOTE(V): We do nothing as the system malloc is by default initialized
 
 		#else
 		#error define allocator implementation

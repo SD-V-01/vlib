@@ -70,10 +70,6 @@ extern "C"{
 
 	}
 
-	void vsys_earlyInit() {
-
-	}
-
 	void vsys_init() {
 		vsys_writeConsoleNullStr("Starting V Runtime enviroment for Windows NT 7 !!!\n");
 

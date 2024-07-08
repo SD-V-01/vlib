@@ -12,6 +12,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#ifndef VLIB_NO_ENTRY
+
 void vrt_preInitUsr();
 void vrt_usrCode();
 
@@ -109,6 +111,17 @@ extern "C"{
 		__android_log_print(ANDROID_LOG_WARN, "mdos", "Starting mdos from android_main");
 
 	}
+
+}
+
+#endif
+
+#else
+void vrt_libInit() {
+	vrt_preInitUsr();
+	vsys_appRtInit();
+	vsys_initCoreMemory();
+	vrt_usrCode();
 
 }
 

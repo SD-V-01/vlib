@@ -18,6 +18,9 @@
 #if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 #include "mimalloc.h"
 
+#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+#include "vsystemalloc.h"
+
 #endif
 
 VLIB_CABI
@@ -25,6 +28,10 @@ VLIB_CABI
 void* valloc(st Size){
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC //NOTE(V): Mimalloc
 	return mi_malloc(Size);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	return vsys_malloc(Size);
+
 	#else
 	#error implement allocator
 
@@ -35,6 +42,10 @@ void* valloc(st Size){
 void* vaalloc(st Size, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_malloc_aligned(Size, Alignment);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	return vsys_aligned_malloc(Size, Alignment);
+
 	#else
 	#error implement allocator
 
@@ -45,6 +56,10 @@ void* vaalloc(st Size, st Alignment) {
 void vfree(void* Size) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	mi_free(Size);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	vsys_free(Size);
+
 	#else
 	#error implement allocator
 
@@ -55,6 +70,10 @@ void vfree(void* Size) {
 void* vrealloc(void* Ptr, st NewSize) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc(Ptr, NewSize);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	return vsys_realloc(Ptr, NewSize);
+
 	#else
 	#error implement allocator
 
@@ -65,6 +84,10 @@ void* vrealloc(void* Ptr, st NewSize) {
 void* varealloc(void* Ptr, st NewSize, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc_aligned(Ptr, NewSize, Alignment);
+	
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	return vsys_aligned_realloc(Ptr, NewSize, Alignment);
+
 	#else
 	#error implement allocator
 
@@ -76,6 +99,10 @@ void* vcalloc(st size, st count){
 	//    STUB(V): Implement
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_calloc(size, count);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	return vsys_calloc(size, count);
+
 	#else
 	#error implement allocator
 

@@ -30,4 +30,9 @@ void vrt_CoreMemInit();
 
 VLIBPP_END
 
+VLIB_CABI
+void vrt_libInit();
+
+VLIB_CABIEND
+
 #endif
