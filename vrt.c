@@ -12,10 +12,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#ifndef VLIB_NO_ENTRY
-
 void vrt_preInitUsr();
+
 void vrt_usrCode();
+
+#ifndef VLIB_NO_ENTRY
 
 #if !defined(VLIB_ON_CRT) && !defined(VLIB_NO_ENTRY)
 
@@ -117,6 +118,8 @@ extern "C"{
 #endif
 
 #else
+#include "system.h"
+
 void vrt_libInit() {
 	vrt_preInitUsr();
 	vsys_appRtInit();

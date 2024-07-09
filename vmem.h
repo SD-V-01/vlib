@@ -22,20 +22,32 @@
 
 VLIB_CABI
 MEM_API void* dalloc(size_t size);
+MEM_API void* daalloc(size_t size, size_t Alignment);
 MEM_API void* dcalloc(size_t size, size_t count);
 MEM_API void* drealloc(void* p, size_t new_size);
+MEM_API void* darealloc(void* p, size_t new_size, size_t Alignment);
 MEM_API void dfree(void* p);
 
 MEM_API u32 dpow2(u32 In);
 
 MEM_API void* dcpy(void* Dest, const void* Source, size_t Size);
 
+#ifndef VLIB_NO_CRT_REDEFINE
 MEM_API void* valloc(st Size);
 MEM_API void* vaalloc(st Size, st Alignment);
 MEM_API void vfree(void* Ptr);
 MEM_API void* vrealloc(void* Ptr, st NewSize);
 MEM_API void* varealloc(void* Ptr, st NewSize, st Alignment);
 MEM_API void* vcalloc(st size, st count);
+
+#endif
+
+MEM_API void* vallocimpl(st Size);
+MEM_API void* vaallocimpl(st Size, st Alignment);
+MEM_API void vfreeimpl(void* Ptr);
+MEM_API void* vreallocimpl(void* Ptr, st NewSize);
+MEM_API void* vareallocimpl(void* Ptr, st NewSize, st Alignment);
+MEM_API void* vcallocimpl(st size, st count);
 
 MEM_API void* vcpy(void* Dest, const void* Source, size_t Size);
 MEM_API void* vc(const void* Source, void* Dest, st Size);

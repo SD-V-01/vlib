@@ -25,7 +25,7 @@
 
 VLIB_CABI
 
-void* valloc(st Size){
+void* vallocimpl(st Size){
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC //NOTE(V): Mimalloc
 	return mi_malloc(Size);
 
@@ -39,7 +39,7 @@ void* valloc(st Size){
 
 }
 
-void* vaalloc(st Size, st Alignment) {
+void* vaallocimpl(st Size, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_malloc_aligned(Size, Alignment);
 
@@ -53,7 +53,7 @@ void* vaalloc(st Size, st Alignment) {
 
 }
 
-void vfree(void* Size) {
+void vfreeimpl(void* Size) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	mi_free(Size);
 
@@ -67,7 +67,7 @@ void vfree(void* Size) {
 
 }
 
-void* vrealloc(void* Ptr, st NewSize) {
+void* vreallocimpl(void* Ptr, st NewSize) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc(Ptr, NewSize);
 
@@ -81,7 +81,7 @@ void* vrealloc(void* Ptr, st NewSize) {
 
 }
 
-void* varealloc(void* Ptr, st NewSize, st Alignment) {
+void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc_aligned(Ptr, NewSize, Alignment);
 	
@@ -95,7 +95,7 @@ void* varealloc(void* Ptr, st NewSize, st Alignment) {
 
 }
 
-void* vcalloc(st size, st count){
+void* vcallocimpl(st size, st count){
 	//    STUB(V): Implement
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_calloc(size, count);
@@ -109,23 +109,66 @@ void* vcalloc(st size, st count){
 	#endif
 }
 
+#ifndef VLIB_NO_CRT_REDEFINE
+void* valloc(st Size) {
+	return vallocimpl(Size);
+
+}
+
+void* vaalloc(st Size, st Alignment) {
+	return vaallocimpl(Size, Alignment);
+
+}
+
+void vfree(void* Ptr) {
+	vfreeimpl(Ptr);
+
+}
+
+void* vrealloc(void* Ptr, st NewSize) {
+	return vreallocimpl(Ptr, NewSize);
+
+}
+
+void* varealloc(void* Ptr, st NewSize, st Alignment) {
+	return vareallocimpl(Ptr, NewSize, Alignment);
+
+}
+
+void* vcalloc(st size, st count) {
+	return vcallocimpl(size, count);
+
+}
+
+#endif
+
 void* dalloc(size_t size){
-	return valloc(size);
+	return vallocimpl(size);
+
+}
+
+void* daalloc(size_t size, size_t Alignment){
+	return vaallocimpl(size, Alignment);
 
 }
 
 void* dcalloc(size_t size, size_t count){
-	return vcalloc(size, count);
+	return vcallocimpl(size, count);
 
 }
 
 void* drealloc(void* p, size_t new_size){
-	return vrealloc(p, new_size);
+	return vreallocimpl(p, new_size);
+
+}
+
+void* darealloc(void* p, size_t new_size, size_t Alignment){
+	return vareallocimpl(p, new_size, Alignment);
 
 }
 
 void dfree(void* p){
-	vfree(p);
+	vfreeimpl(p);
 }
 
 VLIB_CABIEND
