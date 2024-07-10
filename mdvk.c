@@ -43,16 +43,24 @@ static void vkFreeImpl(void* UserData, void* Ptr) {
 
 void mdvkInitVkVmemState() {
 	if (MdvkState.isVmemCallbackInit == false) {
-		MdvkState.VmemCallback.pUserData = NULL;
-		MdvkState.VmemCallback.pfnAllocation = &vkAllocImpl;
-		MdvkState.VmemCallback.pfnReallocation = &vkReallocImpl;
-		MdvkState.VmemCallback.pfnFree = &vkFreeImpl;
-		MdvkState.VmemCallback.pfnInternalAllocation = NULL;
-		MdvkState.VmemCallback.pfnInternalFree = NULL;
-
+		MdvkState.VmemCallback = mdvkInitVmem();
 		MdvkState.isVmemCallbackInit = true;
 
 	}
+
+}
+
+VkAllocationCallbacks mdvkInitVmem() {
+	VkAllocationCallbacks Result;
+	vset(&Result, 0, sizeof(Result));
+	Result.pUserData = NULL;
+	Result.pfnAllocation = &vkAllocImpl;
+	Result.pfnReallocation = &vkReallocImpl;
+	Result.pfnFree = &vkFreeImpl;
+	Result.pfnInternalAllocation = NULL;
+	Result.pfnInternalFree = NULL;
+
+	return Result;
 
 }
 
@@ -824,6 +832,12 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 	vsys_writeConsoleNullStr("\n");
 
 	return MDVK_ERROR_SUCCESS;
+
+}
+
+MDVK_ERROR mdvkXrCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
+								const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result) {
+
 
 }
 

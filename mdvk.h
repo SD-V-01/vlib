@@ -19,6 +19,8 @@
 
 #include "base_types.h"
 
+#define MDVK_API
+
 VLIB_STRUCT(mdvkState)
 VkInstance Instance;
 VkDevice Device;
@@ -29,8 +31,9 @@ bool isVmemCallbackInit;
 
 VLIB_STRUCTEND(mdvkState)
 
-const mdvkState* mdvkGetVulkanState();
-void mdvkInitVkVmemState();
+MDVK_API const mdvkState* mdvkGetVulkanState();
+MDVK_API void mdvkInitVkVmemState();
+MDVK_API VkAllocationCallbacks mdvkInitVmem();
 
 VLIB_STRUCT(mdvkInitStruct)
 const char* AppName;
@@ -97,29 +100,32 @@ typedef enum MDVK_ERROR {
 
 } MDVK_ERROR;
 
-MDVK_ERROR mdvkInit(const mdvkInitStruct* InitStruct);
-MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysicalDevice* Result);
-MDVK_ERROR mdvkGetFirstQueueIndex(VkPhysicalDevice* PhysDevice, VkQueueFlags WantedFlags, i32* Result);
+MDVK_API MDVK_ERROR mdvkInit(const mdvkInitStruct* InitStruct);
+MDVK_API MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysicalDevice* Result);
+MDVK_API MDVK_ERROR mdvkGetFirstQueueIndex(VkPhysicalDevice* PhysDevice, VkQueueFlags WantedFlags, i32* Result);
 
-MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
+MDVK_API MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
 							  const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result);
 
-MDVK_ERROR mdvkCreateDevice(const char** Layers, st LayerCount, const char** Extensions, st ExtensionCount,
+MDVK_API MDVK_ERROR mdvkCreateDevice(const char** Layers, st LayerCount, const char** Extensions, st ExtensionCount,
 							const VkDeviceQueueCreateInfo* Queues, st QueueCount, VkPhysicalDevice* PhysDevice,
 							VkAllocationCallbacks* MemCb, VkDevice* Result);
 
 #define MDVK_FIND_IN_LIST_FAILURE 999999
-st mdvkFindNameInList(const char* Key, const char** List, st ListSize);
-bool mdvkIsInstanceExtensionPresent(const char* WantedExt, MDVK_ERROR* Error, u32* SpecVer);
-bool mdvkIsInstanceLayerPresent(const char* WantedLayer, MDVK_ERROR* Error, u32* SpecVer, u32* ImplVer);
-MDVK_ERROR mdvkDumpAllInstanceExtToStdout();
-MDVK_ERROR mdvkDumpAllInstanceLayerToStdout();
-bool mdvkIsDeviceExtensionPresent(const char* WantedExt, VkPhysicalDevice* Device, MDVK_ERROR* Error, u32* SpecVer);
-bool mdvkIsDeviceLayerPresent(const char* WantedExt, VkPhysicalDevice* Device, MDVK_ERROR* Error, u32* SpecVer, u32* ImplVer);
-MDVK_ERROR mdvkDumpAllDeviceExtToStdout(VkPhysicalDevice* Device);
-MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device);
+MDVK_API st mdvkFindNameInList(const char* Key, const char** List, st ListSize);
+MDVK_API bool mdvkIsInstanceExtensionPresent(const char* WantedExt, MDVK_ERROR* Error, u32* SpecVer);
+MDVK_API bool mdvkIsInstanceLayerPresent(const char* WantedLayer, MDVK_ERROR* Error, u32* SpecVer, u32* ImplVer);
+MDVK_API MDVK_ERROR mdvkDumpAllInstanceExtToStdout();
+MDVK_API MDVK_ERROR mdvkDumpAllInstanceLayerToStdout();
+MDVK_API bool mdvkIsDeviceExtensionPresent(const char* WantedExt, VkPhysicalDevice* Device, MDVK_ERROR* Error, u32* SpecVer);
+MDVK_API bool mdvkIsDeviceLayerPresent(const char* WantedExt, VkPhysicalDevice* Device, MDVK_ERROR* Error, u32* SpecVer, u32* ImplVer);
+MDVK_API MDVK_ERROR mdvkDumpAllDeviceExtToStdout(VkPhysicalDevice* Device);
+MDVK_API MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device);
 
-MDVK_ERROR mdvkInitLoader();
-MDVK_ERROR mdvkFreeLoader();
-MDVK_ERROR mdvkLoaderLoadInstance(VkInstance* Instance);
-MDVK_ERROR mdvkLoaderLoadDevice(VkDevice* Device);
+MDVK_API MDVK_ERROR mdvkXrCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
+								const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result);
+
+MDVK_API MDVK_ERROR mdvkInitLoader();
+MDVK_API MDVK_ERROR mdvkFreeLoader();
+MDVK_API MDVK_ERROR mdvkLoaderLoadInstance(VkInstance* Instance);
+MDVK_API MDVK_ERROR mdvkLoaderLoadDevice(VkDevice* Device);

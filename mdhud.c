@@ -156,7 +156,6 @@ const char* mdHudOpcodeToStr(u32 Opcode) {
 
 }
 
-VLIB_CABIEND
 
 /*
 void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data) {
@@ -180,3 +179,5 @@ void mdHudCmdButton(mdHudCommandBuffer* Cmd, mdHudCmdButtonData* Data) {
 }*/
 
 
+
+VLIB_CABIEND
