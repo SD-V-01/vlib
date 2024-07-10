@@ -111,7 +111,7 @@ MDVK_API MDVK_ERROR mdvkCreateDevice(const char** Layers, st LayerCount, const c
 							const VkDeviceQueueCreateInfo* Queues, st QueueCount, VkPhysicalDevice* PhysDevice,
 							VkAllocationCallbacks* MemCb, VkDevice* Result);
 
-#define MDVK_FIND_IN_LIST_FAILURE 999999
+#define MDVK_FIND_IN_LIST_FAILURE 666666
 MDVK_API st mdvkFindNameInList(const char* Key, const char** List, st ListSize);
 MDVK_API bool mdvkIsInstanceExtensionPresent(const char* WantedExt, MDVK_ERROR* Error, u32* SpecVer);
 MDVK_API bool mdvkIsInstanceLayerPresent(const char* WantedLayer, MDVK_ERROR* Error, u32* SpecVer, u32* ImplVer);
