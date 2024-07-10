@@ -52,7 +52,8 @@ MDHUD_API void mdHudAppendCommandCommandBuffer(mdHudCommandBuffer* Buf, void* Co
 MDHUD_API void mdHudClearCommandBuffer(mdHudCommandBuffer* Cmd);
 MDHUD_API const char* mdHudOpcodeToStr(u32 Opcode);
 
-MDHUD_API void mdHudCmdRect(
+//TODO(V): Do mdHudCmd stuff for drawing
+//MDHUD_API void mdHudCmdRect(
 
 VLIB_CABIEND
 
