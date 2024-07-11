@@ -14,7 +14,9 @@
 
 #include "VHatesOpenxr.h"
 #include "mderror.h"
+#include "vstr32.h"
 
+#include "vulkan/vulkan_core.h"
 #define XR_USE_GRAPHICS_API_VULKAN
 #ifdef VLIB_ANDROID
 #define XR_USE_PLATFORM_ANDROID
@@ -66,10 +68,10 @@ void xrsuxAndroidLoaderInit(void* Vm, void* Context){
 #endif
 
 st xrsuxFindNameInList(const char* Key, const char** List, st ListSize) {
-	const st WantedSize = mdvkStrlen(Key);
+	const st WantedSize = vstrlen8(Key);
 
 	for (u32 v = 0; v < ListSize; v++) {
-		if (mdvkStrlen(List[v]) != WantedSize) {
+		if (vstrlen8(List[v]) != WantedSize) {
 			goto END_DEVICE_EXTENSION_LOOP;
 
 		}
