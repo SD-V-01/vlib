@@ -14,7 +14,9 @@
 
 #pragma once
 
+#include "cpp_compiler.h"
 
+#ifdef VLIB_USE_OXR
 #include "base_types.h"
 
 #define XRSUCKS_API
@@ -31,3 +33,5 @@ XRSUCKS_API bool xrsuxIsLayerPresent(const char* Wanted);
 XRSUCKS_API bool xrsuxIsExtensionPresent(const char* Wanted);
 
 VLIB_CABIEND
+
+#endif

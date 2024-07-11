@@ -12,6 +12,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#include "cpp_compiler.h"
+
+#ifdef VLIB_USE_OXR
+
 #include "VHatesOpenxr.h"
 #include "mderror.h"
 #include "vstr32.h"
@@ -189,3 +193,5 @@ bool xrsuxIsExtensionPresent(const char* Wanted) {
 }
 
 VLIB_CABIEND
+
+#endif
