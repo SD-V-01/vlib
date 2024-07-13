@@ -25,6 +25,11 @@
 #include <sys/sysinfo.h>
 #include "vmem.h"
 #include "pthread.h"
+#include "sys/time.h"
+
+#define NSEC_PER_USEC 1000ull
+#define NSEC_PER_SEC  1000000000ull
+#define NSEC_PER_MSEC 1000000ull
 
 //NOTE(V): Frw
 int pthread_setname_np(pthread_t thread, const char* name);
@@ -130,8 +135,7 @@ void mdHostMutex::release() {
 
 VLIB_CABI
 
-#ifdef VLIB_PLATFORM_LINUX
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 
 bool mdCreateHostMutex(mdHostMutex* Mutex){
 	Mutex->Spin = MD_MUTEX_DEFAULT_SPIN;
@@ -174,11 +178,6 @@ void mdReleaseHostMutex(mdHostMutex* Mutex) {
 	pthread_mutex_unlock(&Mutex->MutexImpl);
 
 }
-
-#else
-#error Implement platform
-
-#endif
 
 #elif defined(VLIB_PLATFORM_NT)
 bool mdCreateHostMutex(mdHostMutex* Mutex) {
@@ -246,6 +245,11 @@ void mdHostCondVar::wait(mdHostMutex* Mutex) {
 
 }
 
+void mdHostCondVar::timedWait(mdHostMutex* Mutex, u32 Ms) {
+	mdTimedWaitHostCondVar(this, Mutex, Ms);
+
+}
+
 void mdHostCondVar::wakeOne() {
 	mdWakeOneHostCondVar(this);
 
@@ -260,8 +264,7 @@ void mdHostCondVar::wakeAll() {
 
 VLIB_CABI
 
-#ifdef VLIB_PLATFORM_LINUX
-#ifdef VLIB_ON_CRT
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 bool mdCreateHostCondVar(mdHostCondVar* Var) {
 	Var->Impl = (pthread_cond_t)PTHREAD_COND_INITIALIZER;
 	int Result = pthread_cond_init(&Var->Impl, NULL);
@@ -281,6 +284,28 @@ void mdWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex) {
 
 }
 
+void mdTimedWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex, u32 Ms) {
+	pthread_mutex_t* Handle = (pthread_mutex_t *)&Mutex->MutexImpl;
+	if (Ms == MDSCH_TIME_INFINITE) {
+		pthread_cond_wait(&Var->Impl, Handle);
+
+	}
+	else {
+		struct timeval Now;
+		struct timespec Timeout;
+		gettimeofday(&Now, NULL);
+		Timeout.tv_sec = Now.tv_sec + Ms / 1000;
+		Timeout.tv_nsec = Now.tv_usec * NSEC_PER_USEC;
+		Timeout.tv_nsec += (Ms % 1000) * NSEC_PER_MSEC;
+		Timeout.tv_sec += Timeout.tv_nsec / (NSEC_PER_SEC);
+		Timeout.tv_nsec %= (NSEC_PER_SEC);
+
+		pthread_cond_timedwait(&Var->Impl, Handle, &Timeout);
+
+	}
+
+}
+
 void mdWakeOneHostCondVar(mdHostCondVar* Var) {
 	pthread_cond_signal(&Var->Impl);
 
@@ -290,11 +315,6 @@ void mdWakeAllHostCondVar(mdHostCondVar* Var) {
 	pthread_cond_broadcast(&Var->Impl);
 
 }
-
-#else
-#error Implement platform
-
-#endif
 
 #elif defined(VLIB_PLATFORM_NT)
 bool mdCreateHostCondVar(mdHostCondVar* Var) {
@@ -310,7 +330,12 @@ void mdDestroyHostCondVar(mdHostCondVar* Var) {
 }
 
 void mdWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex) {
-	SleepConditionVariableCS((PCONDITION_VARIABLE)Var->Impl, (PCRITICAL_SECTION)&Mutex->MutexImpl);
+	SleepConditionVariableCS((PCONDITION_VARIABLE)Var->Impl, (PCRITICAL_SECTION)&Mutex->MutexImpl, INFINITE);
+
+}
+
+void mdTimedWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex, u32 Ms) {
+	SleepConditionVariableCS((PCONDITION_VARIABLE)Var->Impl, (PCRITICAL_SECTION)&Mutex->MutexImpl, Ms);
 
 }
 

@@ -112,6 +112,8 @@ VLIB_CABIEND
 
 //SECTION(V): Conditional variable
 
+#define MDSCH_TIME_INFINITE 0xFFFFFFFF
+
 VLIB_STRUCT(mdHostCondVar)
 
 #ifdef VLIB_PLATFORM_LINUX
@@ -137,6 +139,7 @@ mdHostCondVar();
 MDSCHEDULER_API bool create();
 MDSCHEDULER_API void destroy();
 MDSCHEDULER_API void wait(mdHostMutex* Mutex);
+MDSCHEDULER_API void timedWait(mdHostMutex* Mutex, u32 Ms);
 MDSCHEDULER_API void wakeOne();
 MDSCHEDULER_API void wakeAll();
 
@@ -149,6 +152,7 @@ VLIB_CABI
 MDSCHEDULER_API bool mdCreateHostCondVar(mdHostCondVar* Var);
 MDSCHEDULER_API void mdDestroyHostCondVar(mdHostCondVar* Var);
 MDSCHEDULER_API void mdWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex);
+MDSCHEDULER_API void mdTimedWaitHostCondVar(mdHostCondVar* Var, mdHostMutex* Mutex, u32 Ms);
 MDSCHEDULER_API void mdWakeOneHostCondVar(mdHostCondVar* Var);
 MDSCHEDULER_API void mdWakeAllHostCondVar(mdHostCondVar* Var);
 

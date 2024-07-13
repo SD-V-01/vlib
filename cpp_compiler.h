@@ -29,7 +29,7 @@
 #endif
 #define VLIB_ANDROID
 
-#elif defined(__unix__) && !defined(__APPLE__)
+#elif defined(__linux__)
 #define VLIB_PLATFORM_LINUX
 
 #else
