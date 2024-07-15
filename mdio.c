@@ -450,8 +450,31 @@ bool mdioSeparatorFilter(char Char, char Separator) {
 //SECTION(V): System
 
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+#include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "system.h"
+
+void mdioErrorReportFile(const char* Error, const char* Path, unsigned int ErrorCode) {
+//    TODO(V): Make this use a better api for error reporting
+
+	vsys_writeConsoleNullStr("mdIO Error \"");
+	vsys_writeConsoleNullStr(Error);
+	vsys_writeConsoleNullStr("\" with code \"");
+	vsys_writeConsoleInteger(ErrorCode);
+	vsys_writeConsoleNullStr("\" and path \"");
+	vsys_writeConsoleNullStr(Path);
+	vsys_writeConsoleNullStr("\"\n");
+
+	#ifdef VLIB_IO_ERROR_BREAKPOINT
+	vsys_breakpoint();
+
+	#endif
+
+}
 
 bool mdioDeleteFile(const char* Filename) {
 	return !remove(Filename);
@@ -471,6 +494,240 @@ bool mdioFileExist(const char* Filename) {
 
 	}
 	return true;
+
+}
+
+i64 mdioGetModifiedLastTimeUnix(const char* Filename) {
+	struct stat Fileinfo = { 0 };
+	stat(Filename, &Fileinfo);
+	return Fileinfo.st_mtime;
+
+}
+
+i64 mdioGetAccessedLastTimeUnix(const char* Filename) {
+	struct stat Fileinfo = { 0 };
+	stat(Filename, &Fileinfo);
+	return Fileinfo.st_atime;
+
+}
+
+st mdioGetFileSize(const char* Filename) {
+	struct stat FileInfo = { 0 };
+	stat(Filename, &FileInfo);
+	return FileInfo.st_size;
+
+}
+
+bool mdioDirectoryExist(const char* Path) {
+	struct stat Fileinfo = { 0 };
+	if (stat(Path, &Fileinfo)) {
+		return false;
+
+	}
+
+	return (Fileinfo.st_mode & S_IFDIR) != 0;
+
+}
+
+bool mdio777CreateDir(const char* Path) {
+	if (mdioDirectoryExist(Path)) {
+		return true;
+
+	}
+
+//    TODO(V): Make this MDIO_MAX_PATH independent
+	char ParentPath[MDIO_MAX_PATH] = { 0 };
+	mdioGetParentPath(Path, ParentPath, MDIO_MAX_PATH);
+	if (ParentPath[0] != 0) {
+		mdio777CreateDir(ParentPath);
+
+	}
+
+	//    TODO(V): Passin permissions
+	if (mkdir(Path, 0777) != 0) {
+//        TODO(V): Replace this with a better error handeling message
+		VASSERT(0, "Could not create directory");
+		return false;
+
+	}
+
+	return true;
+
+}
+
+bool mdio777NoRecurseCreateDir(const char* Path) {
+	if (mdioDirectoryExist(Path)) {
+		return true;
+
+	}
+
+	//    TODO(V): Passin permissions
+	if (mkdir(Path, 0777) != 0) {
+		//        TODO(V): Replace this with a better error handeling message
+		VASSERT(0, "Could not create directory");
+		return false;
+
+	}
+
+	return true;
+
+}
+
+bool mdio777RecurseCreateDir(const char* Path, const bool ShouldRecurse) {
+	if (mdioDirectoryExist(Path)) {
+		return true;
+
+	}
+
+	if (ShouldRecurse) {
+		//    TODO(V): Make this MDIO_MAX_PATH independent
+		char ParentPath[MDIO_MAX_PATH] = { 0 };
+		mdioGetParentPath(Path, ParentPath, MDIO_MAX_PATH);
+		if (ParentPath[0] != 0) {
+			mdio777CreateDir(ParentPath);
+
+		}
+
+	}
+
+	//    TODO(V): Passin permissions
+	if (mkdir(Path, 0777) != 0) {
+		//        TODO(V): Replace this with a better error handeling message
+		VASSERT(0, "Could not create directory");
+		return false;
+
+	}
+
+	return true;
+
+}
+
+bool mdio666OpenFile(mdioFile* File, const char* Path, mdioMode Mode) {
+	vset(File, 0, sizeof(*File));
+
+	int Flags = 0;
+	mode_t SysPerms = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IROTH;
+	if (Mode & mdioMode_write) {
+		Flags |= O_CREAT;
+		if (Mode & mdioMode_append) {
+			Flags |= O_APPEND;
+
+		}
+		else {
+			Flags |= O_TRUNC;
+
+		}
+
+		if (Mode & mdioMode_read) {
+			Flags |= O_RDWR;
+
+		}
+		else {
+			Flags |= O_WRONLY;
+
+		}
+
+	}
+	else {
+		Flags |= O_RDONLY;
+
+	}
+
+	int FileDesc = open(Path, Flags, SysPerms);
+	if (FileDesc < 0) {
+		mdioErrorReportFile("Could not 666Open requested file", Path, errno);
+		return false;
+
+	}
+
+	File->Descriptor.UnixFileDesc = FileDesc;
+	File->Size = -1;
+
+	struct stat FileInfo = { 0 };
+	if (fstat(FileDesc, &FileInfo) == 0) {
+		File->Size = FileInfo.st_size;
+
+	}
+	else {
+		mdioErrorReportFile("Could not get the size of the file that was just 666Open'd", Path, errno);
+
+	}
+
+	File->Mode = Mode;
+	File->Map = NULL;
+
+	if ((Mode & mdioMode_read) && (Mode & mdioMode_append) && !(Mode & mdioMode_write)) {
+		if (!mdioSeekFile(File, mdioSeek_end, 0)) {
+			mdioCloseFile(File);
+			return false;
+
+		}
+
+	}
+
+	return true;
+
+}
+
+bool mdioSeekFile(mdioFile* File, mdioSeek Start, st Offset) {
+
+
+}
+
+st mdioGetPositionFile(mdioFile* File) {
+	off_t Res = lseek(File->Descriptor.UnixFileDesc, 0, SEEK_CUR);
+	if (Res >= 0) {
+		return Res;
+
+	}
+
+	char Buffer[1024];
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not get position of file", Buffer, errno);
+	return 0;
+
+}
+
+const char* mdioDereferenceDescriptorFile(mdioFile* File, char* Buffer, st BufferSize) {
+	char FdPath[64];
+	snprintf(FdPath, 64, "/proc/self/fd/%i", File->Descriptor.UnixFileDesc);
+	st Len = readlink(FdPath, Buffer, BufferSize - 1);
+	if (Len >= 0) {
+		Buffer[Len] = 0;
+		return Buffer;
+
+	}
+
+	mdioErrorReportFile("Could not dereference file name from descriptor", FdPath, errno);
+	return "UNKNOWN_FILE_NAME_DERED_FAILED";
+
+}
+
+bool mdioCloseFile(mdioFile* File) {
+	if (File->Map) {
+		if (munmap(File->Map, (st)File->Size)) {
+			char Buffer[1024];
+			mdioDereferenceDescriptorFile(File, Buffer, 1024);
+			mdioErrorReportFile("Could not munmap memory mapped file", Buffer, errno);
+
+		}
+		else {
+			File->Map = NULL;
+
+		}
+
+	}
+
+	char Buffer[1024];
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+
+	bool Success = File->Descriptor.UnixFileDesc < 0 || close(File->Descriptor.UnixFileDesc) == 0;
+	if (!Success) {
+		mdioErrorReportFile("Could not close file", Buffer, errno);
+
+	}
+	File->Descriptor.UnixFileDesc = -1;
+	return Success;
 
 }
 

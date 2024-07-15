@@ -53,15 +53,33 @@ typedef enum mdioAccess {
 
 } mdioAccess;
 
-VLIB_STRUCT(mdioFileInterface)
+typedef enum mdioKernel {
+	mdioKernel_direct MYTH_BIT(1),
+	mdioKernel_noSymLinkDereference MYTH_BIT(2),
+	mdioKernel_temp MYTH_BIT(3),
 
+} mdioKernel;
 
-VLIB_STRUCTEND(mdioFileInterface)
+typedef enum mdioSeek {
+	mdioSeek_start = 0,
+	mdioSeek_current,
+	mdioSeek_end,
+
+	mdioSeek_COUNT,
+
+} mdioSeek;
+
+typedef union mdioFileDesc{
+	int UnixFileDesc;
+	void* VoidP;
+
+} mdioFileDesc;
 
 VLIB_STRUCT(mdioFile)
-mdioFileInterface* Interface;
 mdioMode Mode;
-
+st Size;
+void* Map;
+mdioFileDesc Descriptor;
 
 VLIB_STRUCTEND(mdioFile)
 
@@ -80,8 +98,21 @@ MDIO_API bool mdioIsDriveLetter(const char* Path);
 MDIO_API bool mdioSeparatorFilter(char Char, char Separator);
 
 //SECTION(V): System
+MDIO_API void mdioErrorReportFile(const char* Error, const char* Path, unsigned int ErrorCode);
 MDIO_API bool mdioDeleteFile(const char* Filename);
 MDIO_API bool mdioRenameFile(const char* Filename, const char* NewFilename);
 MDIO_API bool mdioFileExist(const char* Filename);
+MDIO_API i64 mdioGetModifiedLastTimeUnix(const char* Filename);
+MDIO_API i64 mdioGetAccessedLastTimeUnix(const char* Filename);
+MDIO_API st mdioGetFileSize(const char* Filename);
+MDIO_API bool mdioDirectoryExist(const char* Path);
+MDIO_API bool mdio777CreateDir(const char* Path);
+MDIO_API bool mdio777NoRecurseCreateDir(const char* Path);
+MDIO_API bool mdio777RecurseCreateDir(const char* Path, const bool ShouldRecurse);
+MDIO_API bool mdio666OpenFile(mdioFile* File, const char* Path, mdioMode Mode);
+MDIO_API bool mdioSeekFile(mdioFile* File, mdioSeek Start, st Offset);
+MDIO_API st mdioGetPositionFile(mdioFile* File);
+MDIO_API const char* mdioDereferenceDescriptorFile(mdioFile* File, char* Buffer, st BufferSize);
+MDIO_API bool mdioCloseFile(mdioFile* File);
 
 VLIB_CABIEND
