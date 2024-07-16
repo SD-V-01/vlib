@@ -508,6 +508,7 @@ i64 mdioGetModifiedLastTimeUnix(const char* Filename) {
 
 }
 
+//TODO(V): Should error chek those stat calls
 i64 mdioGetAccessedLastTimeUnix(const char* Filename) {
 	struct stat Fileinfo = { 0 };
 	stat(Filename, &Fileinfo);
@@ -735,7 +736,7 @@ const char* mdioDereferenceDescriptorFile(mdioFile* File, char* Buffer, st Buffe
 	}
 
 	mdioErrorReportFile("Could not dereference file name from descriptor", FdPath, errno);
-	return "UNKNOWN_FILE_NAME_DERED_FAILED";
+	return "UNKNOWN_FILE_NAME_DEREF_FAILED";
 
 }
 
