@@ -458,12 +458,16 @@ bool mdioSeparatorFilter(char Char, char Separator) {
 #include <fcntl.h>
 #include "system.h"
 
-void mdioErrorReportFile(const char* Error, const char* Path, unsigned int ErrorCode) {
+void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode) {
 //    TODO(V): Make this use a better api for error reporting
 
 	vsys_writeConsoleNullStr("mdIO Error \"");
 	vsys_writeConsoleNullStr(Error);
 	vsys_writeConsoleNullStr("\" with code \"");
+	if (ErrorCode < 0) {
+		vsys_writeConsoleNullStr("-");
+
+	}
 	vsys_writeConsoleInteger(ErrorCode);
 	vsys_writeConsoleNullStr("\" and path \"");
 	vsys_writeConsoleNullStr(Path);
@@ -670,7 +674,39 @@ bool mdio666OpenFile(mdioFile* File, const char* Path, mdioMode Mode) {
 }
 
 bool mdioSeekFile(mdioFile* File, mdioSeek Start, st Offset) {
+	int SystemStart;
+	char Buffer2[1024];
+	switch (Start) {
+		case mdioSeek_start:
+			SystemStart = SEEK_SET;
+			break;
 
+		case mdioSeek_current:
+			SystemStart = SEEK_CUR;
+			break;
+
+		case mdioSeek_end:
+			SystemStart = SEEK_END;
+			break;
+
+		default:
+		case mdioSeek_COUNT:
+			mdioDereferenceDescriptorFile(File, Buffer2, 1024);
+			mdioErrorReportFile("Bad/Data Coruption on the mdioSeek passed", Buffer2, Start);
+			break;
+
+	}
+
+	off_t Result = lseek(File->Descriptor.UnixFileDesc, Offset, SystemStart);
+	if (Result >= 0) {
+		return true;
+
+	}
+
+	char Buffer[1024];
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not seek intro file", Buffer, errno);
+	return false;
 
 }
 
@@ -691,7 +727,7 @@ st mdioGetPositionFile(mdioFile* File) {
 const char* mdioDereferenceDescriptorFile(mdioFile* File, char* Buffer, st BufferSize) {
 	char FdPath[64];
 	snprintf(FdPath, 64, "/proc/self/fd/%i", File->Descriptor.UnixFileDesc);
-	st Len = readlink(FdPath, Buffer, BufferSize - 1);
+	sst Len = readlink(FdPath, Buffer, BufferSize - 1);
 	if (Len >= 0) {
 		Buffer[Len] = 0;
 		return Buffer;
@@ -718,7 +754,7 @@ bool mdioCloseFile(mdioFile* File) {
 
 	}
 
-	char Buffer[1024];
+	char Buffer[1024] = { 0 };
 	mdioDereferenceDescriptorFile(File, Buffer, 1024);
 
 	bool Success = File->Descriptor.UnixFileDesc < 0 || close(File->Descriptor.UnixFileDesc) == 0;
@@ -728,6 +764,137 @@ bool mdioCloseFile(mdioFile* File) {
 	}
 	File->Descriptor.UnixFileDesc = -1;
 	return Success;
+
+}
+
+bool mdioFlushFile(mdioFile* File) {
+	if (!(File->Mode & mdioMode_write)) {
+		return true;
+
+	}
+
+	if (!fdatasync(File->Descriptor.UnixFileDesc)) {
+		return true;
+
+	}
+
+	char Buffer[1024] = { 0 };
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not flush file data", Buffer, errno);
+	return false;
+
+}
+
+bool mdioFlushMetaAndFile(mdioFile* File) {
+	if (!(File->Mode & mdioMode_write)) {
+		return true;
+
+	}
+
+	if (!fsync(File->Descriptor.UnixFileDesc)) {
+		return true;
+
+	}
+
+	char Buffer[1024] = { 0 };
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not flush file data and metadata", Buffer, errno);
+	return false;
+
+}
+
+bool mdioUpdateSizeFile(mdioFile* File) {
+	off_t Offset = lseek(File->Descriptor.UnixFileDesc, 0, SEEK_CUR);
+	if (Offset < 0) {
+		return false;
+
+	}
+	off_t Size = lseek(File->Descriptor.UnixFileDesc, 0, SEEK_END);
+	if (Size < 0) {
+		return false;
+
+	}
+
+	if (Offset == Size) {
+		File->Size = Size;
+		return true;
+
+	}
+
+	off_t Offset2 = lseek(File->Descriptor.UnixFileDesc, Offset, SEEK_SET);
+	if (Offset2 < 0 || Offset2 != Offset) {
+		char Buffer[1024];
+		mdioDereferenceDescriptorFile(File, Buffer, 1024);
+		mdioErrorReportFile("File position is broken, closing the file", Buffer, errno);
+		mdioCloseFile(File);
+		return false;
+
+	}
+
+	File->Size = Size;
+	return true;
+
+}
+
+st mdioGetSizeOfFile(mdioFile* File) {
+	if (File->Size == -1) {
+		if (!mdioUpdateSizeFile(File)) {
+			return -1;
+
+		}
+
+	}
+	else if (File->Mode & mdioMode_write) {
+		if (!mdioUpdateSizeFile(File)) {
+			return -1;
+
+		}
+
+	}
+
+	return File->Size;
+
+}
+
+st mdioReadFile(mdioFile* File, void* Dest, st Size) {
+	if (!(File->Mode & mdioMode_read)) {
+		char Buffer[1024] = { 0 };
+		mdioDereferenceDescriptorFile(File, Buffer, 1024);
+		mdioErrorReportFile("Trying to read from file while mode is not set to read, this may not work", Buffer, Size);
+
+	}
+
+	sst Result = read(File->Descriptor.UnixFileDesc, Dest, Size);
+	if (Result >= 0) {
+		return Result;
+
+	}
+
+	char Buffer[1024] = { 0 };
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not read from file", Buffer, errno);
+	return 0;
+
+}
+
+st mdioWriteFile(mdioFile* File, void* Src, st Size) {
+	if (!(File->Mode & mdioMode_write)) {
+		char Buffer[1024] = { 0 };
+		mdioDereferenceDescriptorFile(File, Buffer, 1024);
+		mdioErrorReportFile("Trying to read from file while mode is not set to write, this may not work", Buffer, Size);
+
+	}
+
+	sst Result = write(File->Descriptor.UnixFileDesc, Src, Size);
+	if (Result >= 0) {
+		return Result;
+
+	}
+
+	char Buffer[1024] = { 0 };
+	mdioDereferenceDescriptorFile(File, Buffer, 1024);
+	mdioErrorReportFile("Could not write to file", Buffer, errno);
+	return 0;
 
 }
 

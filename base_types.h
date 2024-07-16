@@ -16,6 +16,7 @@
 
 #ifdef VLIB_PLATFORM_LINUX
 #include "stddef.h"
+#include "sys/types.h"
 
 #endif
 
@@ -37,6 +38,7 @@
 #ifdef __clang__
 //NOTE(V): 64 bit types are not portable bettwen compilers for some reason ?
 //NOTE(V): I do prefer the clang way of handeling fixed size datatype because glibc is a mess with that !!
+
 
 typedef __INT8_TYPE__ __int8_t;
 typedef __UINT8_TYPE__ __uint8_t;
@@ -75,6 +77,8 @@ typedef __UINT56_TYPE__ __uint56_t;
 
 #endif
 
+//typedef __INT64_TYPE__ ssize_t
+
 typedef __INT64_TYPE__ __int64_t;
 typedef __UINT64_TYPE__ __uint64_t;
 
@@ -92,6 +96,7 @@ typedef __INT64_TYPE__ __int64_t;
 typedef __UINT64_TYPE__ __uint64_t;
 
 typedef __SIZE_TYPE__ size_t;
+typedef __INT64_TYPE__ ssize_t;
 typedef __CHAR16_TYPE__ char16_t;
 typedef __CHAR32_TYPE__ char32_t;
 
@@ -168,6 +173,7 @@ typedef u8 byte;
 
 typedef size_t sizeType;
 typedef size_t st;
+typedef ssize_t sst;
 typedef void* pvoid;
 typedef const void* cpvoid;
 #ifdef VPP

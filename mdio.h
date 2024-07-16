@@ -98,7 +98,7 @@ MDIO_API bool mdioIsDriveLetter(const char* Path);
 MDIO_API bool mdioSeparatorFilter(char Char, char Separator);
 
 //SECTION(V): System
-MDIO_API void mdioErrorReportFile(const char* Error, const char* Path, unsigned int ErrorCode);
+MDIO_API void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode);
 MDIO_API bool mdioDeleteFile(const char* Filename);
 MDIO_API bool mdioRenameFile(const char* Filename, const char* NewFilename);
 MDIO_API bool mdioFileExist(const char* Filename);
@@ -114,5 +114,11 @@ MDIO_API bool mdioSeekFile(mdioFile* File, mdioSeek Start, st Offset);
 MDIO_API st mdioGetPositionFile(mdioFile* File);
 MDIO_API const char* mdioDereferenceDescriptorFile(mdioFile* File, char* Buffer, st BufferSize);
 MDIO_API bool mdioCloseFile(mdioFile* File);
+MDIO_API bool mdioFlushFile(mdioFile* File);
+MDIO_API bool mdioFlushMetaAndFile(mdioFile* File);
+MDIO_API bool mdioUpdateSizeFile(mdioFile* File);
+MDIO_API st mdioGetSizeOfFile(mdioFile* File);
+MDIO_API st mdioReadFile(mdioFile* File, void* Dest, st Size);
+MDIO_API st mdioWriteFile(mdioFile* File, void* Src, st Size);
 
 VLIB_CABIEND
