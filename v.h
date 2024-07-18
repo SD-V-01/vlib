@@ -13,6 +13,11 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "base.h"
+#include "mdio.h"
+#include "mdos.h"
+#include "mdsch.h"
+#include "mdvk.h"
+#include "system.h"
 
 #ifndef _V_H_
 #define _V_H_
