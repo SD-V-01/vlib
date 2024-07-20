@@ -31,6 +31,7 @@ XRSUCKS_API void xrsuxAndroidLoaderInit(void* Vm, void* Context);
 XRSUCKS_API st xrsuxFindNameInList(const char* Key, const char** List, st ListSize);
 XRSUCKS_API bool xrsuxIsLayerPresent(const char* Wanted);
 XRSUCKS_API bool xrsuxIsExtensionPresent(const char* Wanted);
+XRSUCKS_API void xrsuxDumpInstanceInfo();
 
 VLIB_CABIEND
 

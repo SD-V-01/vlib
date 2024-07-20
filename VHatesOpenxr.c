@@ -19,6 +19,7 @@
 #include "VHatesOpenxr.h"
 #include "mderror.h"
 #include "vstr32.h"
+#include "system.h"
 
 #include "vulkan/vulkan_core.h"
 #define XR_USE_GRAPHICS_API_VULKAN
@@ -187,6 +188,29 @@ bool xrsuxIsExtensionPresent(const char* Wanted) {
 	}
 	else {
 		return false;
+
+	}
+
+}
+
+void xrsuxDumpInstanceInfo() {
+	vsys_writeConsoleNullStr("Dumping openxr runtime info\n");
+
+	XrResult Result = XR_SUCCESS;
+	u32 ExtensionCount = 0;
+	Result = xrEnumerateInstanceExtensionProperties(NULL, 0, &ExtensionCount, NULL);
+	if (!XR_SUCCEEDED(Result)) { vsys_writeConsoleNullStr("Failed openxr call\n"); return; }
+	vsys_writeConsoleNullStr("Found \"");
+	vsys_writeConsoleInteger(ExtensionCount);
+	vsys_writeConsoleNullStr("\" extensions\n");
+
+	XrExtensionProperties Properties[ExtensionCount];
+	Result = xrEnumerateInstanceExtensionProperties(NULL, ExtensionCount, &ExtensionCount, Properties);
+	if (!XR_SUCCEEDED(Result)) { vsys_writeConsoleNullStr("Failed openxr call\n"); return; }
+
+//    TODO(V): Implement !!!!!!!!!!
+	for (st v = 0; v < ExtensionCount; v++) {
+		//vsys_writeConsoleNullStr("    Found
 
 	}
 

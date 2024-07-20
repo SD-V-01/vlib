@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "base_types.h"
+#include "vstr32.h"
 
 #ifndef _MDOS_H_
 #define _MDOS_H_
@@ -30,6 +31,9 @@ VLIB_CABIEND
 
 #define MDTIME_API
 #define MDCON_API
+
+#define VLOG(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_info, __VA_ARGS__);
+#define VLOGNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_info);
 
 enum mdConVarFlags {
 	mdConVarFlags_USER MYTH_BIT(0),
@@ -76,25 +80,22 @@ typedef void(*mdConVarCallback)(mdConVar*);
 //NOTE(V): Larger will not make mdConEntry fit inside a cache line witch would be bad
 #define MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH 40
 
-VLIB_STRUCT(mdConEntry)
-const char* Message;
-i64 Time;
-u64 Severity;
-char Subsystem[MD_CON_ENTRY_SUBSYSTEM_STR_LENGTH];
-
-VLIB_STRUCTEND(mdConEntry)
-
 #define MD_CON_STATE_NAME_LENGTH 32
+
+#define MD_CON_STATE_DEFAULT_OUT_LENGTH 32768
 
 VLIB_STRUCT(mdConState)
 mdConVar* HtPtr;
 st HtAlloc;
 st HtSize;
 
-mdConEntry* EntryPtr;
-st EntryAlloc;
-st EntrySize;
+//mdConEntry* EntryPtr;
+//st EntryAlloc;
+//st EntrySize;
 
+char* Out;
+st OutSize;
+st OutAlloc;
 
 char Name[MD_CON_STATE_NAME_LENGTH];
 
@@ -132,9 +133,17 @@ MDCON_API st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st
 MDCON_API void mdConStateResize(mdConState* State);
 MDCON_API void mdConStateSet(mdConState* State, mdConVar* Var);
 MDCON_API void mdConStateDumpToStdout(mdConState* State);
+MDCON_API void mdConStateOutNullStr(mdConState* State, const char* Str);
+MDCON_API void mdConStateOut(mdConState* State, const char* Str, st Size);
+MDCON_API void mdConCheckSizeOut(mdConState* State, st NewSize);
+MDCON_API void mdConStateOutHeader(mdConState* State);
 
 MDCON_API void mdConStart();
 MDCON_API void mdConEnd();
+MDCON_API void mdConLog(const char* Str);
+MDCON_API void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...);
+MDCON_API void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity);
+MDCON_API void mdConDumpToStdout();
 
 //NOTE(V): Only the char* Name can be dealocated as we do a copy of it for serialization reasons
 //    but we count on the user to never nullify the char* Help pointer
@@ -170,6 +179,8 @@ MDCON_API void mdConPrint(const char* Message, i64 Time, mdConSeverity Severity)
 MDCON_API st mdConGetLineCount();
 
 MDCON_API void mdConCreateKeybind(const char* Cmd, const char* Res);
+
+
 VLIB_CABIEND
 
 //SECTION(V): System time
@@ -224,4 +235,11 @@ MDTIME_API float mdTimeGetSecondFromPresicewatch(mdTimePrecisewatch* Watch);
 MDTIME_API float mdTimeGetSecondAverageFromPresicewatch(mdTimePrecisewatch* Watch);
 MDTIME_API void mdTimeResetPresicewatch(mdTimePrecisewatch* Watch);
 
+MDTIME_API void mdTimeToStr(i64 Time, char* Buffer);
+
 VLIB_CABIEND
+
+//SECTION(V): Init
+
+void mdosInit();
+void mdosExit();

@@ -16,11 +16,9 @@
 #include "vmem.h"
 #include "vhash.h"
 #include "system.h"
+#include "mdos.h"
 
 #define MDINIT_NO_STDOUT_DEBUG
-
-static bool IsMdinitInit = false;
-static mdInitState IState;
 
 static st mdinitStrlen(const char* String) {
 	const char* A = String;
@@ -75,6 +73,7 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 }
 
 void mdinitDumpJobToStdout(mdinitJob* Job) {
+	/*
 	vsys_writeConsoleNullStr("    Dumping job ");
 	if (Job->Name != NULL) {
 		vsys_writeConsoleNullStr(Job->Name);
@@ -96,6 +95,29 @@ void mdinitDumpJobToStdout(mdinitJob* Job) {
 
 	}
 	vsys_writeConsoleNullStr("\n");
+	*/
+
+
+	char DepToStr[4096];
+	st DepToStrPos = 0;
+	for (st v = 0; v < Job->DepSize; v++) {
+		if ((vstrlen8(Job->DepNames[v]) + DepToStrPos) > 4096) {
+			break;
+
+		}
+
+		DepToStr[DepToStrPos] = ' ';
+		DepToStrPos++;
+		DepToStr[DepToStrPos] = '\"';
+		DepToStrPos++;
+		vcpy(DepToStr + DepToStrPos, Job->DepNames[v], vstrlen8(Job->DepNames[v]));
+		DepToStrPos += vstrlen8(Job->DepNames[v]);
+
+	}
+	//vsys_writeConsoleNullStr("########");
+
+	VLOG("mdInit", "    Dumping job {cstr} with hash \"{ptr}\" dep size \"{st}\" alloc \"{st}\" IsInit {bool} dependencies [cstr]",
+		 Job->Name, Job->Hash, Job->DepSize, Job->DepAlloc, Job->IsInit);
 
 }
 
@@ -118,27 +140,29 @@ void mdinitRunState(mdInitState* State) {
 
 void mdinitExecJob(mdInitState* State, st Index, st Recursive) {
 	if (Index == MDINIT_FIND_ERROR) {
-		vsys_writeConsoleNullStr("Was not able to a find dependency while initializing, recursive level \"");
-		vsys_writeConsoleInteger(Recursive);
-		vsys_writeConsoleNullStr("\"\nTry to recompile vlib or mdinit.c with #define MDINIT_NO_STDOUT_DEBUG to "
-								 "see stdout on graph walk and be able to spot where the missing dependency is\n");
+		//vsys_writeConsoleNullStr("Was not able to a find dependency while initializing, recursive level \"");
+		//vsys_writeConsoleInteger(Recursive);
+		//vsys_writeConsoleNullStr("\"\nTry to recompile vlib or mdinit.c with #define MDINIT_NO_STDOUT_DEBUG to "
+								 //"see stdout on graph walk and be able to spot where the missing dependency is\n");
 		return;
 
 	}
 
 	mdinitJob* Job = &(State->Jobs[Index]);
-	#ifdef MDINIT_NO_STDOUT_DEBUG
-	vsys_writeConsoleNullStr("Executing init job \"");
-	vsys_writeConsoleNullStr(Job->Name);
-	vsys_writeConsoleNullStr("\" recursive level \"");
-	vsys_writeConsoleInteger(Recursive);
-	vsys_writeConsoleNullStr("\", ");
+	//#ifdef MDINIT_NO_STDOUT_DEBUG
+	//vsys_writeConsoleNullStr("Executing init job \"");
+	//vsys_writeConsoleNullStr(Job->Name);
+	//vsys_writeConsoleNullStr("\" recursive level \"");
+	//vsys_writeConsoleInteger(Recursive);
+	//vsys_writeConsoleNullStr("\", ");
 
-	#endif
+
+	//#endif
 
 	if (Job->IsInit == true) {
 		#ifdef MDINIT_NO_STDOUT_DEBUG
-		vsys_writeConsoleNullStr("Skipping\n");
+		//vsys_writeConsoleNullStr("Skipping\n");
+		VLOG("mdInit", "  Skipping job {cstr} {st}", Job->Name, Recursive);
 
 		#endif
 
@@ -147,15 +171,27 @@ void mdinitExecJob(mdInitState* State, st Index, st Recursive) {
 	}
 	#ifdef MDINIT_NO_STDOUT_DEBUG
 	else {
-		vsys_writeConsoleNullStr("\n");
-
+		//vsys_writeConsoleNullStr("\n");
+		VLOG("mdInit", "  Executing job {cstr}, recursive level {st}", Job->Name, Recursive);
+		
 	}
 
 	#endif
 
 	for (st v = 0; v < Job->DepSize; v++) {
 		if (Job->Dependencies[v] != 0) {
-			mdinitExecJob(State, mdinitSearchJob(Job->Dependencies[v], State), Recursive + 1);
+			st DepIndex = mdinitSearchJob(Job->Dependencies[v], State);
+			if (DepIndex == MDINIT_FIND_ERROR) {
+				vsys_writeConsoleNullStr("Could not find required dependency for initialization of \"");
+				vsys_writeConsoleNullStr(Job->Name);
+				vsys_writeConsoleNullStr("\" with nonexistant job being \"");
+				vsys_writeConsoleNullStr(Job->DepNames[v]);
+				vsys_writeConsoleNullStr("\" Skipping.....\n");
+				continue;
+
+			}
+
+			mdinitExecJob(State, DepIndex, Recursive + 1);
 
 		}
 
@@ -201,13 +237,16 @@ void mdinitCreateState(mdInitState* State) {
 }
 
 void mdinitDumpStateToStdout(mdInitState* State) {
-	vsys_writeConsoleNullStr("Dumping mdInitState with \"");
-	vsys_writeConsoleInteger(State->JobSize);
-	vsys_writeConsoleNullStr("\" Jobs and \"");
-	vsys_writeConsoleInteger(State->JobAlloc);
-	vsys_writeConsoleNullStr("\" Allocated with ptr \"");
-	vsys_writeConsoleInteger((unsigned long int)State->Jobs);
-	vsys_writeConsoleNullStr("\"\n");
+	//vsys_writeConsoleNullStr("Dumping mdInitState with \"");
+	//vsys_writeConsoleInteger(State->JobSize);
+	//vsys_writeConsoleNullStr("\" Jobs and \"");
+	//vsys_writeConsoleInteger(State->JobAlloc);
+	//vsys_writeConsoleNullStr("\" Allocated with ptr \"");
+	//vsys_writeConsoleInteger((unsigned long int)State->Jobs);
+	//vsys_writeConsoleNullStr("\"\n");
+
+	VLOG("mdInit", "Dumpint mdInitState with {st} jobs and {st} allocated with ptr {ptr}",
+		 State->JobSize, State->JobAlloc, State->Jobs);
 
 	for (st v = 0; v < State->JobAlloc; v++) {
 		/*
@@ -226,7 +265,8 @@ void mdinitDumpStateToStdout(mdInitState* State) {
 		mdinitDumpJobToStdout(State->Jobs + v);
 
 	}
-	vsys_writeConsoleNullStr("End of mdinitState\n");
+	//vsys_writeConsoleNullStr("End of mdinitState\n");
+	VLOGNF("mdInit", "End of mdinitState");
 
 }
 
@@ -250,6 +290,7 @@ void mdinitStateCheckSize(mdInitState* State, st NewSize) {
 
 }
 
+//TODO(V): Check for duplicates
 mdinitJob* mdinitGetNewJobPtr(mdInitState* State, const char* Name, mdinitJobFunc Func) {
 	mdinitStateCheckSize(State, State->JobSize + 1);
 	mdinitJob* Result = State->Jobs + State->JobSize;
@@ -259,6 +300,7 @@ mdinitJob* mdinitGetNewJobPtr(mdInitState* State, const char* Name, mdinitJobFun
 
 }
 
+//TODO(V): Check for duplicates
 void mdinitCopyJobToState(mdInitState* State, mdinitJob* Job) {
 	mdinitStateCheckSize(State, State->JobSize + 1);
 	vcpy(State->Jobs + State->JobSize, Job, sizeof(mdinitJob));
@@ -271,13 +313,35 @@ u64 mdinitHash(const char* Name) {
 
 }
 
-void mdinitCheckInit(){
-//    NOTE(V): We could use the exec_once feature in mdsch but i am not willing to introduce more interdependencies
+VLIB_CABIEND
+
+//SECTION(V): Runtime init system implementation
+
+static bool IsMdinitInit = false;
+static mdInitState IState;
+
+VLIB_CABI
+void vrtinitCheckInit(){
+	//    NOTE(V): We could use the exec_once feature in mdsch but i am not willing to introduce more interdependencies
 	if (IsMdinitInit == false) {
 		mdinitCreateState(&IState);
 		IsMdinitInit = true;
 
 	}
+
+}
+
+mdinitJob* vrtinitAddJob(const char* Name, mdinitJobFunc Func) {
+	vrtinitCheckInit();
+	return mdinitGetNewJobPtr(&IState, Name, Func);
+
+}
+
+void vrtinitRun() {
+	//vsys_writeConsoleNullStr("Initializing usr program thru init system\n");
+	VLOGNF("vrtinit", "Initializing usr program thru init system");
+	mdinitDumpStateToStdout(&IState);
+	mdinitRunState(&IState);
 
 }
 

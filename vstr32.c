@@ -448,13 +448,18 @@ st vinttostr8(u64 Var, char* Result, st MaxSize) {
 	}
 
 	Result[TotalDigits] = 0;
+	//vsys_writeConsoleInteger(TotalIter);
+	//vsys_writeConsoleNullStr("#");
 
-	const st TotalIter = TotalDigits;
-	st v = 0;
-	for (; v < (TotalIter - 1); v++) {
- 		Result[TotalDigits - 1] = Var % 10 + 48;
-		Var = Var / 10;
-		TotalDigits--;
+	const size_t TotalIter = TotalDigits;
+	size_t v = 0;
+	if (TotalIter != 0) {
+		for (; v < (TotalIter - 1); v++) {
+			Result[TotalDigits - 1] = Var % 10 + 48;
+			Var = Var / 10;
+			TotalDigits--;
+
+		}
 
 	}
 
@@ -494,10 +499,13 @@ st vinttostr32(u64 Var, vchar* Result, st MaxSize) {
 
 	const st TotalIter = TotalDigits;
 	st v = 0;
-	for (; v < (TotalIter - 1); v++) {
-		Result[TotalDigits - 1] = Var % 10 + 48;
-		Var = Var / 10;
-		TotalDigits--;
+	if (TotalIter != 0) {
+		for (; v < (TotalIter - 1); v++) {
+			Result[TotalDigits - 1] = Var % 10 + 48;
+			Var = Var / 10;
+			TotalDigits--;
+
+		}
 
 	}
 
@@ -691,7 +699,12 @@ void vformaterror(const char* Message) {
 st vformat8(const char* Fmt, char* Buf, st BufSize, ...) {
 	v_varargList Args;
 	v_varargStart(Args, BufSize);
+	vformat8impl(Fmt, Buf, BufSize, Args);
+	v_varargEnd(Args);
 
+}
+
+st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 	st BufPosition = 0;
 	while (*Fmt != 0) {
 		bool IsBackToBackExpression;
@@ -800,6 +813,23 @@ st vformat8(const char* Fmt, char* Buf, st BufSize, ...) {
 				}
 				else {
 					vformaterror("Unknown format specifier for u64");
+
+				}
+
+			}
+			else if (vformatisexactmatch8(TypeParameter, "st")) {
+				if (vstrlen8(FormatParameter) == 0) {
+					st IntSize = vinttostr8(v_vararg(Args, st), Buf + BufPosition, BufSize - BufPosition);
+					BufPosition += IntSize;
+
+				}
+				else if (vformatisexactmatch8(FormatParameter, "hex")){
+					st IntSize = vinttohex8(v_vararg(Args, st), Buf + BufPosition, BufSize - BufPosition);
+					BufPosition += IntSize;
+
+				}
+				else {
+					vformaterror("Unknown format specifier for st");
 
 				}
 
@@ -1085,7 +1115,6 @@ st vformat8(const char* Fmt, char* Buf, st BufSize, ...) {
 
 	}
 
-	v_varargEnd(Args);
 	Buf[BufPosition] = 0;
 	return BufPosition;
 

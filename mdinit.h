@@ -18,9 +18,15 @@
 
 #define MDINIT_API
 
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #define VPREINIT(Name) \
 static void Name() __attribute__((constructor));\
 static void Name()
+
+#else
+#error
+
+#endif
 
 //SECTION(V): Init system
 
@@ -70,4 +76,9 @@ VLIB_CABIEND
 
 //SECTION(V): Runtime init system
 
-MDINIT_API void mdinitCheckInit();
+VLIB_CABI
+MDINIT_API void vrtinitCheckInit();
+MDINIT_API mdinitJob* vrtinitAddJob(const char* Name, mdinitJobFunc Func);
+MDINIT_API void vrtinitRun();
+
+VLIB_CABIEND

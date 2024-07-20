@@ -130,14 +130,19 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 
 	}
 
-	State->EntryAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
+	//State->EntryAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
 	//State->
-	State->EntryPtr = (mdConEntry*)vcalloc(sizeof(mdConEntry), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
-	if (State->EntryPtr == NULL) {
-		VASSERT(0, "Failed to allocate memory for mdConState entry buffer creation");
-		return;
+	//State->EntryPtr = (mdConEntry*)vcalloc(sizeof(mdConEntry), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
+	//if (State->EntryPtr == NULL) {
+		//VASSERT(0, "Failed to allocate memory for mdConState entry buffer creation");
+		//return;
 
-	}
+	//}
+
+	State->OutAlloc = MD_CON_STATE_DEFAULT_OUT_LENGTH;
+	State->OutSize = 0;
+	State->Out = valloc(State->OutAlloc);
+	vset(State->Out, 0, State->OutAlloc);
 
 	st NameLength = vstrlen8(Name);
 	if (NameLength > MD_CON_STATE_NAME_LENGTH - 1) {
@@ -147,6 +152,8 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 
 	vcpy(State->Name, Name, NameLength);
 	State->Name[NameLength] = 0;
+
+	mdConStateOutHeader(State);
 
 }
 
@@ -163,16 +170,17 @@ void mdConStateDestroy(mdConState* State) {
 
 	}
 
-	for (u64 v = 0; v < State->EntryAlloc; v++) {
-		if (State->EntryPtr[v].Message != NULL) {
-			vfree((void*)State->EntryPtr[v].Message);
+	//for (u64 v = 0; v < State->EntryAlloc; v++) {
+		//if (State->EntryPtr[v].Message != NULL) {
+			//vfree((void*)State->EntryPtr[v].Message);
 
-		}
+		//}
 
-	}
+	//}
 
 	vfree((void*)State->HtPtr);
-	vfree((void*)State->EntryPtr);
+	//vfree((void*)State->EntryPtr);
+	vfree((void*)State->Out);
 	vset(State, 0, sizeof(mdConState));
 
 }
@@ -320,15 +328,140 @@ void mdConStateDumpToStdout(mdConState* State) {
 
 }
 
+void mdConStateOutNullStr(mdConState* State, const char* Str) {
+	mdConStateOut(State, Str, vstrlen8(Str));
+
+}
+
+void mdConStateOut(mdConState* State, const char* Str, st Size) {
+	#ifndef VLIB_NO_STDOUT_MDCONSTATE_OUT_LOGGING
+	char SystemFmt[Size + 32];
+	//    TODO(V): Make it so we input the size of the string with something
+	//     like {cstr:sizearg} where we pass another arg to be the size
+	vformat8("DUNIA Console [{cstr}] {cstr}", SystemFmt, Size + 32, State->Name, Str);
+	vsys_writeConsoleNullStr(SystemFmt);
+
+	#endif
+
+	mdConCheckSizeOut(State, State->OutSize + Size);
+//    NOTE(V): If mdConCheckSizeOut fails to realloc the array it just doesent update OutAlloc so we check for that
+	if (State->OutAlloc > (State->OutSize + Size)) {
+		vcpy(State->Out + State->OutSize, Str, Size);
+		State->OutSize += Size;
+
+	}
+
+}
+
+void mdConCheckSizeOut(mdConState* State, st NewSize) {
+	if (NewSize < State->OutAlloc) {
+		return;
+
+	}
+
+	NewSize = dpow2(NewSize);
+	char* NewPtr = (char*)valloc(NewSize);
+	if (NewPtr == NULL) {
+		return;
+
+	}
+
+	vset(NewPtr, 0, NewSize);
+	vcpy(NewPtr, State->Out, State->OutSize);
+
+	vfree((void*)State->Out);
+	State->Out = NewPtr;
+	State->OutAlloc = NewSize;
+
+}
+
+void mdConStateOutHeader(mdConState* State) {
+	/*
+	mdConStateOutNullStr(State, "Dunia log start\n");
+
+	mdConStateOutNullStr(State, "UTC Time: [");
+	char UTC[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), UTC);
+	mdConStateOutNullStr(State, UTC);
+	mdConStateOutNullStr(State, "Z] Local Time: [");
+
+	char LOCAL[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), LOCAL);
+	mdConStateOutNullStr(State, LOCAL);
+	mdConStateOutNullStr(State, "]\n\n");
+	*/
+
+	char UTC[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), UTC);
+	char LOCAL[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), LOCAL);
+	//    TODO(V): Make it so we handle timezones for this
+
+	char Buffer[1024];
+	vformat8("Dunia log start\nUTC Time: [{cstr}Z] LocalTime: [{cstr}]\n\n", Buffer, 1024, UTC, LOCAL);
+	mdConStateOutNullStr(State, Buffer);
+
+}
+
 static mdConState DuniaConsole;
+static bool IsDuniaConsoleStarted = false;
 
 void mdConStart() {
-	mdConStateCreate(&DuniaConsole, "DUNIA");
+	if (IsDuniaConsoleStarted == false) {
+		IsDuniaConsoleStarted = true;
+		mdConStateCreate(&DuniaConsole, "DISRUPT");
+
+	}
 
 }
 
 void mdConEnd() {
 	mdConStateDestroy(&DuniaConsole);
+
+}
+
+void mdConLog(const char* Str) {
+	mdConStart();
+	mdConStateOutNullStr(&DuniaConsole, Str);
+
+}
+
+void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
+	char UsrFmt[vstrlen8(Message) + vstrlen8(Message) + 64];
+	v_varargList Args;
+	v_varargStart(Args, Severity);
+	vformat8impl(Message, UsrFmt, vstrlen8(Message) + vstrlen8(Message) + 64, Args);
+	v_varargEnd(Args);
+
+	char OutStr[vstrlen8(UsrFmt) + 512];
+	char OutTime[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	
+	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(UsrFmt) + 512,
+			 OutTime , Subsystem, mdConSeverityGetUserStr(Severity), UsrFmt);
+	mdConLog(OutStr);
+
+}
+
+void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity) {
+	char OutStr[vstrlen8(Message) + vstrlen8(Subsystem) + 512];
+	char OutTime[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(Message) + vstrlen8(Subsystem) + 512, OutTime, Subsystem,
+			 mdConSeverityGetUserStr(Severity), Message);
+	mdConLog(OutStr);
+
+}
+
+void mdConDumpToStdout() {
+	mdConStart();
+	vsys_writeConsoleNullStr("Dumping console state \"");
+	vsys_writeConsoleNullStr(DuniaConsole.Name);
+	vsys_writeConsoleNullStr("\" to Std out\n");
+
+	vsys_writeConsoleNullStr("################# START OF CONSOLE BUFFER #################\n");
+	vsys_writeConsoleNullStr(DuniaConsole.Out);
+	vsys_writeConsoleNullStr("################# END OF CONSOLE BUFFER #################\n");
 
 }
 
@@ -436,6 +569,12 @@ float mdTimeGetSecondAverageFromPresicewatch(mdTimePrecisewatch* Watch) {
 
 void mdTimeResetPresicewatch(mdTimePrecisewatch* Watch) {
 	Watch->StartTime = mdTimeGetMicroSystemTime();
+
+}
+
+void mdTimeToStr(i64 Time, char* Buffer) {
+//    TODO(V): Implement
+	vinttostr8(Time, Buffer, 24);
 
 }
 
@@ -602,3 +741,15 @@ i64 mdTimeGetTimerFreq() {
 
 #endif
 VLIB_CABIEND
+
+//SECTION(V): Init
+
+void mdosInit() {
+	mdConStart();
+
+}
+
+void mdosExit() {
+	mdConEnd();
+
+}

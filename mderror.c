@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "mderror.h"
+#include "system.h"
 
 VLIB_CABI
 
@@ -22,3 +23,16 @@ int v_errno = 0;
 VLIB_CABIEND
 
 //TODO(V): Implement stack backtracing
+
+//SECTION(V): Logging
+
+VLIB_CABI
+void mderrUsrLogging(const char* LogMessage) {
+//    TODO(V): Add ability to have a user callback
+
+	vsys_writeConsoleNullStr(LogMessage);
+	vsys_writeConsoleNullStr("\n");
+
+}
+
+VLIB_CABIEND

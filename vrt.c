@@ -16,6 +16,9 @@ void vrt_preInitUsr();
 
 void vrt_usrCode();
 
+void mdosInit();
+void mdosExit();
+
 #ifndef VLIB_NO_ENTRY
 
 #if !defined(VLIB_ON_CRT) && !defined(VLIB_NO_ENTRY)
@@ -47,7 +50,9 @@ void __stdcall VRuntime_MDos_NTAppInit()
 	vrt_CoreMemInit();
 
 	//    User function (its the main equivalent)
+	mdosInit();
 	vrt_usrCode();
+	mdosExit();
 
     vsys_killProcess(Result);
 }
@@ -68,8 +73,9 @@ extern "C" {
 
 		vsys_appRtInit();
 		vsys_initCoreMemory();
+		mdosInit();
 		//vrt_usrCode();
-
+		mdosExit();
 
 		vsys_killProcess(0);
 
@@ -91,7 +97,10 @@ int main(int argc, char** argv) {
 	vrt_preInitUsr();
 	vsys_appRtInit();
 	vsys_initCoreMemory();
+
+	mdosInit();
 	vrt_usrCode();
+	mdosExit();
 
 	return 0;
 
@@ -124,8 +133,9 @@ void vrt_libInit() {
 	vrt_preInitUsr();
 	vsys_appRtInit();
 	vsys_initCoreMemory();
+	mdosInit();
 	vrt_usrCode();
-
+	mdosExit();
 }
 
 #endif
