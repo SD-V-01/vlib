@@ -20,6 +20,7 @@
 #include "mderror.h"
 #include "vstr32.h"
 #include "system.h"
+#include "mdos.h"
 
 #include "vulkan/vulkan_core.h"
 #define XR_USE_GRAPHICS_API_VULKAN
@@ -194,23 +195,26 @@ bool xrsuxIsExtensionPresent(const char* Wanted) {
 }
 
 void xrsuxDumpInstanceInfo() {
-	vsys_writeConsoleNullStr("Dumping openxr runtime info\n");
+	//vsys_writeConsoleNullStr("Dumping openxr runtime info\n");
+	VLOGNF("OpenXR", "Dumping OpenXR runtime info");
 
 	XrResult Result = XR_SUCCESS;
 	u32 ExtensionCount = 0;
 	Result = xrEnumerateInstanceExtensionProperties(NULL, 0, &ExtensionCount, NULL);
-	if (!XR_SUCCEEDED(Result)) { vsys_writeConsoleNullStr("Failed openxr call\n"); return; }
-	vsys_writeConsoleNullStr("Found \"");
-	vsys_writeConsoleInteger(ExtensionCount);
-	vsys_writeConsoleNullStr("\" extensions\n");
+	if (!XR_SUCCEEDED(Result)) { VERRNF("OpenXR", "Failed openxr call"); return; }
+	//vsys_writeConsoleNullStr("Found \"");
+	//vsys_writeConsoleInteger(ExtensionCount);
+	//vsys_writeConsoleNullStr("\" extensions\n");
+	VLOG("OpenXR", "Found {u32} OpenXR Extensions", ExtensionCount);
 
 	XrExtensionProperties Properties[ExtensionCount];
 	Result = xrEnumerateInstanceExtensionProperties(NULL, ExtensionCount, &ExtensionCount, Properties);
-	if (!XR_SUCCEEDED(Result)) { vsys_writeConsoleNullStr("Failed openxr call\n"); return; }
+	if (!XR_SUCCEEDED(Result)) { VERRNF("OpenXR", "Failed openxr call"); return; }
 
 //    TODO(V): Implement !!!!!!!!!!
 	for (st v = 0; v < ExtensionCount; v++) {
 		//vsys_writeConsoleNullStr("    Found
+		VLOG("OpenXR", "    Extension {cstr} ver {xrver}", Properties[v].extensionName, Properties[v].extensionVersion);
 
 	}
 

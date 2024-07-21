@@ -112,12 +112,15 @@ void mdinitDumpJobToStdout(mdinitJob* Job) {
 		DepToStrPos++;
 		vcpy(DepToStr + DepToStrPos, Job->DepNames[v], vstrlen8(Job->DepNames[v]));
 		DepToStrPos += vstrlen8(Job->DepNames[v]);
+		DepToStr[DepToStrPos] = '\"';
+		DepToStrPos++;
 
 	}
+	DepToStr[DepToStrPos] = 0;
 	//vsys_writeConsoleNullStr("########");
 
-	VLOG("mdInit", "    Dumping job {cstr} with hash \"{ptr}\" dep size \"{st}\" alloc \"{st}\" IsInit {bool} dependencies [cstr]",
-		 Job->Name, Job->Hash, Job->DepSize, Job->DepAlloc, Job->IsInit);
+	VLOG("Init", "    Dumping job {cstr} with hash \"{ptr}\" dep size \"{st}\" alloc \"{st}\" IsInit {bool} dependencies {cstr}",
+		 Job->Name, Job->Hash, Job->DepSize, Job->DepAlloc, Job->IsInit, DepToStr);
 
 }
 
@@ -162,7 +165,7 @@ void mdinitExecJob(mdInitState* State, st Index, st Recursive) {
 	if (Job->IsInit == true) {
 		#ifdef MDINIT_NO_STDOUT_DEBUG
 		//vsys_writeConsoleNullStr("Skipping\n");
-		VLOG("mdInit", "  Skipping job {cstr} {st}", Job->Name, Recursive);
+		VLOG("Init", "  Skipping job {cstr} {st}", Job->Name, Recursive);
 
 		#endif
 
@@ -172,7 +175,7 @@ void mdinitExecJob(mdInitState* State, st Index, st Recursive) {
 	#ifdef MDINIT_NO_STDOUT_DEBUG
 	else {
 		//vsys_writeConsoleNullStr("\n");
-		VLOG("mdInit", "  Executing job {cstr}, recursive level {st}", Job->Name, Recursive);
+		VLOG("Init", "  Executing job {cstr}, recursive level {st}", Job->Name, Recursive);
 		
 	}
 
@@ -182,11 +185,13 @@ void mdinitExecJob(mdInitState* State, st Index, st Recursive) {
 		if (Job->Dependencies[v] != 0) {
 			st DepIndex = mdinitSearchJob(Job->Dependencies[v], State);
 			if (DepIndex == MDINIT_FIND_ERROR) {
-				vsys_writeConsoleNullStr("Could not find required dependency for initialization of \"");
-				vsys_writeConsoleNullStr(Job->Name);
-				vsys_writeConsoleNullStr("\" with nonexistant job being \"");
-				vsys_writeConsoleNullStr(Job->DepNames[v]);
-				vsys_writeConsoleNullStr("\" Skipping.....\n");
+				//vsys_writeConsoleNullStr("Could not find required dependency for initialization of \"");
+				//vsys_writeConsoleNullStr(Job->Name);
+				//vsys_writeConsoleNullStr("\" with nonexistant job being \"");
+				//vsys_writeConsoleNullStr(Job->DepNames[v]);
+				//vsys_writeConsoleNullStr("\" Skipping.....\n");
+				VERR("Init", "Could not find required dependency for initialization of {cstr} "
+					 "with missing subsystem {cstr}, Skipping...", Job->Name, Job->DepNames[v]);
 				continue;
 
 			}
@@ -245,7 +250,7 @@ void mdinitDumpStateToStdout(mdInitState* State) {
 	//vsys_writeConsoleInteger((unsigned long int)State->Jobs);
 	//vsys_writeConsoleNullStr("\"\n");
 
-	VLOG("mdInit", "Dumpint mdInitState with {st} jobs and {st} allocated with ptr {ptr}",
+	VLOG("Init", "Dumpint mdInitState with {st} jobs and {st} allocated with ptr {ptr}",
 		 State->JobSize, State->JobAlloc, State->Jobs);
 
 	for (st v = 0; v < State->JobAlloc; v++) {
@@ -266,7 +271,7 @@ void mdinitDumpStateToStdout(mdInitState* State) {
 
 	}
 	//vsys_writeConsoleNullStr("End of mdinitState\n");
-	VLOGNF("mdInit", "End of mdinitState");
+	VLOGNF("Init", "End of mdinitState");
 
 }
 

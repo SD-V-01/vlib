@@ -16,6 +16,7 @@
 #include "vmem.h"
 #include "mderror.h"
 #include "system.h"
+#include "mdos.h"
 
 //SECTION(V): Command buffer
 #define MD_HUD_CREATE_COMMAND_BUFFER_FALLBACK_SIZE 512
@@ -85,13 +86,15 @@ void mdHudPopLastCommandBuffer(mdHudCommandBuffer* Cmd) {
 }
 
 void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
-	vsys_writeConsoleNullStr("Dumping MdHud command buffer with size \"");
-	vsys_writeConsoleInteger(Cmd->Size);
-	vsys_writeConsoleNullStr("\" alloc \"");
-	vsys_writeConsoleInteger(Cmd->Alloc);
-	vsys_writeConsoleNullStr("\" last command size \"");
-	vsys_writeConsoleInteger(Cmd->LastOpcodeSize);
-	vsys_writeConsoleNullStr("\"\n");
+	//vsys_writeConsoleNullStr("Dumping MdHud command buffer with size \"");
+	//vsys_writeConsoleInteger(Cmd->Size);
+	//vsys_writeConsoleNullStr("\" alloc \"");
+	//vsys_writeConsoleInteger(Cmd->Alloc);
+	//vsys_writeConsoleNullStr("\" last command size \"");
+	//vsys_writeConsoleInteger(Cmd->LastOpcodeSize);
+	//vsys_writeConsoleNullStr("\"\n");
+	VLOG("Hud", "Dumping mdHudCommandBuffer of size {st} alloc {st} last Opcode size {st}", Cmd->Size, Cmd->Alloc, Cmd->LastOpcodeSize);
+
 	char* WorkPtr = (char*)Cmd->Commands;
 
 	while (1) {

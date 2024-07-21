@@ -33,10 +33,3 @@ extern int v_errno;
 VLIB_CABIEND
 
 #endif
-
-//SECTION(V): Logging
-
-VLIB_CABI
-void mderrUsrLogging(const char* LogMessage);
-
-VLIB_CABIEND

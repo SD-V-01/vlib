@@ -32,8 +32,32 @@ VLIB_CABIEND
 #define MDTIME_API
 #define MDCON_API
 
+#define VVERBOSE(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_verbose, __VA_ARGS__);
+#define VVERBOSENF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_verbose);
+
 #define VLOG(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_info, __VA_ARGS__);
 #define VLOGNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_info);
+
+#define VWARN(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_warning, __VA_ARGS__);
+#define VWARNNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_warning);
+
+#define VERR(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_error, __VA_ARGS__);
+#define VERRNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_error);
+
+#define VBELLWETHER(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_bellwether, __VA_ARGS__);
+#define VBELLWETHERNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_bellwether);
+
+#define VDVERBOSE(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataVerbose, __VA_ARGS__);
+#define VDVERBOSENF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataVerbose);
+
+#define VDLOG(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataInfo, __VA_ARGS__);
+#define VDLOGNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataInfo);
+
+#define VDWARN(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataWarning, __VA_ARGS__);
+#define VDWARNNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataWarning);
+
+#define VDERR(Subsystem, Message, ...) mdConLogInternFmt_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataError, __VA_ARGS__);
+#define VDERRNF(Subsystem, Message) mdConLogIntern_DO_NOT_USE(Subsystem, Message, mdConSeverity_dataError);
 
 enum mdConVarFlags {
 	mdConVarFlags_USER MYTH_BIT(0),
@@ -238,6 +262,10 @@ MDTIME_API void mdTimeResetPresicewatch(mdTimePrecisewatch* Watch);
 MDTIME_API void mdTimeToStr(i64 Time, char* Buffer);
 
 VLIB_CABIEND
+
+//SECTION(V): Object loading
+
+
 
 //SECTION(V): Init
 
