@@ -35,9 +35,9 @@ void mdinitCreateJob(mdinitJob* Job, const char* Name, mdinitJobFunc Func) {
 	Job->Name = Name;
 	Job->Hash = mdinitHash(Name);
 	Job->Func = Func;
-	Job->DepNames = valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
+	Job->DepNames = (const char**)valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
 	vset(Job->DepNames, 0, MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
-	Job->Dependencies = valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
+	Job->Dependencies = (u64*)valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
 	vset(Job->Dependencies, 0, MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
 	Job->DepAlloc = MDINIT_DEFAULT_DEP_SIZE;
 
@@ -50,7 +50,7 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 	}
 
 	NewSize = dpow2(NewSize);
-	const char** NewCharPtr = valloc(NewSize * sizeof(const char*));
+	const char** NewCharPtr = (const char**)valloc(NewSize * sizeof(const char*));
 	if (NewCharPtr == NULL) {
 		return;
 
@@ -59,7 +59,7 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 	vset(NewCharPtr, 0, NewSize);
 	vcpy(NewCharPtr, Job->DepNames, Job->DepSize);
 
-	u64* NewHashPtr = valloc(NewSize * sizeof(u64));
+	u64* NewHashPtr = (u64*)valloc(NewSize * sizeof(u64));
 	if (NewHashPtr == NULL) {
 		return;
 
@@ -235,7 +235,7 @@ st mdinitSearchJob(u64 InHash, mdInitState* State) {
 
 void mdinitCreateState(mdInitState* State) {
 	vset(State, 0, sizeof(*State));
-	State->Jobs = valloc(MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
+	State->Jobs = (mdinitJob*)valloc(MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
 	vset(State->Jobs, 0, MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
 	State->JobAlloc = MDINIT_DEFAULT_JOB_NUMBER;
 
@@ -282,7 +282,7 @@ void mdinitStateCheckSize(mdInitState* State, st NewSize) {
 	}
 
 	NewSize = dpow2(NewSize);
-	mdinitJob* NewPtr = valloc(NewSize * sizeof(mdinitJob));
+	mdinitJob* NewPtr = (mdinitJob*)valloc(NewSize * sizeof(mdinitJob));
 	if (NewPtr == NULL) {
 		return;
 

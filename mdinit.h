@@ -24,7 +24,7 @@ static void Name() __attribute__((constructor));\
 static void Name()
 
 #else
-#error
+#error Implement for platform
 
 #endif
 

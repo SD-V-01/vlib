@@ -12,11 +12,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #include "base_types.h"
 #include "vstr32.h"
-
-#ifndef _MDOS_H_
-#define _MDOS_H_
 
 VLIB_CABI
 
@@ -24,8 +23,6 @@ const char* mdosGetArt(u32 Index);
 void mdosPrintTermHeader();
 
 VLIB_CABIEND
-
-#endif
 
 //SECTION(V): console
 

@@ -423,10 +423,11 @@ mi_decl_nodiscard mi_decl_export mi_decl_restrict void* mi_heap_alloc_new_n(mi_h
 // Implement the C++ std::allocator interface for use in STL containers.
 // (note: see `mimalloc-new-delete.h` for overriding the new/delete operators globally)
 // ---------------------------------------------------------------------------------------------
-#ifdef __cplusplus
+//#ifdef __cplusplus
+#if 0
 
-#include <cstddef>     // std::size_t
-#include <cstdint>     // PTRDIFF_MAX
+#include <stddef.h>     // std::size_t
+#include <stdint.h>     // PTRDIFF_MAX
 #if (__cplusplus >= 201103L) || (_MSC_VER > 1900)  // C++11
 #include <type_traits> // std::true_type
 #include <utility>     // std::forward

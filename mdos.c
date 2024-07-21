@@ -141,7 +141,7 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 
 	State->OutAlloc = MD_CON_STATE_DEFAULT_OUT_LENGTH;
 	State->OutSize = 0;
-	State->Out = valloc(State->OutAlloc);
+	State->Out = (char*)valloc(State->OutAlloc);
 	vset(State->Out, 0, State->OutAlloc);
 
 	st NameLength = vstrlen8(Name);
