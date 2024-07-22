@@ -22,10 +22,6 @@
 extern "C"{
 	#endif
 
-	//    mdos frw
-
-	void mdosPrintTermHeader();
-
 	#ifdef __cplusplus
 }
 #endif
@@ -55,7 +51,6 @@ extern "C"{
 	void vsys_initConsole() {
 		StdConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (StdConsoleHandle != INVALID_HANDLE_VALUE) {
-			mdosPrintTermHeader();
 			vsys_writeConsoleNullStr("Initalized STD out console sucesfully, standard out logging now avalable\n");
 
 		}

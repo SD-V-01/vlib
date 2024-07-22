@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "base_types.h"
+#include "mdos.h"
 #include "mdio.h"
 #include "mderror.h"
 #include "vstr32.h"
@@ -458,20 +459,24 @@ bool mdioSeparatorFilter(char Char, char Separator) {
 #include <fcntl.h>
 #include "system.h"
 
+//#define VLIB_IO_ERROR_BREAKPOINT
+
 void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode) {
 //    TODO(V): Make this use a better api for error reporting
 
-	vsys_writeConsoleNullStr("mdIO Error \"");
-	vsys_writeConsoleNullStr(Error);
-	vsys_writeConsoleNullStr("\" with code \"");
-	if (ErrorCode < 0) {
-		vsys_writeConsoleNullStr("-");
+	//vsys_writeConsoleNullStr("mdIO Error \"");
+	//vsys_writeConsoleNullStr(Error);
+	//vsys_writeConsoleNullStr("\" with code \"");
+	//if (ErrorCode < 0) {
+		//vsys_writeConsoleNullStr("-");
 
-	}
-	vsys_writeConsoleInteger(ErrorCode);
-	vsys_writeConsoleNullStr("\" and path \"");
-	vsys_writeConsoleNullStr(Path);
-	vsys_writeConsoleNullStr("\"\n");
+	//}
+	//vsys_writeConsoleInteger(ErrorCode);
+	//vsys_writeConsoleNullStr("\" and path \"");
+	//vsys_writeConsoleNullStr(Path);
+	//vsys_writeConsoleNullStr("\"\n");
+
+	VDERR("IO", "mdIO Error \"{cstr}\" with code {i32} path \"{cstr}\"", Error, ErrorCode, Path);
 
 	#ifdef VLIB_IO_ERROR_BREAKPOINT
 	vsys_breakpoint();

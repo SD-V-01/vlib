@@ -56,6 +56,17 @@ static const char* MDOS_ART_02 =
 "       _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\\\\\/______________\\///\\\\\\\\\\/____/\\\\\\\\\\\\\\\\\\\\_ \n"
 "        _\\///______________\\///__\\////////////__________________\\/////_____\\//////////__\n";
 
+
+static const char* MDOS_ART_02_1 = "__/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\\\\\\\\\\_________________________________________        ";
+static const char* MDOS_ART_02_2 = " _\\/\\\\\\\\\\\\________/\\\\\\\\\\\\_\\/\\\\\\////////\\\\\\_______________________________________       ";
+static const char* MDOS_ART_02_3 = "  _\\/\\\\\\//\\\\\\____/\\\\\\//\\\\\\_\\/\\\\\\______\\//\\\\\\______________________________________      ";
+static const char* MDOS_ART_02_4 = "   _\\/\\\\\\\\///\\\\\\/\\\\\\/_\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_______________/\\\\\\\\\\_____/\\\\\\\\\\\\\\\\\\\\_     ";
+static const char* MDOS_ART_02_5 = "    _\\/\\\\\\__\\///\\\\\\/___\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_____________/\\\\\\///\\\\\\__\\/\\\\\\//////__    ";
+static const char* MDOS_ART_02_6 = "     _\\/\\\\\\____\\///_____\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\____________/\\\\\\__\\//\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\_   ";
+static const char* MDOS_ART_02_7 = "      _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\_______/\\\\\\____________\\//\\\\\\__/\\\\\\__\\////////\\\\\\_  ";
+static const char* MDOS_ART_02_8 = "       _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\\\\\/______________\\///\\\\\\\\\\/____/\\\\\\\\\\\\\\\\\\\\_ ";
+static const char* MDOS_ART_02_9 = "        _\\///______________\\///__\\////////////__________________\\/////_____\\//////////__";
+
 const char* mdosGetArt(u32 Index) {
 	switch (Index) {
 
@@ -72,8 +83,20 @@ const char* mdosGetArt(u32 Index) {
 }
 
 void mdosPrintTermHeader() {
-	vsys_writeConsoleNullStr(MDOS_ART_02);
-	vsys_writeConsoleNullStr("\n   Booting Runtime OS .....\n\n\n");
+	//vsys_writeConsoleNullStr(MDOS_ART_02);
+	//vsys_writeConsoleNullStr("\n   Booting Runtime OS .....\n\n\n");
+
+	//VLOG("mdOS", "\n\n{cstr}\n", MDOS_ART_02);
+	VLOGNF("mdOS", MDOS_ART_02_1);
+	VLOGNF("mdOS", MDOS_ART_02_2);
+	VLOGNF("mdOS", MDOS_ART_02_3);
+	VLOGNF("mdOS", MDOS_ART_02_4);
+	VLOGNF("mdOS", MDOS_ART_02_5);
+	VLOGNF("mdOS", MDOS_ART_02_6);
+	VLOGNF("mdOS", MDOS_ART_02_7);
+	VLOGNF("mdOS", MDOS_ART_02_8);
+	VLOGNF("mdOS", MDOS_ART_02_9);
+	VLOGNF("mdOS", "    Booting Runtime OS ......");
 
 }
 
@@ -328,6 +351,26 @@ void mdConStateDumpToStdout(mdConState* State) {
 
 }
 
+void mdConStateDumpDbToSelfe(mdConState* State) {
+	mdConStatePrint(State, "mdOS", "Dumping all CVAR's", mdConSeverity_info);
+	st Count = 0;
+
+	for (st v = 0; v < State->HtAlloc; v++) {
+		if (State->HtPtr[v].Name != NULL) {
+			char Buff[2048] = { 0 };
+			mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
+			mdConStatePrint(State, "mdOS", Buff, mdConSeverity_info);
+
+			Count++;
+
+		}
+
+	}
+
+	mdConStateFmt(State, "mdOS", "Found {st} CVAR's", mdConSeverity_info, Count);
+
+}
+
 void mdConStateOutNullStr(mdConState* State, const char* Str) {
 	mdConStateOut(State, Str, vstrlen8(Str));
 
@@ -426,12 +469,25 @@ void mdConLog(const char* Str) {
 
 }
 
-void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
+mdConState* mdConGetDisruptConsole() {
+	return &DuniaConsole;
+
+}
+
+void mdConStatePrint(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity) {
+	char OutStr[vstrlen8(Message) + vstrlen8(Subsystem) + 512];
+	char OutTime[32];
+	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(Message) + vstrlen8(Subsystem) + 512, OutTime, Subsystem,
+			 mdConSeverityGetUserStr(Severity), Message);
+	//mdConLog(OutStr);
+	mdConStateOutNullStr(State, OutStr);
+
+}
+
+void mdConStateFmtImpl(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, v_varargList Args) {
 	char UsrFmt[vstrlen8(Message) + vstrlen8(Message) + 64];
-	v_varargList Args;
-	v_varargStart(Args, Severity);
 	vformat8impl(Message, UsrFmt, vstrlen8(Message) + vstrlen8(Message) + 64, Args);
-	v_varargEnd(Args);
 
 	char OutStr[vstrlen8(UsrFmt) + 512];
 	char OutTime[32];
@@ -439,17 +495,32 @@ void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, md
 	
 	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(UsrFmt) + 512,
 			 OutTime , Subsystem, mdConSeverityGetUserStr(Severity), UsrFmt);
-	mdConLog(OutStr);
+	//mdConLog(OutStr);
+	mdConStateOutNullStr(State, OutStr);
+
+}
+
+void mdConStateFmt(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
+	v_varargList Args;
+	v_varargStart(Args, Severity);
+	mdConStateFmtImpl(State, Subsystem, Message, Severity, Args);
+	v_varargEnd(Args);
+
+}
+
+void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
+	mdConStart();
+	v_varargList Args;
+	v_varargStart(Args, Severity);
+	mdConStateFmtImpl(&DuniaConsole, Subsystem, Message, Severity, Args);
+	
+	v_varargEnd(Args);
 
 }
 
 void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity) {
-	char OutStr[vstrlen8(Message) + vstrlen8(Subsystem) + 512];
-	char OutTime[32];
-	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
-	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(Message) + vstrlen8(Subsystem) + 512, OutTime, Subsystem,
-			 mdConSeverityGetUserStr(Severity), Message);
-	mdConLog(OutStr);
+	mdConStart();
+	mdConStatePrint(&DuniaConsole, Subsystem, Message, Severity);
 
 }
 
@@ -466,17 +537,20 @@ void mdConDumpToStdout() {
 }
 
 void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize) {
-	//vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type \"{mdConVarType}\" \"{u64}\" name \"{cstr}\" help \"{cstr}\" StatePtr{p} CallbackPtr{p}",
-			 //Buffer, BufferSize,
-			 //Var->Var.VarInt, Var->Var.VarDouble, Var->Flags, Var->Flags,
-			 //Var->Type, Var->Type, Var->Name, Var->Help, Var->StatePtr, Var->CallbackPtr);
-
 	if (Var->Name != NULL) {
-		vformat8("mdConVar VarInt \"{i64}\"",
+		vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type \"{mdConVarType}\" \"{u64}\" name \"{cstr}\" help \"{cstr}\" StatePtr {p} CallbackPtr {p}",
 				 Buffer, BufferSize,
-				 Var->Var.VarInt);
+				 Var->Var.VarInt, Var->Var.VarDouble, Var->Flags, Var->Flags,
+				 Var->Type, Var->Type, Var->Name, Var->Help, Var->StatePtr, Var->CallbackPtr);
 
 	}
+
+	//if (Var->Name != NULL) {
+		//vformat8("mdConVar VarInt \"{i64}\"",
+				 //Buffer, BufferSize,
+				 //Var->Var.VarInt);
+
+	//}
 
 }
 
@@ -742,10 +816,80 @@ i64 mdTimeGetTimerFreq() {
 #endif
 VLIB_CABIEND
 
+//SECTION(V): Object loading
+
+#if defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#include <dlfcn.h>
+
+mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
+	void* Result = NULL;
+	int GnuFlags = 0;
+	if ((*Flags & mdsoFlags_lazyBind) == mdsoFlags_lazyBind) {
+		GnuFlags |= RTLD_LAZY;
+
+	}
+	else {
+		GnuFlags |= RTLD_NOW;
+
+	}
+
+	if ((*Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
+		GnuFlags |= RTLD_NOLOAD;
+
+	}
+
+	if ((*Flags & mdsoFlags_localSymbols) == mdsoFlags_localSymbols) {
+		GnuFlags |= RTLD_LOCAL;
+
+	}
+	else {
+		GnuFlags |= RTLD_GLOBAL;
+
+	}
+
+	Result = dlopen(Name, GnuFlags);
+	if (Result == NULL) {
+		char* ErrorStr = dlerror();
+		VDERR("SharedObject", "Failed to load library {cstr} flags {u32:hex} with error \"{cstr}\"", Name, Flags, ErrorStr);
+
+	}
+
+	return Result;
+
+}
+
+void* mdosGetFunc(mdsoHandle Handle, const char* Symbol) {
+	void* Result;
+	Result = dlsym((void*)Handle, Symbol);
+	if (Result == NULL) {
+		char* ErrorStr = dlerror();
+//        TODO(V): Add code to get the name of the library that is failing and report it
+		VDERR("SharedObject", "Failed to load function from library with error \"{cstr\"", ErrorStr);
+
+	}
+
+	return Result;
+
+}
+
+void mdsoClose(mdsoHandle Handle) {
+	dlclose((void*)Handle);
+
+}
+
+#else
+#error Implement for platform
+
+#endif
+
 //SECTION(V): Init
 
 void mdosInit() {
 	mdConStart();
+	mdosPrintTermHeader();
 
 }
 

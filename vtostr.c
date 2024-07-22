@@ -33,9 +33,10 @@ const char* vtostr_mdConVarType(u64 Var){
 			break;
 
 	}
-	vsys_writeConsoleNullStr("#####");
-	vsys_writeConsoleInteger(Var);
 	return "vtostr_error_mdConVarType";
+	//vsys_writeConsoleNullStr("#####");
+	//vsys_writeConsoleInteger(Var);
+		//return "vtostr_error_mdConVarType";
 
 }
 

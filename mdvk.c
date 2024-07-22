@@ -16,6 +16,7 @@
 #include "vmem.h"
 #include "volk.h"
 #include "system.h"
+#include "mdos.h"
 
 static mdvkState MdvkState;
 
@@ -175,6 +176,7 @@ MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysica
 
 	}
 
+	VERR("Vulkan", "Could not find suetable physical device after searching thru {u32} Devices", DeviceCount);
 	return MDVK_ERROR_NO_SUETABLE_PHYSICAL_DEVICE;
 
 }
@@ -503,9 +505,11 @@ MDVK_ERROR mdvkDumpAllInstanceExtToStdout() {
 
 	}
 
-	vsys_writeConsoleNullStr("Dumping Vulkan instance extensions to stdout, \"");
-	vsys_writeConsoleInteger(ExtCount);
-	vsys_writeConsoleNullStr("\" extensions found !!!");
+	//vsys_writeConsoleNullStr("Dumping Vulkan instance extensions to stdout, \"");
+	//vsys_writeConsoleInteger(ExtCount);
+	//vsys_writeConsoleNullStr("\" extensions found !!!");
+
+	VLOG("Vulkan", "Dumping Vulkan instance extensions, {u32} Extensions found !!!", ExtCount);
 
 	VkExtensionProperties Extensions[ExtCount];
 	EnumErr = vkEnumerateInstanceExtensionProperties(NULL, &ExtCount, Extensions);
@@ -515,13 +519,15 @@ MDVK_ERROR mdvkDumpAllInstanceExtToStdout() {
 	}
 
 	for (st v = 0; v < ExtCount; v++) {
-		vsys_writeConsoleNullStr("\n    Ext \"");
-		vsys_writeConsoleNullStr(Extensions[v].extensionName);
-		vsys_writeConsoleNullStr("\" ver ");
-		vsys_writeConsoleInteger(Extensions[v].specVersion);
+		//vsys_writeConsoleNullStr("\n    Ext \"");
+		//vsys_writeConsoleNullStr(Extensions[v].extensionName);
+		//vsys_writeConsoleNullStr("\" ver ");
+		//vsys_writeConsoleInteger(Extensions[v].specVersion);
+
+		VLOG("Vulkan", "    Ext {cstr} ver {u32}", Extensions[v].extensionName, Extensions[v].specVersion);
 
 	}
-	vsys_writeConsoleNullStr("\n");
+	//vsys_writeConsoleNullStr("\n");
 
 	return MDVK_ERROR_SUCCESS;
 
@@ -535,9 +541,11 @@ MDVK_ERROR mdvkDumpAllInstanceLayerToStdout() {
 
 	}
 
-	vsys_writeConsoleNullStr("Dumping Vulkan instance layers to stdout, \"");
-	vsys_writeConsoleInteger(LayerCount);
-	vsys_writeConsoleNullStr("\" Extensions found !!!");
+	//vsys_writeConsoleNullStr("Dumping Vulkan instance layers to stdout, \"");
+	//vsys_writeConsoleInteger(LayerCount);
+	//vsys_writeConsoleNullStr("\" Extensions found !!!");
+
+	VLOG("Vulkan", "Dumping Vulkan instance layers, {u32} Layers found !!", LayerCount);
 
 	VkLayerProperties Layers[LayerCount];
 	EnumErr = vkEnumerateInstanceLayerProperties(&LayerCount, Layers);
@@ -547,15 +555,18 @@ MDVK_ERROR mdvkDumpAllInstanceLayerToStdout() {
 	}
 
 	for (st v = 0; v < LayerCount; v++) {
-		vsys_writeConsoleNullStr("\n    Layer \"");
-		vsys_writeConsoleNullStr(Layers[v].layerName);
-		vsys_writeConsoleNullStr("\" implementation ver ");
-		vsys_writeConsoleInteger(Layers[v].implementationVersion);
-		vsys_writeConsoleNullStr(" spec ver ");
-		vsys_writeConsoleInteger(Layers[v].specVersion);
+		//vsys_writeConsoleNullStr("\n    Layer \"");
+		//vsys_writeConsoleNullStr(Layers[v].layerName);
+		//vsys_writeConsoleNullStr("\" implementation ver ");
+		//vsys_writeConsoleInteger(Layers[v].implementationVersion);
+		//vsys_writeConsoleNullStr(" spec ver ");
+		//vsys_writeConsoleInteger(Layers[v].specVersion);
+
+		VLOG("Vulkan", "    Layer {cstr} impl ver {u32} spec ver {u32} description {cstr}",
+			 Layers[v].layerName, Layers[v].implementationVersion, Layers[v].specVersion, Layers[v].description);
 
 	}
-	vsys_writeConsoleNullStr("\n");
+	//vsys_writeConsoleNullStr("\n");
 
 	return MDVK_ERROR_SUCCESS;
 
@@ -771,9 +782,11 @@ MDVK_ERROR mdvkDumpAllDeviceExtToStdout(VkPhysicalDevice* Device) {
 
 	}
 
-	vsys_writeConsoleNullStr("Dumping Vulkan device extensions to stdout, \"");
-	vsys_writeConsoleInteger(ExtCount);
-	vsys_writeConsoleNullStr("\" Extensions found !!!");
+	//vsys_writeConsoleNullStr("Dumping Vulkan device extensions to stdout, \"");
+	//vsys_writeConsoleInteger(ExtCount);
+	//vsys_writeConsoleNullStr("\" Extensions found !!!");
+
+	VLOG("Vulkan", "Dumping vulkan device extensions, {u32} Extensions found !!!", ExtCount);
 
 	VkExtensionProperties Extensions[ExtCount];
 	EnumErr = vkEnumerateDeviceExtensionProperties(*Device, NULL, &ExtCount, Extensions);
@@ -783,14 +796,16 @@ MDVK_ERROR mdvkDumpAllDeviceExtToStdout(VkPhysicalDevice* Device) {
 	}
 
 	for (st v = 0; v < ExtCount; v++) {
-		vsys_writeConsoleNullStr("\n    Ext \"");
-		vsys_writeConsoleNullStr(Extensions[v].extensionName);
-		vsys_writeConsoleNullStr("\" ver ");
-		vsys_writeConsoleInteger(Extensions[v].specVersion);
+		//vsys_writeConsoleNullStr("\n    Ext \"");
+		//vsys_writeConsoleNullStr(Extensions[v].extensionName);
+		//vsys_writeConsoleNullStr("\" ver ");
+		//vsys_writeConsoleInteger(Extensions[v].specVersion);
+
+		VLOG("Vulkan", "    Ext {cstr} ver {u32}", Extensions[v].extensionName, Extensions[v].specVersion);
 
 	}
 
-	vsys_writeConsoleNullStr("\n");
+	//vsys_writeConsoleNullStr("\n");
 	return MDVK_ERROR_SUCCESS;
 
 }
@@ -808,9 +823,11 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 
 	}
 
-	vsys_writeConsoleNullStr("Dumping Vulkan device layers to stdout, \"");
-	vsys_writeConsoleInteger(LayerCount);
-	vsys_writeConsoleNullStr("\" Layers found !!!");
+	//vsys_writeConsoleNullStr("Dumping Vulkan device layers to stdout, \"");
+	//vsys_writeConsoleInteger(LayerCount);
+	//vsys_writeConsoleNullStr("\" Layers found !!!");
+
+	VLOG("Vulkan", "Dumping Vulkan device layers, {u32} Layers found !!", LayerCount);
 
 	VkLayerProperties Layers[LayerCount];
 	LayerEnumErr = vkEnumerateDeviceLayerProperties(*Device, &LayerCount, Layers);
@@ -820,16 +837,19 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 	}
 
 	for (st v = 0; v < LayerCount; v++) {
-		vsys_writeConsoleNullStr("\n    Layer \"");
-		vsys_writeConsoleNullStr(Layers[v].layerName);
-		vsys_writeConsoleNullStr("\" implementation ver ");
-		vsys_writeConsoleInteger(Layers[v].implementationVersion);
-		vsys_writeConsoleNullStr(" spec ver ");
-		vsys_writeConsoleInteger(Layers[v].specVersion);
+		//vsys_writeConsoleNullStr("\n    Layer \"");
+		//vsys_writeConsoleNullStr(Layers[v].layerName);
+		//vsys_writeConsoleNullStr("\" implementation ver ");
+		//vsys_writeConsoleInteger(Layers[v].implementationVersion);
+		//vsys_writeConsoleNullStr(" spec ver ");
+		//vsys_writeConsoleInteger(Layers[v].specVersion);
+
+		VLOG("Vulkan", "    Layer {cstr} impl ver {u32} spec ver {u32} description {cstr}",
+			 Layers[v].layerName, Layers[v].implementationVersion, Layers[v].specVersion, Layers[v].description);
 
 	}
 
-	vsys_writeConsoleNullStr("\n");
+	//vsys_writeConsoleNullStr("\n");
 
 	return MDVK_ERROR_SUCCESS;
 

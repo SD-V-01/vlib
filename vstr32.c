@@ -16,6 +16,7 @@
 #include "system.h"
 #include "vmem.h"
 #include "vtostr.h"
+#include "mdos.h"
 
 #ifdef VPP
 namespace VLIB_NAMESPACE{
@@ -691,8 +692,10 @@ char* vstrlastchar8(const char* Str, int Char) {
 }
 
 void vformaterror(const char* Message) {
-	vsys_writeConsoleNullStr(Message);
-	vsys_writeConsoleNullStr("\n");
+	//vsys_writeConsoleNullStr(Message);
+	//vsys_writeConsoleNullStr("\n");
+
+	VLOGNF("VFormat", Message);
 
 }
 

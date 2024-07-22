@@ -154,6 +154,7 @@ MDCON_API st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st
 MDCON_API void mdConStateResize(mdConState* State);
 MDCON_API void mdConStateSet(mdConState* State, mdConVar* Var);
 MDCON_API void mdConStateDumpToStdout(mdConState* State);
+MDCON_API void mdConStateDumpDbToSelfe(mdConState* State);
 MDCON_API void mdConStateOutNullStr(mdConState* State, const char* Str);
 MDCON_API void mdConStateOut(mdConState* State, const char* Str, st Size);
 MDCON_API void mdConCheckSizeOut(mdConState* State, st NewSize);
@@ -162,6 +163,10 @@ MDCON_API void mdConStateOutHeader(mdConState* State);
 MDCON_API void mdConStart();
 MDCON_API void mdConEnd();
 MDCON_API void mdConLog(const char* Str);
+MDCON_API mdConState* mdConGetDisruptConsole();
+MDCON_API void mdConStatePrint(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity);
+MDCON_API void mdConStateFmtImpl(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, v_varargList Args);
+MDCON_API void mdConStateFmt(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, ...);
 MDCON_API void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...);
 MDCON_API void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity);
 MDCON_API void mdConDumpToStdout();
@@ -262,7 +267,28 @@ VLIB_CABIEND
 
 //SECTION(V): Object loading
 
+#define MDSO_API
 
+#if defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
+typedef void* mdsoHandle;
+
+#else
+#error Implement for platform
+
+#endif
+
+typedef enum mdsoFlags {
+	mdsoFlags_lazyBind MYTH_BIT(1),
+	mdsoFlags_dontLoad MYTH_BIT(2),
+	mdsoFlags_localSymbols MYTH_BIT(3),
+
+	mdsoFlags_COUNT,
+
+} mdsoFlags;
+
+MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags);
+MDSO_API void* mdosGetFunc(mdsoHandle Handle, const char* Symbol);
+MDSO_API void mdsoClose(mdsoHandle Handle);
 
 //SECTION(V): Init
 

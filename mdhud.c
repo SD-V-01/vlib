@@ -101,8 +101,9 @@ void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
 		u32* OpCheck = (u32 *)WorkPtr;
 		if ((*OpCheck) != 0) {
 			const char* DisplayName = mdHudOpcodeToStr(*OpCheck);
-			vsys_writeConsoleNullStr(DisplayName);
-			vsys_writeConsoleNullStr("\n");
+			//vsys_writeConsoleNullStr(DisplayName);
+			//vsys_writeConsoleNullStr("\n");
+			VLOGNF("Hud", DisplayName);
 			OpCheck++;
 			u32 CommandSizeOffset = *OpCheck;
 			WorkPtr += CommandSizeOffset;
@@ -111,8 +112,9 @@ void mdHudDumpToStdoutCommandBuffer(mdHudCommandBuffer* Cmd) {
 
 		u32* EndCheck = (u32 *)WorkPtr;
 		if (*EndCheck == 0) {
-			vsys_writeConsoleNullStr("End of command buffer");
-			vsys_writeConsoleNullStr("\n");
+			//vsys_writeConsoleNullStr("End of command buffer");
+			//vsys_writeConsoleNullStr("\n");
+			VLOGNF("Hud", "End of command buffer");
 			break;
 
 		}

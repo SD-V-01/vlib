@@ -58,14 +58,8 @@ void vsys_freeSmallPageGeneric(void* Ptr) {
 
 }
 
-// frw
-VLIB_CABI
-void mdosPrintTermHeader();
-VLIB_CABIEND
-
 void vsys_initConsole() {
 	//    NOTE(V): I am pretty sure linux doesent need that unlike win32
-	mdosPrintTermHeader();
 
 }
 
