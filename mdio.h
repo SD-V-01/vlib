@@ -120,5 +120,6 @@ MDIO_API bool mdioUpdateSizeFile(mdioFile* File);
 MDIO_API st mdioGetSizeOfFile(mdioFile* File);
 MDIO_API st mdioReadFile(mdioFile* File, void* Dest, st Size);
 MDIO_API st mdioWriteFile(mdioFile* File, void* Src, st Size);
+MDIO_API char mdioGetSystemSeparator();
 
 VLIB_CABIEND

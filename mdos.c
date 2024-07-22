@@ -20,6 +20,9 @@
 #include "mdmath.h"
 #include "system.h"
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+#include "errno.h"
+#include "string.h"
+#include "sys/sysinfo.h"
 #include "time.h"
 
 #elif defined(VLIB_PLATFORM_NT)
@@ -378,10 +381,10 @@ void mdConStateOutNullStr(mdConState* State, const char* Str) {
 
 void mdConStateOut(mdConState* State, const char* Str, st Size) {
 	#ifndef VLIB_NO_STDOUT_MDCONSTATE_OUT_LOGGING
-	char SystemFmt[Size + 32];
+	char SystemFmt[Size + 256];
 	//    TODO(V): Make it so we input the size of the string with something
 	//     like {cstr:sizearg} where we pass another arg to be the size
-	vformat8("DUNIA Console [{cstr}] {cstr}", SystemFmt, Size + 32, State->Name, Str);
+	vformat8("DUNIA Console [{cstr}] {cstr}", SystemFmt, Size + 256, State->Name, Str);
 	vsys_writeConsoleNullStr(SystemFmt);
 
 	#endif
@@ -882,6 +885,144 @@ void mdsoClose(mdsoHandle Handle) {
 
 #else
 #error Implement for platform
+
+#endif
+
+//SECTION(V): System info
+
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+u64 mdsysTotalRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of avalable memory with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.totalram;
+
+}
+
+u64 mdsysTotalHighRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of avalable highmem with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.totalhigh;
+
+}
+
+u64 mdsysTotalSwap() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of total total swap with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.totalswap;
+
+}
+
+u64 mdsysFreeRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of free memory with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.freeram;
+
+}
+
+u64 mdsysFreeHighRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of free highmem with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.freehigh;
+
+}
+
+u64 mdsysFreeSwap() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of free swap with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.freeswap;
+
+}
+
+u64 mdsysSharedRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of shared ram with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.sharedram;
+
+}
+
+u64 mdsysBufferRam() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get amount of buffered ram with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.bufferram;
+
+}
+
+u64 mdsysTotalProcesses() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get number of total processes with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.procs;
+
+}
+
+u64 mdsysUptime() {
+	struct sysinfo Info;
+	int Err = sysinfo(&Info);
+	if (Err != 0) {
+		VERR("mdSystemInfo", "Could not get uptime with error \"{cstr}\"", strerror(errno));
+		return 0;
+
+	}
+
+	return Info.uptime;
+
+}
+
+#else
+#error Implement platform
 
 #endif
 

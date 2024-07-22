@@ -14,6 +14,7 @@
 
 #include "vmem.h"
 #include "base_types.h"
+#include "mderror.h"
 
 #if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 #include "mimalloc.h"
@@ -170,6 +171,109 @@ void* darealloc(void* p, size_t new_size, size_t Alignment){
 void dfree(void* p){
 	vfreeimpl(p);
 }
+
+bool vIsPow2(u32 In){
+	return (In & (In - 1)) == 0;
+
+}
+
+bool vIsPow2b64(u64 In){
+	return (In & (In - 1)) == 0;
+
+}
+
+i32 vAlignUp(i32 In, i32 Alignment) {
+	return (((In - 1) / Alignment) + 1) * Alignment;
+
+}
+
+st vAlignUpSt(st In, st Alignment) {
+	return (((In - 1) / Alignment) + 1) * Alignment;
+
+}
+
+st vAlignUpSt32(st In, i32 Alignment) {
+	return (((In - 1) / Alignment) + 1) * Alignment;
+
+}
+
+void* vAlignUpPtr(void* Ptr, st Alignment) {
+	st In = (st)Ptr;
+	return (void*)((((In - 1) / Alignment) + 1) * Alignment);
+
+}
+
+i32 vAlignUpPow2(i32 In, i32 Alignment) {
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignUpPow2(i32, i32) is not a power of two, MDos memory error");
+	i32 Mask = Alignment - 1;
+	return (In + Mask) & ~Mask;
+
+}
+
+st vAlignUpPow2st(st In, i32 Alignment) {
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignUpPow2st(st, i32) is not a power of two, MDos memory error");
+	i32 Mask = Alignment - 1;
+	return (In + Mask) & ~Mask;
+
+}
+
+void* vAlignUpPow2Ptr(void* Ptr, i32 Alignment) {
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignUpPow2Ptr(void*, i32) is not a power of two, MDos memory error");
+	st In = (st)Ptr;
+	i32 Mask = Alignment - 1;
+	return (void*)((In + Mask) & ~Mask);
+
+}
+
+i32 vAlignDownPow2(i32 In, i32 Alignment) {
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignDownPow2(i32, i32) is not a power of two, MDos memory error");
+	return In & ~(Alignment - 1);
+
+}
+
+void* vAlignDownPow2Ptr(void* Ptr, i32 Alignment) {
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignDownPow2Ptr(void*, i32) is not a power of two, MDos memory error");
+	st In = (st)Ptr;
+	return (void*)(In & ~(Alignment - 1));
+
+}
+
+u32 vPow2(u32 In) {
+    In--;
+    In |= In >> 1;
+    In |= In >> 2;
+    In |= In >> 4;
+    In |= In >> 8;
+    In |= In >> 16;
+    In++;
+    return In;
+
+}
+
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+#include "unistd.h"
+#include "sys/sysinfo.h"
+
+u64 vGetTotalRam() {
+	long Pages = sysconf(_SC_PHYS_PAGES);
+	long PageSize = sysconf(_SC_PAGE_SIZE);
+	return Pages * PageSize;
+
+}
+
+#elif defined(VLIB_PLATFORM_NT)
+u64 vGetTotalRam() {
+	MEMORYSTATUSEX Status;
+    Status.dwLength = sizeof(Status);
+    GlobalMemoryStatusEx(&Status);
+    return Status.ullTotalPhys;
+
+}
+
+#else
+#error Implement for platform
+
+#endif
 
 VLIB_CABIEND
 

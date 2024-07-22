@@ -59,6 +59,21 @@ MEM_API void* vmemrchr(const void* Array, int Char, st Size);
 MEM_API void* vmemchr(const void* Array, int Char, st Size);
 MEM_API int vmemcmp(const void* Vl, const void* Vr, st Size);
 
+MEM_API bool vIsPow2(u32 In);
+MEM_API bool vIsPow2b64(u64 In);
+MEM_API i32 vAlignUp(i32 In, i32 Alignment);
+MEM_API st vAlignUpSt(st In, st Alignment);
+MEM_API st vAlignUpSt32(st In, i32 Alignment);
+MEM_API void* vAlignUpPtr(void* Ptr, st Alignment);
+MEM_API i32 vAlignUpPow2(i32 In, i32 Alignment);
+MEM_API st vAlignUpPow2st(st In, i32 Alignment);
+MEM_API void* vAlignUpPow2Ptr(void* Ptr, i32 Alignment);
+MEM_API i32 vAlignDownPow2(i32 In, i32 Alignment);
+MEM_API void* vAlignDownPow2Ptr(void* Ptr, i32 Alignment);
+MEM_API u32 vPow2(u32 In);
+
+MEM_API u64 vGetTotalRam();
+
 VLIB_CABIEND
 
 #ifdef VPP

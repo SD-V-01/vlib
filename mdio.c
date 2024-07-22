@@ -904,6 +904,11 @@ st mdioWriteFile(mdioFile* File, void* Src, st Size) {
 
 }
 
+char mdioGetSystemSeparator() {
+	return '/';
+
+}
+
 #elif defined(VLIB_PLATFORM_NT)
 bool mdioDeleteFile(const char* Filename) {
 	st FilePathLen = vstrlen8(Filename);
