@@ -101,6 +101,11 @@ void mdosPrintTermHeader() {
 	VLOGNF("mdOS", MDOS_ART_02_9);
 	VLOGNF("mdOS", "    Booting Runtime OS ......");
 
+	#ifdef VPP
+	VWARNNF("mdOS", "VLib has being compiled with a c++ compiler !!!");
+
+	#endif
+
 }
 
 VLIB_CABIEND
