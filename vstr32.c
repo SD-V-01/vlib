@@ -708,6 +708,16 @@ st vformat8(const char* Fmt, char* Buf, st BufSize, ...) {
 }
 
 st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
+//    NOTE(V): Why dose c++ fucking crash for no reason ???
+	//#ifdef VPP
+	//return 0;
+	//#endif
+
+	#ifdef VPP
+
+
+	#endif
+
 	st BufPosition = 0;
 	while (*Fmt != 0) {
 		bool IsBackToBackExpression;

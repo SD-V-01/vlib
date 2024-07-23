@@ -111,7 +111,12 @@ void* vcallocimpl(st size, st count){
 }
 
 #ifndef VLIB_NO_CRT_REDEFINE
-void* valloc(st Size) {
+#ifdef VPP
+void* valloc(st Size) noexcept {
+	#else
+	void* valloc(st Size) {
+	#endif
+
 	return vallocimpl(Size);
 
 }

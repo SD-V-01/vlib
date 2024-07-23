@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "cpp_compiler.h"
+#include "immintrin.h"
 
 #ifdef VLIB_PLATFORM_LINUX
 #include "stddef.h"

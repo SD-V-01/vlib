@@ -33,7 +33,12 @@ MEM_API u32 dpow2(u32 In);
 MEM_API void* dcpy(void* Dest, const void* Source, size_t Size);
 
 #ifndef VLIB_NO_CRT_REDEFINE
+#ifdef VPP
+MEM_API void* valloc(st Size) noexcept;
+#else
 MEM_API void* valloc(st Size);
+#endif
+
 MEM_API void* vaalloc(st Size, st Alignment);
 MEM_API void vfree(void* Ptr);
 MEM_API void* vrealloc(void* Ptr, st NewSize);

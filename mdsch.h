@@ -206,6 +206,18 @@ MDSCHEDULER_API void mdDetatchThread(mdThreadHandle CallerHandle);
 
 VLIB_CABIEND
 
+//SECTION(V): Atomics
+
+MDSCHEDULER_API inline void mdHardwareFullMemoryBarrier() {
+	__sync_synchronize();
+
+}
+
+MDSCHEDULER_API inline void mdYeildProc() {
+	_mm_pause();
+
+}
+
 //SECTION(V): Scheduler
 
 

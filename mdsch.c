@@ -659,6 +659,10 @@ void mdDetatchThread(mdThreadHandle CallerHandle) {
 
 VLIB_CABIEND
 
+//SECTION(V): Atomics
+
+
+
 //SECTION(V): Scheduler
 
 
