@@ -702,8 +702,10 @@ void vformaterror(const char* Message) {
 st vformat8(const char* Fmt, char* Buf, st BufSize, ...) {
 	v_varargList Args;
 	v_varargStart(Args, BufSize);
-	vformat8impl(Fmt, Buf, BufSize, Args);
+	st Result = vformat8impl(Fmt, Buf, BufSize, Args);
 	v_varargEnd(Args);
+
+	return Result;
 
 }
 
@@ -714,7 +716,7 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 	//#endif
 
 	#ifdef VPP
-
+	//vsys_writeConsoleInteger((unsigned long int)BufSize);
 
 	#endif
 
