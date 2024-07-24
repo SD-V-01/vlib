@@ -22,6 +22,11 @@ void mdosExit();
 #include "cpp_compiler.h"
 
 #if !defined(VLIB_NO_ENTRY) && defined(VLIB_ANDROID)
+#ifndef VLIB_ON_CRT
+#error Cannot build on android without the crt, please define VLIB_ON_CRT
+
+#endif
+
 #include "android_glue/android_native_app_glue.h"
 #include "android/log.h"
 
@@ -36,6 +41,90 @@ extern "C"{
 	}
 
 }
+
+#elif !defined(VLIB_NO_ENTRY) && defined(VLIB_PLATFORM_NT)
+
+#ifdef VLIB_ON_CRT
+#error Building with a crt is not supported
+
+#endif
+
+#include "system.h"
+#include "windows.h"
+#include "cpp_compiler.h"
+
+
+void vrt_CoreMemInit() {
+	vsys_initCoreMemory();
+
+}
+
+//TODO(V): This has not being tested for 2 months and is probabelly broken, its fine its windows >:)
+void __stdcall VRuntime_MDos_NTAppInit()
+{
+	int Result = 0;
+
+	//    User preinit
+	vrt_preInitUsr();
+
+    //Result = WinMain(GetModuleHandle(0), 0, 0, 0);
+
+	vsys_appRtInit();
+	vrt_CoreMemInit();
+
+	//    User function (its the main equivalent)
+	mdosInit();
+	vrt_usrCode();
+	mdosExit();
+
+    vsys_killProcess(Result);
+}
+
+#elif !defined(VLIB_NO_ENTRY) && defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
+
+#include "system.h"
+#include "vmem.h"
+
+int main(int argc, char** argv) {
+	vrt_preInitUsr();
+	vsys_appRtInit();
+	vsys_initCoreMemory();
+
+	mdosInit();
+	vrt_usrCode();
+	mdosExit();
+
+	return 0;
+
+}
+
+#elif !defined(VLIB_NO_ENTRY) && !defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
+
+#include "system.h"
+
+#ifdef __cplusplus
+extern "C" {
+	#endif
+	=
+	__attribute__((force_align_arg_pointer))
+	void _start() {
+
+		//vrt_preInitUsr();
+
+		vsys_appRtInit();
+		vsys_initCoreMemory();
+		mdosInit();
+		//vrt_usrCode();
+		mdosExit();
+
+		vsys_killProcess(0);
+
+	}
+
+
+	#ifdef __cplusplus
+}
+#endif
 
 #elif defined(VLIB_NO_ENTRY)
 //NOTE(V): NOTHING
