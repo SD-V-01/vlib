@@ -13,14 +13,26 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
+#ifdef __X86_64
 #include "vmeowhash.h"
+
+#elif __ARM_NEON
+#include "vneonmeow.h"
+
+#else
+#error Implement
+
+#endif
 
 VLIB_CABI
 
+#ifndef UINT64_C
 #ifdef VPP
 #define UINT64_C(c) static_cast<u64>(c ## LLU)
 #else
 #define UINT64_C(c) (u64)(c ## LLU)
+#endif
+
 #endif
 
 u64 vfnv64std(const char* Data, u32 Size) {

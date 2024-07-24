@@ -19,6 +19,33 @@ void vrt_usrCode();
 void mdosInit();
 void mdosExit();
 
+#include "cpp_compiler.h"
+
+#if !defined(VLIB_NO_ENTRY) && defined(VLIB_ANDROID)
+#include "android_glue/android_native_app_glue.h"
+#include "android/log.h"
+
+extern "C"{
+    __attribute__((visibility("default"))) void android_main(android_app* AppPtr);
+
+
+	__attribute__((visibility("default"))) void android_main(android_app* AppPtr) {
+		__android_log_print(ANDROID_LOG_WARN, "mdos", "Starting mdos from android_main");
+
+//        TODO(V): Implement !!!!!!!!!!!
+	}
+
+}
+
+#elif defined(VLIB_NO_ENTRY)
+//NOTE(V): NOTHING
+
+#else
+#error Implement platform
+
+#endif
+
+/*
 #ifndef VLIB_NO_ENTRY
 
 #if !defined(VLIB_ON_CRT) && !defined(VLIB_NO_ENTRY)
@@ -138,4 +165,4 @@ void vrt_libInit() {
 	mdosExit();
 }
 
-#endif
+#endif*/

@@ -13,7 +13,16 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "cpp_compiler.h"
+#if defined(__x86_64)
 #include "immintrin.h"
+
+#elif defined __ARM_NEON
+#include "arm_neon.h"
+
+#else
+#error Implement platform
+
+#endif
 
 #ifdef VLIB_PLATFORM_LINUX
 #include "stddef.h"
