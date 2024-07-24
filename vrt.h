@@ -35,4 +35,20 @@ void vrt_libInit();
 
 VLIB_CABIEND
 
+//SECTION(V): Android
+
+#ifdef VLIB_ANDROID
+#include "android_glue/android_native_app_glue.h"
+
+VLIB_STRUCT(vrt_android)
+android_app* AppPtr;
+android_app App;
+
+VLIB_STRUCTEND(vrt_android)
+
+vrt_android vrt_getAndroidEnv();
+ANativeActivity* vrt_getActivity();
+
+#endif
+
 #endif

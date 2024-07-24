@@ -21,6 +21,25 @@ void mdosExit();
 
 #include "cpp_compiler.h"
 
+#include "vrt.h"
+
+//SECTION(V): Android
+
+#ifdef VLIB_ANDROID
+static vrt_android AndroidEnv;
+
+vrt_android vrt_getAndroidEnv(){
+	return AndroidEnv;
+
+}
+
+ANativeActivity* vrt_getActivity() {
+	return AndroidEnv.AppPtr->activity;
+
+}
+
+#endif
+
 #if !defined(VLIB_NO_ENTRY) && defined(VLIB_ANDROID)
 #ifndef VLIB_ON_CRT
 #error Cannot build on android without the crt, please define VLIB_ON_CRT
@@ -35,6 +54,9 @@ extern "C"{
 
 
 	__attribute__((visibility("default"))) void android_main(android_app* AppPtr) {
+		AndroidEnv.AppPtr = AppPtr;
+		AndroidEnv.App = *AppPtr;
+
 		__android_log_print(ANDROID_LOG_WARN, "mdos", "Starting mdos from android_main");
 
 //        TODO(V): Implement !!!!!!!!!!!
@@ -127,7 +149,14 @@ extern "C" {
 #endif
 
 #elif defined(VLIB_NO_ENTRY)
-//NOTE(V): NOTHING
+void vrt_libInit() {
+	vrt_preInitUsr();
+	vsys_appRtInit();
+	vsys_initCoreMemory();
+	mdosInit();
+	vrt_usrCode();
+	mdosExit();
+}
 
 #else
 #error Implement platform
