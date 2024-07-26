@@ -52,7 +52,6 @@ ANativeActivity* vrt_getActivity() {
 extern "C"{
     __attribute__((visibility("default"))) void android_main(android_app* AppPtr);
 
-
 	__attribute__((visibility("default"))) void android_main(android_app* AppPtr) {
 		AndroidEnv.AppPtr = AppPtr;
 		AndroidEnv.App = *AppPtr;
