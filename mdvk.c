@@ -855,12 +855,6 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 
 }
 
-MDVK_ERROR mdvkXrCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
-								const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result) {
-
-
-}
-
 MDVK_ERROR mdvkInitLoader() {
 	volkInitialize();
 	return MDVK_ERROR_SUCCESS;
