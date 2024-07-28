@@ -13,10 +13,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
-#ifdef __X86_64
+#ifdef VLIB_X64
 #include "vmeowhash.h"
 
-#elif __ARM_NEON
+#elif VLIB_ARM
 #include "vneonmeow.h"
 
 #else

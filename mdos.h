@@ -286,14 +286,18 @@ typedef enum mdsoFlags {
 
 } mdsoFlags;
 
+VLIB_CABI
 MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags);
 MDSO_API void* mdosGetFunc(mdsoHandle Handle, const char* Symbol);
 MDSO_API void mdsoClose(mdsoHandle Handle);
+
+VLIB_CABIEND
 
 //SECTION(V): System info
 
 #define MDSYSTEMINFO_API
 
+VLIB_CABI
 MDSYSTEMINFO_API u64 mdsysTotalRam();
 MDSYSTEMINFO_API u64 mdsysTotalHighRam();
 MDSYSTEMINFO_API u64 mdsysTotalSwap();
@@ -304,6 +308,7 @@ MDSYSTEMINFO_API u64 mdsysSharedRam();
 MDSYSTEMINFO_API u64 mdsysBufferRam();
 MDSYSTEMINFO_API u64 mdsysTotalProcesses();
 MDSYSTEMINFO_API u64 mdsysUptime();
+VLIB_CABIEND
 
 //SECTION(V): Init
 

@@ -13,10 +13,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "cpp_compiler.h"
-#if defined(__x86_64)
+#if defined(VLIB_X64)
 #include "immintrin.h"
 
-#elif defined __ARM_NEON
+#elif defined(VLIB_ARM)
 #include "arm_neon.h"
 
 #else

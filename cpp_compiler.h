@@ -37,7 +37,16 @@
 
 #endif
 
+#ifdef __ARM_NEON
+#define VLIB_ARM
 
+#elif defined(__x86_64__)
+#define VLIB_X64
+
+#else
+#error Implement cpu arch
+
+#endif
 
 #ifdef __cplusplus
 #define VCPP
