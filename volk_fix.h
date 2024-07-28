@@ -21,20 +21,24 @@
 #ifdef VLIB_ON_CRT
 #include <dlfcn.h>
 
+extern inline void* volk_dlopen(const char* Filename, int Flags);
 inline void* volk_dlopen(const char* Filename, int Flags){
 	return dlopen(Filename, Flags);
 
 }
 
+extern inline void* volk_dlsym(void* Handle, const char* Symbol);
 inline void* volk_dlsym(void* Handle, const char* Symbol) {
 	return dlsym(Handle, Symbol);
 
 }
 
+extern inline int volk_dlclose(void* Handle);
 inline int volk_dlclose(void* Handle) {
 	return dlclose(Handle);
 
 }
+
 #else
 #error Implement these crt function
 #endif

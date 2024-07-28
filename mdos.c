@@ -360,14 +360,14 @@ void mdConStateDumpToStdout(mdConState* State) {
 }
 
 void mdConStateDumpDbToSelfe(mdConState* State) {
-	mdConStatePrint(State, "mdOS", "Dumping all CVAR's", mdConSeverity_info);
+	mdConStatePrint(State, "Dunia", "Dumping all CVAR's to self", mdConSeverity_info);
 	st Count = 0;
 
 	for (st v = 0; v < State->HtAlloc; v++) {
 		if (State->HtPtr[v].Name != NULL) {
 			char Buff[2048] = { 0 };
 			mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
-			mdConStatePrint(State, "mdOS", Buff, mdConSeverity_info);
+			mdConStatePrint(State, "Dunia", Buff, mdConSeverity_info);
 
 			Count++;
 
@@ -375,7 +375,7 @@ void mdConStateDumpDbToSelfe(mdConState* State) {
 
 	}
 
-	mdConStateFmt(State, "mdOS", "Found {st} CVAR's", mdConSeverity_info, Count);
+	mdConStateFmt(State, "Dunia", "Found {st} CVAR's", mdConSeverity_info, Count);
 
 }
 

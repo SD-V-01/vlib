@@ -26,6 +26,9 @@
 
 VLIB_CABI
 
+extern inline u32 vrotl32(u32 X, u32 R);
+extern inline u64 vrotl64(u64 X, u64 R);
+
 #ifndef UINT64_C
 #ifdef VPP
 #define UINT64_C(c) static_cast<u64>(c ## LLU)
