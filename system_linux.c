@@ -40,6 +40,7 @@ void vsys_breakpoint() {
 
 vsys_bool vsys_enableLargePage(vsys_size* PageSize) {
 	//    TODO(V): !!!!! STUB
+	return vsys_false;
 
 }
 
@@ -50,6 +51,7 @@ void vsys_initMemory(vsys_coreMemoryProfile* MemProfile) {
 
 void* vsys_allocSmallPageGeneric(vsys_size Size) {
 	//    TODO(V): !!!!! STUB
+	return vsys_nullptr;
 
 }
 
