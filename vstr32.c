@@ -284,6 +284,7 @@ char* vstrstrtw(const unsigned char* In, const unsigned char* Search) {
 }
 
 VSTR32_API long int vstrtol8(const char* Str, char** EndPtr, int Base) {
+	return 0;
 
 }//    TODO(V): !!!!!!!!!!! Implement
 
@@ -382,10 +383,12 @@ char* vLEGACYstrncat(char* Dest, const char* Source, size_t Size) {
 }
 
 char* vLEGACYrealpath(const char* filename, char* resolved) {
+	return NULL;
 
 } //        STUB(V): Implement legacy realpath !!!!
 
 char* vLEGACYgcvt(double In, int NumDigits, char* Buf) {
+	return NULL;
 
 } //        STUB(V): Implement legacy gcvt c library function
 

@@ -122,7 +122,7 @@ extern "C"{
 
 	int vLEGACYatexit(void(*Func)()) {
 		#ifdef VLIB_ON_CRT
-		atexit(Func);
+		return atexit(Func);
 
 		#else
 		#error implement !!
