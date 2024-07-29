@@ -36,6 +36,9 @@ extern "C"
  * Function declaration:  VKAPI_ATTR void VKAPI_CALL vkCommand(void);
  * Function pointer type: typedef void (VKAPI_PTR *PFN_vkCommand)(void);
  */
+
+	#include "vk_headers_patch.h"
+
 #if defined(_WIN32)
     // On Windows, Vulkan commands use the stdcall convention
     #define VKAPI_ATTR
