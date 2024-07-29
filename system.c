@@ -135,6 +135,10 @@ extern "C"{
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	//    frw
 	void vlib_mimalloc_preinit();
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	void mytha_init();
+
 	#endif
 
 	void vsys_initCoreMemory() {
@@ -143,6 +147,9 @@ extern "C"{
 
 		#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 //        NOTE(V): We do nothing as the system malloc is by default initialized
+
+		#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+		mytha_init();
 
 		#else
 		#error define allocator implementation

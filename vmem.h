@@ -34,6 +34,7 @@ MEM_API void* dcpy(void* Dest, const void* Source, size_t Size);
 
 #ifndef VLIB_NO_CRT_REDEFINE
 #ifdef VPP
+//NOTE(V): I have no clue what the c++ compiler is doing
 MEM_API void* valloc(st Size) noexcept;
 #else
 MEM_API void* valloc(st Size);
@@ -53,6 +54,11 @@ MEM_API void vfreeimpl(void* Ptr);
 MEM_API void* vreallocimpl(void* Ptr, st NewSize);
 MEM_API void* vareallocimpl(void* Ptr, st NewSize, st Alignment);
 MEM_API void* vcallocimpl(st size, st count);
+
+MEM_API void* vzeroalloc(st NewSize);
+MEM_API void* vzerocalloc(void* Ptr, st NewCount, st NewSize);
+MEM_API void* vzerorealloc(void* Ptr, st NewSize);
+MEM_API void vzerofree(void* Ptr);
 
 MEM_API void* vcpy(void* Dest, const void* Source, size_t Size);
 MEM_API void* vc(const void* Source, void* Dest, st Size);
