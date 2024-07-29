@@ -7,7 +7,6 @@
 ** SPDX-License-Identifier: Apache-2.0
 */
 
-#include "../vk_headers_patch.h"
 
 #ifndef VK_PLATFORM_H_
 #define VK_PLATFORM_H_
