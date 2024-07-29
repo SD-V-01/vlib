@@ -832,10 +832,10 @@ VLIB_CABIEND
 #endif
 #include <dlfcn.h>
 
-mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
+mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
 	void* Result = NULL;
 	int GnuFlags = 0;
-	if ((*Flags & mdsoFlags_lazyBind) == mdsoFlags_lazyBind) {
+	if ((Flags & mdsoFlags_lazyBind) == mdsoFlags_lazyBind) {
 		GnuFlags |= RTLD_LAZY;
 
 	}
@@ -844,12 +844,12 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
 
 	}
 
-	if ((*Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
+	if ((Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
 		GnuFlags |= RTLD_NOLOAD;
 
 	}
 
-	if ((*Flags & mdsoFlags_localSymbols) == mdsoFlags_localSymbols) {
+	if ((Flags & mdsoFlags_localSymbols) == mdsoFlags_localSymbols) {
 		GnuFlags |= RTLD_LOCAL;
 
 	}
@@ -864,12 +864,16 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
 		VDERR("SharedObject", "Failed to load library {cstr} flags {u32:hex} with error \"{cstr}\"", Name, Flags, ErrorStr);
 
 	}
+	else {
+		VDLOG("SharedObject", "Loaded library {cstr} with flags {u32:hex} sucessfully", Name, Flags);
+
+	}
 
 	return Result;
 
 }
 
-void* mdosGetFunc(mdsoHandle Handle, const char* Symbol) {
+void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol) {
 	void* Result;
 	Result = dlsym((void*)Handle, Symbol);
 	if (Result == NULL) {

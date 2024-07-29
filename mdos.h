@@ -271,6 +271,7 @@ VLIB_CABIEND
 
 #if defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
 typedef void* mdsoHandle;
+#define mdsoNullHandle NULL;
 
 #else
 #error Implement for platform
@@ -287,8 +288,8 @@ typedef enum mdsoFlags {
 } mdsoFlags;
 
 VLIB_CABI
-MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags);
-MDSO_API void* mdosGetFunc(mdsoHandle Handle, const char* Symbol);
+MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags);
+MDSO_API void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol);
 MDSO_API void mdsoClose(mdsoHandle Handle);
 
 VLIB_CABIEND
