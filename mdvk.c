@@ -14,9 +14,9 @@
 
 #include "mdvk.h"
 #include "vmem.h"
-#include "volk.h"
 #include "system.h"
 #include "mdos.h"
+#include "vulkan/vkmyth.h"
 
 static mdvkState MdvkState;
 
@@ -122,7 +122,7 @@ MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysica
 		return MDVK_ERROR_PHYSICAL_DEVICE_ENUM_FAILED;
 
 	}
-
+	//vsys_writeConsoleNullStr("#########");
 	//    TODO(V): Use vram as a suplementary variable to check for best device
 
 	if(DeviceCount == 0){
@@ -856,25 +856,31 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 }
 
 MDVK_ERROR mdvkInitLoader() {
-	volkInitialize();
-	return MDVK_ERROR_SUCCESS;
+	if (mythVkLoad() == VK_SUCCESS) {
+		return MDVK_ERROR_SUCCESS;
+
+	}
+	else {
+		return MDVK_ERROR_UNKNOWN;
+
+	}
 
 }
 
 MDVK_ERROR mdvkFreeLoader() {
-	volkFinalize();
+	mythVkExit();
 	return MDVK_ERROR_SUCCESS;
 
 }
 
 MDVK_ERROR mdvkLoaderLoadInstance(VkInstance* Instance) {
-	volkLoadInstanceOnly(*Instance);
+	mythVkLoadInstance(*Instance);
 	return MDVK_ERROR_SUCCESS;
 
 }
 
 MDVK_ERROR mdvkLoaderLoadDevice(VkDevice* Device) {
-	volkLoadDevice(*Device);
+	mythVkLoadDevice(*Device);
 	return MDVK_ERROR_SUCCESS;
 
 }
