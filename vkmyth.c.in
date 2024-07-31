@@ -41,6 +41,16 @@ static PFN_vkVoidFunction mythVkNullifyDeviceFuncPtr(VkDevice Device, const char
 
 }
 
+static PFN_vkVoidFunction mythVkLoad_loadFunc(VkInstance Instance, const char* Name){
+	PFN_vkVoidFunction Func = vkGetInstanceProcAddr(Instance, Name);
+	if(Func == NULL){
+		VWARN("VkLoader", "Could not load Loader function {cstr}", Name);
+
+	}
+
+	return Func;
+
+}
 
 VkResult mythVkLoad(){
 	mdsoHandle Handle = mdsoOpen(MYTH_VK_LOAD_DLL, mdsoFlags_localSymbols);
@@ -57,7 +67,7 @@ VkResult mythVkLoad(){
 
 	vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)mdsoGetFunc(Handle, "vkGetInstanceProcAddr");
 	Libvk = Handle;
-	_mythVkLoadBasic(NULL, vkGetInstanceProcAddr);
+	_mythVkLoadBasic(NULL, &mythVkLoad_loadFunc);
 
 	return VK_SUCCESS;
 
@@ -95,14 +105,41 @@ uint32_t mythVkGetInstanceVer(){
 
 }
 
+static PFN_vkVoidFunction mythVkLoadInstance_loadFunc(VkInstance Instance, const char* Name) {
+	PFN_vkVoidFunction Func = vkGetInstanceProcAddr(Instance, Name);
+	if (Func == NULL) {
+		VWARN("VkLoad", "Could not load Instance function {cstr}", Name);
+
+	}
+	/*else{
+		//VERRNF("VkLoader", "#################################");
+		u64* MemChecker = (u64*)Func;
+		VVERBOSE("TESTING", "{u64} {ptr}", *MemChecker, Func);
+
+	}*/
+
+	return Func;
+
+}
+
 void mythVkLoadInstance(VkInstance Instance){
-	_mythVkLoadInstance(Instance, vkGetInstanceProcAddr);
+	VLOG("VkLoad", "Loading instance {ptr} functions", Instance);
+	_mythVkLoadInstance(Instance, &mythVkLoadInstance_loadFunc);
+
+}
+
+static PFN_vkVoidFunction mythVkLoadDevice_laodFunc(VkDevice Device, const char* Name){
+	PFN_vkVoidFunction Func = vkGetDeviceProcAddr(Device, Name);
+	if(Func == NULL){
+		VWARN("VkLoad", "Could not load device function {cstr}", Name);
+
+	}
 
 }
 
 void mythVkLoadDevice(VkDevice Device){
 	MainDevice = Device;
-	_mythVkLoadDevice(Device, vkGetDeviceProcAddr);
+	_mythVkLoadDevice(Device, &mythVkLoadDevice_laodFunc);
 
 }
 

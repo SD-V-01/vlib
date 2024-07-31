@@ -12,6 +12,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#define VK_NO_PROTOTYPES
+#include "vulkan/vulkan.h"
 #include "mdvk.h"
 #include "vmem.h"
 #include "system.h"
@@ -176,6 +178,7 @@ MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysica
 
 	}
 
+	(*Result) = VK_NULL_HANDLE;
 	VERR("Vulkan", "Could not find suetable physical device after searching thru {u32} Devices", DeviceCount);
 	return MDVK_ERROR_NO_SUETABLE_PHYSICAL_DEVICE;
 
@@ -250,6 +253,7 @@ MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const 
 	}
 
 	mdvkLoaderLoadInstance(Result);
+	VVERBOSE("TESTING", "{ptr}", vkGetPhysicalDeviceProperties);
 
 	return MDVK_ERROR_SUCCESS;
 

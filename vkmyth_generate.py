@@ -56,7 +56,7 @@ def patch(FileName, SourceFile, Blocks):
                     Result.append(Blocks["DEVICE_TABLE"])
                 if Line.strip().startswith("//SECTION(V): TENX_PARSER_PROTOTYPES"):
                     Result.append(Blocks["PROTOTYPES_H"])
-                if Line.strip().startswith("//SECTION(V): VK_PROTOTYPES"):
+                if Line.strip().startswith("//SECTION(V): VK_PROTOTYPES_HEADER"):
                     Result.append(Blocks["PROTOTYPES_H"])
 
     with open(FileName, "w", newline = "\n") as File:
@@ -175,7 +175,7 @@ def generate():
     #print(Commands)
 
     Types = {}
-    for Type in Spec.findall("type/type"):
+    for Type in Spec.findall("types/type"):
         Name = Type.findtext("name")
         if Name:
             Types[Name] = Type
@@ -198,16 +198,14 @@ def generate():
             if Name == "vkGetDeviceProcAddr":
                 Type = "VkInstance"
 
-            if is_descendant_type(Types, Type, "VkDevice") and Name not in InstanceCommands:
-                Blocks["LOAD_DEVICE"] += '\t' + Name + " = (PFN_" + Name + ')LoadFunc(Device, "' + Name + '");\n'
-                Blocks["DEVICE_TABLE"] += '\tPFN_' + Name + " " + Name + ';\n'
-                Blocks["LOAD_DEVICE_TABLE"] += '\tFuncArray->' + Name + ' = (PFN_' + Name + ')LoadFunc(Device, "' + Name + '");\n'
-            
-            elif is_descendant_type(Types, Type, "VkInstance"):
-                Blocks["LOAD_INSTANCE"] += '\t' + Name + ' = (PFN_' + Name + ')LoadFunc(Instance, "' + Name + '");\n'
-
+            if is_descendant_type(Types, Type, 'VkDevice') and Name not in InstanceCommands:
+                Blocks["LOAD_DEVICE"] += '    ' + Name + " = (PFN_" + Name + ')LoadFunc(Device, "' + Name + '");\n'
+                Blocks["DEVICE_TABLE"] += '    PFN_' + Name + " " + Name + ';\n'
+                Blocks["LOAD_DEVICE_TABLE"] += '    FuncArray->' + Name + ' = (PFN_' + Name + ')LoadFunc(Device, "' + Name + '");\n'
+            elif is_descendant_type(Types, Type, 'VkInstance'):
+                Blocks["LOAD_INSTANCE"] += '    ' + Name + ' = (PFN_' + Name + ')LoadFunc(Instance, "' + Name + '");\n'
             elif Type != '':
-                Blocks["LOAD_LOADER"] += '\t' + Name + ' = (PFN_' + Name + ')LoadFunc(Instance, "' + Name + '");\n'
+                Blocks["LOAD_LOADER"] += '    ' + Name + ' = (PFN_' + Name + ')LoadFunc(Instance, "' + Name + '");\n'
 
             Blocks["PROTOTYPES_H"] += "extern PFN_" + Name + " " + Name + ";\n"
             Blocks["PROTOTYPES_C"] += "PFN_" + Name + " " + Name + ";\n"
