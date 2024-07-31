@@ -26,7 +26,10 @@ extern "C" {
     ((((major) & 0xffffULL) << 48) | (((minor) & 0xffffULL) << 32) | ((patch) & 0xffffffffULL))
 
 // OpenXR current version number.
-#define XR_CURRENT_API_VERSION XR_MAKE_VERSION(1, 1, 36)
+#define XR_CURRENT_API_VERSION XR_MAKE_VERSION(1, 1, 38)
+
+// OpenXR 1.0 version number
+#define XR_API_VERSION_1_0 XR_MAKE_VERSION(1, 0, XR_VERSION_PATCH(XR_CURRENT_API_VERSION))
 
 #define XR_VERSION_MAJOR(version) (uint16_t)(((uint64_t)(version) >> 48)& 0xffffULL)
 #define XR_VERSION_MINOR(version) (uint16_t)(((uint64_t)(version) >> 32) & 0xffffULL)
@@ -770,6 +773,7 @@ typedef XrFlags64 XrCompositionLayerFlags;
 static const XrCompositionLayerFlags XR_COMPOSITION_LAYER_CORRECT_CHROMATIC_ABERRATION_BIT = 0x00000001;
 static const XrCompositionLayerFlags XR_COMPOSITION_LAYER_BLEND_TEXTURE_SOURCE_ALPHA_BIT = 0x00000002;
 static const XrCompositionLayerFlags XR_COMPOSITION_LAYER_UNPREMULTIPLIED_ALPHA_BIT = 0x00000004;
+static const XrCompositionLayerFlags XR_COMPOSITION_LAYER_INVERTED_ALPHA_BIT_EXT = 0x00000008;
 
 typedef XrFlags64 XrViewStateFlags;
 
@@ -1633,6 +1637,9 @@ XRAPI_ATTR XrResult XRAPI_CALL xrStopHapticFeedback(
 
 // XR_VERSION_1_1 is a preprocessor guard. Do not pass it to API calls.
 #define XR_VERSION_1_1 1
+// OpenXR 1.1 version number
+#define XR_API_VERSION_1_1 XR_MAKE_VERSION(1, 1, XR_VERSION_PATCH(XR_CURRENT_API_VERSION))
+
 #define XR_UUID_SIZE                      16
 typedef struct XrColor3f {
     float    r;
@@ -2249,7 +2256,7 @@ typedef struct XrCompositionLayerImageLayoutFB {
 
 // XR_FB_composition_layer_alpha_blend is a preprocessor guard. Do not pass it to API calls.
 #define XR_FB_composition_layer_alpha_blend 1
-#define XR_FB_composition_layer_alpha_blend_SPEC_VERSION 2
+#define XR_FB_composition_layer_alpha_blend_SPEC_VERSION 3
 #define XR_FB_COMPOSITION_LAYER_ALPHA_BLEND_EXTENSION_NAME "XR_FB_composition_layer_alpha_blend"
 
 typedef enum XrBlendFactorFB {
@@ -4167,7 +4174,7 @@ XR_DEFINE_HANDLE(XrPassthroughFB)
 XR_DEFINE_HANDLE(XrPassthroughLayerFB)
 XR_DEFINE_HANDLE(XrGeometryInstanceFB)
 #define XR_PASSTHROUGH_COLOR_MAP_MONO_SIZE_FB 256
-#define XR_FB_passthrough_SPEC_VERSION    3
+#define XR_FB_passthrough_SPEC_VERSION    4
 #define XR_FB_PASSTHROUGH_EXTENSION_NAME  "XR_FB_passthrough"
 
 typedef enum XrPassthroughLayerPurposeFB {
@@ -4226,7 +4233,6 @@ typedef struct XrPassthroughLayerCreateInfoFB {
     XrPassthroughLayerPurposeFB    purpose;
 } XrPassthroughLayerCreateInfoFB;
 
-// XrCompositionLayerPassthroughFB extends XrCompositionLayerBaseHeader
 typedef struct XrCompositionLayerPassthroughFB {
     XrStructureType             type;
     const void* XR_MAY_ALIAS    next;
@@ -7151,7 +7157,7 @@ typedef struct XrHandTrackingDataSourceStateEXT {
 // XR_EXT_plane_detection is a preprocessor guard. Do not pass it to API calls.
 #define XR_EXT_plane_detection 1
 XR_DEFINE_HANDLE(XrPlaneDetectorEXT)
-#define XR_EXT_plane_detection_SPEC_VERSION 1
+#define XR_EXT_plane_detection_SPEC_VERSION 2
 #define XR_EXT_PLANE_DETECTION_EXTENSION_NAME "XR_EXT_plane_detection"
 
 typedef enum XrPlaneDetectorOrientationEXT {
@@ -7438,6 +7444,12 @@ XRAPI_ATTR XrResult XRAPI_CALL xrEnableUserCalibrationEventsML(
 #define XR_YVR_controller_interaction 1
 #define XR_YVR_controller_interaction_SPEC_VERSION 1
 #define XR_YVR_CONTROLLER_INTERACTION_EXTENSION_NAME "XR_YVR_controller_interaction"
+
+
+// XR_EXT_composition_layer_inverted_alpha is a preprocessor guard. Do not pass it to API calls.
+#define XR_EXT_composition_layer_inverted_alpha 1
+#define XR_EXT_composition_layer_inverted_alpha_SPEC_VERSION 1
+#define XR_EXT_COMPOSITION_LAYER_INVERTED_ALPHA_EXTENSION_NAME "XR_EXT_composition_layer_inverted_alpha"
 
 #ifdef __cplusplus
 }
