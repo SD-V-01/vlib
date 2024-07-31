@@ -253,7 +253,7 @@ MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const 
 	}
 
 	mdvkLoaderLoadInstance(Result);
-	VVERBOSE("TESTING", "{ptr}", vkGetPhysicalDeviceProperties);
+	//VVERBOSE("TESTING", "{ptr}", vkGetPhysicalDeviceProperties);
 
 	return MDVK_ERROR_SUCCESS;
 
