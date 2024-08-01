@@ -107,11 +107,73 @@ void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc){
     xrEnumerateApiLayerProperties = (PFN_xrEnumerateApiLayerProperties)LoadFunc(Instance, "xrEnumerateApiLayerProperties");
     xrEnumerateInstanceExtensionProperties = (PFN_xrEnumerateInstanceExtensionProperties)LoadFunc(Instance, "xrEnumerateInstanceExtensionProperties");
 #endif /*  defined(XR_VERSION_1_0)   */
+
+}
+
+void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadFunc){
+
+//SECTION(V): XRMYTH_LOAD_INSTANCE
+#if defined(XR_VERSION_1_0)
+    xrAcquireSwapchainImage = (PFN_xrAcquireSwapchainImage)LoadFunc(Instance, "xrAcquireSwapchainImage");
+    xrApplyHapticFeedback = (PFN_xrApplyHapticFeedback)LoadFunc(Instance, "xrApplyHapticFeedback");
+    xrAttachSessionActionSets = (PFN_xrAttachSessionActionSets)LoadFunc(Instance, "xrAttachSessionActionSets");
+    xrBeginFrame = (PFN_xrBeginFrame)LoadFunc(Instance, "xrBeginFrame");
+    xrBeginSession = (PFN_xrBeginSession)LoadFunc(Instance, "xrBeginSession");
+    xrCreateAction = (PFN_xrCreateAction)LoadFunc(Instance, "xrCreateAction");
+    xrCreateActionSet = (PFN_xrCreateActionSet)LoadFunc(Instance, "xrCreateActionSet");
+    xrCreateActionSpace = (PFN_xrCreateActionSpace)LoadFunc(Instance, "xrCreateActionSpace");
+    xrCreateReferenceSpace = (PFN_xrCreateReferenceSpace)LoadFunc(Instance, "xrCreateReferenceSpace");
+    xrCreateSession = (PFN_xrCreateSession)LoadFunc(Instance, "xrCreateSession");
+    xrCreateSwapchain = (PFN_xrCreateSwapchain)LoadFunc(Instance, "xrCreateSwapchain");
+    xrDestroyAction = (PFN_xrDestroyAction)LoadFunc(Instance, "xrDestroyAction");
+    xrDestroyActionSet = (PFN_xrDestroyActionSet)LoadFunc(Instance, "xrDestroyActionSet");
+    xrDestroyInstance = (PFN_xrDestroyInstance)LoadFunc(Instance, "xrDestroyInstance");
+    xrDestroySession = (PFN_xrDestroySession)LoadFunc(Instance, "xrDestroySession");
+    xrDestroySpace = (PFN_xrDestroySpace)LoadFunc(Instance, "xrDestroySpace");
+    xrDestroySwapchain = (PFN_xrDestroySwapchain)LoadFunc(Instance, "xrDestroySwapchain");
+    xrEndFrame = (PFN_xrEndFrame)LoadFunc(Instance, "xrEndFrame");
+    xrEndSession = (PFN_xrEndSession)LoadFunc(Instance, "xrEndSession");
+    xrEnumerateBoundSourcesForAction = (PFN_xrEnumerateBoundSourcesForAction)LoadFunc(Instance, "xrEnumerateBoundSourcesForAction");
+    xrEnumerateEnvironmentBlendModes = (PFN_xrEnumerateEnvironmentBlendModes)LoadFunc(Instance, "xrEnumerateEnvironmentBlendModes");
+    xrEnumerateReferenceSpaces = (PFN_xrEnumerateReferenceSpaces)LoadFunc(Instance, "xrEnumerateReferenceSpaces");
+    xrEnumerateSwapchainFormats = (PFN_xrEnumerateSwapchainFormats)LoadFunc(Instance, "xrEnumerateSwapchainFormats");
+    xrEnumerateSwapchainImages = (PFN_xrEnumerateSwapchainImages)LoadFunc(Instance, "xrEnumerateSwapchainImages");
+    xrEnumerateViewConfigurationViews = (PFN_xrEnumerateViewConfigurationViews)LoadFunc(Instance, "xrEnumerateViewConfigurationViews");
+    xrEnumerateViewConfigurations = (PFN_xrEnumerateViewConfigurations)LoadFunc(Instance, "xrEnumerateViewConfigurations");
+    xrGetActionStateBoolean = (PFN_xrGetActionStateBoolean)LoadFunc(Instance, "xrGetActionStateBoolean");
+    xrGetActionStateFloat = (PFN_xrGetActionStateFloat)LoadFunc(Instance, "xrGetActionStateFloat");
+    xrGetActionStatePose = (PFN_xrGetActionStatePose)LoadFunc(Instance, "xrGetActionStatePose");
+    xrGetActionStateVector2f = (PFN_xrGetActionStateVector2f)LoadFunc(Instance, "xrGetActionStateVector2f");
+    xrGetCurrentInteractionProfile = (PFN_xrGetCurrentInteractionProfile)LoadFunc(Instance, "xrGetCurrentInteractionProfile");
+    xrGetInputSourceLocalizedName = (PFN_xrGetInputSourceLocalizedName)LoadFunc(Instance, "xrGetInputSourceLocalizedName");
+    xrGetInstanceProperties = (PFN_xrGetInstanceProperties)LoadFunc(Instance, "xrGetInstanceProperties");
+    xrGetReferenceSpaceBoundsRect = (PFN_xrGetReferenceSpaceBoundsRect)LoadFunc(Instance, "xrGetReferenceSpaceBoundsRect");
+    xrGetSystem = (PFN_xrGetSystem)LoadFunc(Instance, "xrGetSystem");
+    xrGetSystemProperties = (PFN_xrGetSystemProperties)LoadFunc(Instance, "xrGetSystemProperties");
+    xrGetViewConfigurationProperties = (PFN_xrGetViewConfigurationProperties)LoadFunc(Instance, "xrGetViewConfigurationProperties");
+    xrLocateSpace = (PFN_xrLocateSpace)LoadFunc(Instance, "xrLocateSpace");
+    xrLocateViews = (PFN_xrLocateViews)LoadFunc(Instance, "xrLocateViews");
+    xrPathToString = (PFN_xrPathToString)LoadFunc(Instance, "xrPathToString");
+    xrPollEvent = (PFN_xrPollEvent)LoadFunc(Instance, "xrPollEvent");
+    xrReleaseSwapchainImage = (PFN_xrReleaseSwapchainImage)LoadFunc(Instance, "xrReleaseSwapchainImage");
+    xrRequestExitSession = (PFN_xrRequestExitSession)LoadFunc(Instance, "xrRequestExitSession");
+    xrResultToString = (PFN_xrResultToString)LoadFunc(Instance, "xrResultToString");
+    xrStopHapticFeedback = (PFN_xrStopHapticFeedback)LoadFunc(Instance, "xrStopHapticFeedback");
+    xrStringToPath = (PFN_xrStringToPath)LoadFunc(Instance, "xrStringToPath");
+    xrStructureTypeToString = (PFN_xrStructureTypeToString)LoadFunc(Instance, "xrStructureTypeToString");
+    xrSuggestInteractionProfileBindings = (PFN_xrSuggestInteractionProfileBindings)LoadFunc(Instance, "xrSuggestInteractionProfileBindings");
+    xrSyncActions = (PFN_xrSyncActions)LoadFunc(Instance, "xrSyncActions");
+    xrWaitFrame = (PFN_xrWaitFrame)LoadFunc(Instance, "xrWaitFrame");
+    xrWaitSwapchainImage = (PFN_xrWaitSwapchainImage)LoadFunc(Instance, "xrWaitSwapchainImage");
+#endif /*  defined(XR_VERSION_1_0)   */
 #if defined(XR_LOADER_VERSION_1_0)
     xrCreateApiLayerInstance = (PFN_xrCreateApiLayerInstance)LoadFunc(Instance, "xrCreateApiLayerInstance");
     xrNegotiateLoaderApiLayerInterface = (PFN_xrNegotiateLoaderApiLayerInterface)LoadFunc(Instance, "xrNegotiateLoaderApiLayerInterface");
     xrNegotiateLoaderRuntimeInterface = (PFN_xrNegotiateLoaderRuntimeInterface)LoadFunc(Instance, "xrNegotiateLoaderRuntimeInterface");
 #endif /*  defined(XR_LOADER_VERSION_1_0)   */
+#if defined(XR_VERSION_1_1)
+    xrLocateSpaces = (PFN_xrLocateSpaces)LoadFunc(Instance, "xrLocateSpaces");
+#endif /*  defined(XR_VERSION_1_1)   */
 #if defined(XR_ALMALENCE_digital_lens_control)
     xrSetDigitalLensControlALMALENCE = (PFN_xrSetDigitalLensControlALMALENCE)LoadFunc(Instance, "xrSetDigitalLensControlALMALENCE");
 #endif /*  defined(XR_ALMALENCE_digital_lens_control)   */
@@ -497,68 +559,6 @@ void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc){
 #if defined(XR_VARJO_view_offset)
     xrSetViewOffsetVARJO = (PFN_xrSetViewOffsetVARJO)LoadFunc(Instance, "xrSetViewOffsetVARJO");
 #endif /*  defined(XR_VARJO_view_offset)   */
-
-}
-
-void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadFunc){
-
-//SECTION(V): XRMYTH_LOAD_INSTANCE
-#if defined(XR_VERSION_1_0)
-    xrAcquireSwapchainImage = (PFN_xrAcquireSwapchainImage)LoadFunc(Instance, "xrAcquireSwapchainImage");
-    xrApplyHapticFeedback = (PFN_xrApplyHapticFeedback)LoadFunc(Instance, "xrApplyHapticFeedback");
-    xrAttachSessionActionSets = (PFN_xrAttachSessionActionSets)LoadFunc(Instance, "xrAttachSessionActionSets");
-    xrBeginFrame = (PFN_xrBeginFrame)LoadFunc(Instance, "xrBeginFrame");
-    xrBeginSession = (PFN_xrBeginSession)LoadFunc(Instance, "xrBeginSession");
-    xrCreateAction = (PFN_xrCreateAction)LoadFunc(Instance, "xrCreateAction");
-    xrCreateActionSet = (PFN_xrCreateActionSet)LoadFunc(Instance, "xrCreateActionSet");
-    xrCreateActionSpace = (PFN_xrCreateActionSpace)LoadFunc(Instance, "xrCreateActionSpace");
-    xrCreateReferenceSpace = (PFN_xrCreateReferenceSpace)LoadFunc(Instance, "xrCreateReferenceSpace");
-    xrCreateSession = (PFN_xrCreateSession)LoadFunc(Instance, "xrCreateSession");
-    xrCreateSwapchain = (PFN_xrCreateSwapchain)LoadFunc(Instance, "xrCreateSwapchain");
-    xrDestroyAction = (PFN_xrDestroyAction)LoadFunc(Instance, "xrDestroyAction");
-    xrDestroyActionSet = (PFN_xrDestroyActionSet)LoadFunc(Instance, "xrDestroyActionSet");
-    xrDestroyInstance = (PFN_xrDestroyInstance)LoadFunc(Instance, "xrDestroyInstance");
-    xrDestroySession = (PFN_xrDestroySession)LoadFunc(Instance, "xrDestroySession");
-    xrDestroySpace = (PFN_xrDestroySpace)LoadFunc(Instance, "xrDestroySpace");
-    xrDestroySwapchain = (PFN_xrDestroySwapchain)LoadFunc(Instance, "xrDestroySwapchain");
-    xrEndFrame = (PFN_xrEndFrame)LoadFunc(Instance, "xrEndFrame");
-    xrEndSession = (PFN_xrEndSession)LoadFunc(Instance, "xrEndSession");
-    xrEnumerateBoundSourcesForAction = (PFN_xrEnumerateBoundSourcesForAction)LoadFunc(Instance, "xrEnumerateBoundSourcesForAction");
-    xrEnumerateEnvironmentBlendModes = (PFN_xrEnumerateEnvironmentBlendModes)LoadFunc(Instance, "xrEnumerateEnvironmentBlendModes");
-    xrEnumerateReferenceSpaces = (PFN_xrEnumerateReferenceSpaces)LoadFunc(Instance, "xrEnumerateReferenceSpaces");
-    xrEnumerateSwapchainFormats = (PFN_xrEnumerateSwapchainFormats)LoadFunc(Instance, "xrEnumerateSwapchainFormats");
-    xrEnumerateSwapchainImages = (PFN_xrEnumerateSwapchainImages)LoadFunc(Instance, "xrEnumerateSwapchainImages");
-    xrEnumerateViewConfigurationViews = (PFN_xrEnumerateViewConfigurationViews)LoadFunc(Instance, "xrEnumerateViewConfigurationViews");
-    xrEnumerateViewConfigurations = (PFN_xrEnumerateViewConfigurations)LoadFunc(Instance, "xrEnumerateViewConfigurations");
-    xrGetActionStateBoolean = (PFN_xrGetActionStateBoolean)LoadFunc(Instance, "xrGetActionStateBoolean");
-    xrGetActionStateFloat = (PFN_xrGetActionStateFloat)LoadFunc(Instance, "xrGetActionStateFloat");
-    xrGetActionStatePose = (PFN_xrGetActionStatePose)LoadFunc(Instance, "xrGetActionStatePose");
-    xrGetActionStateVector2f = (PFN_xrGetActionStateVector2f)LoadFunc(Instance, "xrGetActionStateVector2f");
-    xrGetCurrentInteractionProfile = (PFN_xrGetCurrentInteractionProfile)LoadFunc(Instance, "xrGetCurrentInteractionProfile");
-    xrGetInputSourceLocalizedName = (PFN_xrGetInputSourceLocalizedName)LoadFunc(Instance, "xrGetInputSourceLocalizedName");
-    xrGetInstanceProperties = (PFN_xrGetInstanceProperties)LoadFunc(Instance, "xrGetInstanceProperties");
-    xrGetReferenceSpaceBoundsRect = (PFN_xrGetReferenceSpaceBoundsRect)LoadFunc(Instance, "xrGetReferenceSpaceBoundsRect");
-    xrGetSystem = (PFN_xrGetSystem)LoadFunc(Instance, "xrGetSystem");
-    xrGetSystemProperties = (PFN_xrGetSystemProperties)LoadFunc(Instance, "xrGetSystemProperties");
-    xrGetViewConfigurationProperties = (PFN_xrGetViewConfigurationProperties)LoadFunc(Instance, "xrGetViewConfigurationProperties");
-    xrLocateSpace = (PFN_xrLocateSpace)LoadFunc(Instance, "xrLocateSpace");
-    xrLocateViews = (PFN_xrLocateViews)LoadFunc(Instance, "xrLocateViews");
-    xrPathToString = (PFN_xrPathToString)LoadFunc(Instance, "xrPathToString");
-    xrPollEvent = (PFN_xrPollEvent)LoadFunc(Instance, "xrPollEvent");
-    xrReleaseSwapchainImage = (PFN_xrReleaseSwapchainImage)LoadFunc(Instance, "xrReleaseSwapchainImage");
-    xrRequestExitSession = (PFN_xrRequestExitSession)LoadFunc(Instance, "xrRequestExitSession");
-    xrResultToString = (PFN_xrResultToString)LoadFunc(Instance, "xrResultToString");
-    xrStopHapticFeedback = (PFN_xrStopHapticFeedback)LoadFunc(Instance, "xrStopHapticFeedback");
-    xrStringToPath = (PFN_xrStringToPath)LoadFunc(Instance, "xrStringToPath");
-    xrStructureTypeToString = (PFN_xrStructureTypeToString)LoadFunc(Instance, "xrStructureTypeToString");
-    xrSuggestInteractionProfileBindings = (PFN_xrSuggestInteractionProfileBindings)LoadFunc(Instance, "xrSuggestInteractionProfileBindings");
-    xrSyncActions = (PFN_xrSyncActions)LoadFunc(Instance, "xrSyncActions");
-    xrWaitFrame = (PFN_xrWaitFrame)LoadFunc(Instance, "xrWaitFrame");
-    xrWaitSwapchainImage = (PFN_xrWaitSwapchainImage)LoadFunc(Instance, "xrWaitSwapchainImage");
-#endif /*  defined(XR_VERSION_1_0)   */
-#if defined(XR_VERSION_1_1)
-    xrLocateSpaces = (PFN_xrLocateSpaces)LoadFunc(Instance, "xrLocateSpaces");
-#endif /*  defined(XR_VERSION_1_1)   */
 
 
 }

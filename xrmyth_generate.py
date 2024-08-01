@@ -151,12 +151,13 @@ def generate():
             if Name == "xrGetInstanceProcAddr":
                 Type = ""
 
-            if is_descendant_type(Types, Type, "XrInstance") and Name not in InstanceCommands:
-                Blocks["LOAD_INSTANCE"] += "    " + Name + " = (PFN_" + Name + ')LoadFunc(Instance, "' + Name + '");\n'
+# is_descendant_type(Types, Type, "XrInstance") and Name not in InstanceCommands
 
-            elif Type != "":
+            if Name.startswith("xrCreateInstance") or Name.startswith("xrEnumerateApiLayerProperties") or Name.startswith("xrEnumerateInstanceExtensionProperties"):
                 Blocks["LOAD_LOADER"] += "    " + Name + " = (PFN_" + Name + ')LoadFunc(Instance, "' + Name + '");\n'
 
+            elif Type != "":
+                Blocks["LOAD_INSTANCE"] += "    " + Name + " = (PFN_" + Name + ')LoadFunc(Instance, "' + Name + '");\n'
             
             Blocks["PROTOTYPE_H"] += "extern PFN_" + Name + " " + Name + ";\n"
             Blocks["PROTOTYPE_C"] += "PFN_" + Name + " " + Name + ";\n"
