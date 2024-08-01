@@ -61,7 +61,7 @@ def patch(FileName, SourceName, Blocks):
             File.write(Line)
 
 def generate():
-    print("Generating openxr loader")
+    #print("Generating openxr loader")
 
     Spec = etree.parse(sys.argv[1])
 

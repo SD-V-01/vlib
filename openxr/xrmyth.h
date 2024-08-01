@@ -16,6 +16,7 @@
 #define MTYH_XR_LOADER_H
 
 #include "base_types.h"
+#include "../vulkan/vkmyth.h"
 
 #if defined(OPENXR_H_) && !defined(XR_NO_PROTOTYPES)
 #error Please define XR_NO_PROTOTYPES before including any openxr headers !!
@@ -32,12 +33,15 @@
 #define XR_NO_PROTOTYPES
 #endif
 
-#if defined(VLIB_PLATFORM_NT)
-
 #ifndef MYTH_XR_NO_PLATFORM_DEFINES
 
-#elif defined(VLIB_PLATFORM_LINUX)
+#if defined(VLIB_PLATFORM_NT)
 #define XR_USE_PLATFORM_WIN32
+
+#elif defined(VLIB_PLATFORM_LINUX)
+
+#else
+#error Implement platform
 
 #endif
 

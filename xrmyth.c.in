@@ -51,8 +51,16 @@ bool mythXrLoad(){
 	}
 
 	xrGetInstanceProcAddr = (PFN_xrGetInstanceProcAddr)mdsoGetFunc(Handle, "xrGetInstanceProcAddr");
+	if(xrGetInstanceProcAddr == NULL){
+		VERRNF("XrLoader", "Could not load OpenXR entry point");
+		return false;
+
+	}
+
 	Libxr = Handle;
 	_mythXrLoadBasic(NULL, &mythXrLoad_loadFunc);
+
+	return true;
 
 }
 
