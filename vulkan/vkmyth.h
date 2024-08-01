@@ -53,16 +53,12 @@ typedef struct _SECURITY_ATTRIBUTES SECURITY_ATTRIBUTES;
 #define MYTH_VK_LOAD_DLL_BACKUP "vulkan-1.dll"
 
 
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__unix__)
 #define MYTH_VK_LOAD_DLL "libvulkan.so.1"
 #define MYTH_VK_LOAD_DLL_BACKUP "libvulkan.so"
 
 #elif defined(__APPLE__)
 #error We don't do that around here
-
-#elif defined(__unix__)
-#define MYTH_VK_LOAD_DLL "libvulkan.so.1"
-#define MYTH_VK_LOAD_DLL_BACKUP "libvulkan.so"
 
 #else
 #error Define platform

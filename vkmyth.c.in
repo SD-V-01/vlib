@@ -60,7 +60,7 @@ VkResult mythVkLoad(){
 	}
 
 	if(!Handle){
-		VERRNF("VkLoader", "Could not load vulkan api");
+		VERRNF("VkLoader", "Could not load Vulkan api");
 		return VK_ERROR_INITIALIZATION_FAILED;
 
 	}

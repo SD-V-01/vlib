@@ -1,0 +1,119 @@
+////////////////////////////////////////////////////////////////////////////
+//
+//  VLib Source File.
+//  Copyright (C) 2024 S/N: V-01
+// -------------------------------------------------------------------------
+//  File name:   xrmyth.c
+//  Version:     v1.00
+//  Created:     31/07/24 by V.
+//  Description: 
+// -------------------------------------------------------------------------
+//  This project is licensed under the MIT License
+//
+////////////////////////////////////////////////////////////////////////////
+
+#include "xrmyth.h"
+#include "../mdos.h"
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+mdsoHandle Libxr = mdsoNullHandle;
+
+static PFN_xrVoidFunction mythXrLoad_loadFunc(XrInstance Instance, const char* Name){
+	PFN_xrVoidFunction Func = NULL;
+	XrResult XRes = xrGetInstanceProcAddr(Instance, Name, &Func);
+	if((Func == NULL) || (XRes != XR_SUCCESS)){
+		VWARN("XrLoader", "Could not load Base OpenXR Function {cstr} with error \"{xr}\" instance {ptr}",
+				Name, XRes, Instance);
+				Func = NULL;
+
+	}
+
+	return Func;
+
+}
+
+bool mythXrLoad(){
+	mdsoHandle Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_localSymbols);
+	if(!Handle){
+		Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_localSymbols);
+
+	}
+
+	//TODO(V): Add better search for openxr_loader.so, like search if steam vr is installed and use that copy
+
+	if(!Handle){
+		VERRNF("XrLoader", "Could not load OpenXR api");
+		return false;
+
+	}
+
+	xrGetInstanceProcAddr = (PFN_xrGetInstanceProcAddr)mdsoGetFunc(Handle, "xrGetInstanceProcAddr");
+	Libxr = Handle;
+	_mythXrLoadBasic(NULL, &mythXrLoad_loadFunc);
+
+}
+
+static PFN_xrVoidFunction mythXrNullifyInstanceFuncPtr(XrInstance Instance, const char* Name){
+	(void)Instance;
+	(void)Name;
+	return NULL;
+
+}
+
+void mythXrExit(){
+	if(Libxr){
+		mdsoClose(Libxr);
+
+	}
+
+	xrGetInstanceProcAddr = NULL;
+	_mythXrLoadBasic(NULL, &mythXrNullifyInstanceFuncPtr);
+	_mythXrLoadInstance(NULL, &mythXrNullifyInstanceFuncPtr);
+
+}
+
+static PFN_xrVoidFunction mythXrLoadInstance_loadFunc(XrInstance Instance, const char* Name){
+	PFN_xrVoidFunction Func = NULL;
+	XrResult XRes = xrGetInstanceProcAddr(Instance, Name, &Func);
+	if((Func == NULL) || (XRes != XR_SUCCESS)){
+		VWARN("XrLoader", "Could not load Instance OpenXR Function {cstr} with error \"{xr}\" instance {ptr}",
+				Name, XRes, Instance);
+				Func = NULL;
+
+	}
+
+	return Func;
+
+}
+
+void mythXrLoadInstance(XrInstance Instance){
+	_mythXrLoadInstance(Instance, &mythXrLoadInstance_loadFunc);
+
+}
+
+
+//SECTION(V): XRMYTH_TOSTR8_IMPL
+
+//SECTION(V): XRMYTH_TOSTR32_IMPL
+
+void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc){
+
+//SECTION(V): XRMYTH_LOAD_BASIC
+
+}
+
+void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadFunc){
+
+//SECTION(V): XRMYTH_LOAD_INSTANCE
+
+
+}
+
+//SECTION(V): XRMYTH_PROTOTYPE_IMPL
+
+#ifdef __cplusplus
+}
+#endif

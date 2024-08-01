@@ -158,7 +158,7 @@ def generate():
         Key = " || ".join(['(' + g + ')' for g in Groups])
         CommandGroups.setdefault(Key, []).append(Name)
 
-    #print(CommandGroups)
+    #print(CommandToGroups)
 
     Commands = {}
 
@@ -179,6 +179,8 @@ def generate():
         Name = Type.findtext("name")
         if Name:
             Types[Name] = Type
+
+    #print(Types)
 
     for Key in BlockKeys:
         Blocks[Key] = ""
@@ -215,7 +217,6 @@ def generate():
                 Blocks[Key] = Blocks[Key][:-len(Ifdef)]
             else:
                 Blocks[Key] += "#endif /*  " + Group + "  */\n"
-
 
     #print(Blocks)
 
