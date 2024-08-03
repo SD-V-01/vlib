@@ -8356,8 +8356,6 @@ typedef XrResult (XRAPI_PTR *<name>PFN_xrCreateApiLayerInstance</name>)(
         <require>
             <enum value="2"                                name="XR_EXT_thermal_query_SPEC_VERSION"/>
             <enum value="&quot;XR_EXT_thermal_query&quot;" name="XR_EXT_THERMAL_QUERY_EXTENSION_NAME"/>
-            <type name="XrPerfSettingsDomainEXT"/>
-            <type name="XrPerfSettingsNotificationLevelEXT"/>
             <command name="xrThermalGetTemperatureTrendEXT"/>
         </require>
     </extension>
@@ -9061,7 +9059,6 @@ typedef XrResult (XRAPI_PTR *<name>PFN_xrCreateApiLayerInstance</name>)(
 
             <type name="XrBodyJointFB"/>
             <type name="XrBodyJointSetFB"/>
-            <type name="XrBodyJointFB"/>
             <type name="XrBodyJointLocationFB"/>
 
             <type name="XrSystemBodyTrackingPropertiesFB"/>
