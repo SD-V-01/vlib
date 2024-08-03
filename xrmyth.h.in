@@ -90,6 +90,8 @@ typedef PFN_xrVoidFunction (*loadFuncPtr)(XrInstance Instance, const char* Name)
 MYTH_XR_LOAD_API void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc);
 MYTH_XR_LOAD_API void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadFunc);
 
+#ifndef MYTH_XR_NO_TOSTR
+
 //SECTION(V): XRMYTH_SPECIAL_ENUM8_PROTO
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM32_PROTO
@@ -97,6 +99,8 @@ MYTH_XR_LOAD_API void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadF
 //SECTION(V): XRMYTH_TOSTR8_PROTO
 
 //SECTION(V): XRMYTH_TOSTR32_PROTO
+
+#endif
 
 #if defined(TEX_PARSER) || defined(IDE_PARSER)
 

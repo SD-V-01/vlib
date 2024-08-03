@@ -1014,6 +1014,8 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 
 			}*/
 
+			#ifndef MYTH_XR_NO_TOSTR
+
 			else if (vformatisexactmatch8(TypeParameter, "xrobjecttype")) {
 				if (vstrlen8(FormatParameter) == 0) {
 					i32 Var = v_vararg(Args, i32);
@@ -1032,6 +1034,8 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 				}
 
 			}
+
+			#endif
 
 			//            NOTE(V): Ptr utils
 			else if (vformatisexactmatch8(TypeParameter, "eol")) {

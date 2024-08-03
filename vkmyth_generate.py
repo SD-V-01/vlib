@@ -23,7 +23,7 @@ CmdVersions = {
 	"vkCmdSetExclusiveScissorEnableNV": 2
 }
 
-def patch(FileName, SourceFile, Blocks):
+def patch(FileName, SourceFile, Blocks, EnumBlocks):
     Result = []
     Block = None
 
@@ -58,6 +58,16 @@ def patch(FileName, SourceFile, Blocks):
                     Result.append(Blocks["PROTOTYPES_H"])
                 if Line.strip().startswith("//SECTION(V): VK_PROTOTYPES_HEADER"):
                     Result.append(Blocks["PROTOTYPES_H"])
+
+                if Line.strip().startswith("//SECTION(V): VTOSTR8_IMPL"):
+                    Result.append(EnumBlocks["VSTR8_IMPL"])
+                if Line.strip().startswith("//SECTION(V): VTOSTR32_IMPL"):
+                    Result.append(EnumBlocks["VSTR32_IMPL"])
+                if Line.strip().startswith("//SECTION(V): VTOSTR8_PROTO"):
+                    Result.append(EnumBlocks["VSTR8_PROTO"])
+                if Line.strip().startswith("//SECTION(V): VTOSTR32_PROTO"):
+                    Result.append(EnumBlocks["VSTR32_PROTO"])
+
 
     with open(FileName, "w", newline = "\n") as File:
         for Line in Result:
@@ -97,6 +107,8 @@ def generate():
     CommandGroups = OrderedDict()
     InstanceCommands = set()
 
+    EnumGroups = OrderedDict()
+
     for Feature in Spec.findall('feature'):
         Api = Feature.get('api')
         if 'vulkan' not in Api.split(","):
@@ -105,8 +117,18 @@ def generate():
         CmdRefs = Feature.findall("require/command")
         CommandGroups[Key] = [CmdRef.get('name') for CmdRef in CmdRefs] # I can't do this shit anymore
 
+    for Feature in Spec.findall("feature"):
+        Api = Feature.get("api")
+        if "vulkan" not in Api.split(","):
+            continue
+        Key = defined(Feature.get("name"))
+        EnumRefs = Feature.findall("require/type")
+        EnumGroups[Key] = [CmdRef.get("name") for CmdRef in EnumRefs]
+
     #print(CommandGroups)
     
+    ExtGroups = OrderedDict()
+
     for Ext in sorted(Spec.findall("extensions/extension"), key = lambda Ext: Ext.get("name")):
         Supported = Ext.get("supported")
         if "vulkan" not in Supported.split(","):
@@ -136,12 +158,31 @@ def generate():
                 else:
                     CommandGroups.setdefault(Key, []).append(CmdRef.get("name"))
 
+            EnumRefs = Req.findall("type")
+            for EnumRef in EnumRefs:
+                if EnumRef.get("alias") != None:
+                    EnumGroups.setdefault(Key, []).append(EnumRef.get("name"))
+
+            for ExtEnum in Req.findall("enum"):
+                if ExtEnum.get("extends") != None:
+                    #print(ExtEnum.get("extends"))
+                    if ExtEnum.get("alias") == None:
+                        ExtGroups.setdefault(Key, []).append((ExtEnum.get("name"), ExtEnum.get("extends")))
+
             if Type == "instance":
                 for CmdRef in CmdRefs:
                     InstanceCommands.add(CmdRef.get("name"))
 
+    #print(ExtGroups)
     #print(CommandGroups)
     #print(InstanceCommands)
+
+    Enums = {}
+    for Enum in Spec.findall("enums"):
+        if Enum.get("type") != "enum":
+            continue
+        Name = Enum.get("name")
+        Enums[Name] = Enum
 
     CommandToGroups = OrderedDict()
 
@@ -220,7 +261,99 @@ def generate():
 
     #print(Blocks)
 
-    patch(sys.argv[2], sys.argv[4], Blocks)
-    patch(sys.argv[3], sys.argv[5], Blocks)
+    SpecEnumGlobalDefine = {}
+    SpecialEnumCons = {"",}
+    EnumKeys = {"VSTR8_IMPL", "VSTR8_PROTO", "VSTR32_PROTO", "VSTR32_IMPL"}
+    EnumBlocks = {}
+    for Key in EnumKeys:
+        EnumBlocks[Key] = ""
+
+    #for (ExtGroup, ExtEnums) in ExtGroups.items():
+    #    for Enum in ExtEnums:
+    #        for (ExtGroup2, ExtEnums2) in ExtGroups.items():
+    #            for Enum2 in ExtEnums2:
+    #                if Enum2[1] == Enum[1]:
+    #                    print(Enum2)
+
+    for (Group, EnumName) in EnumGroups.items():
+        Ifdef = "#if " + Group + "\n"
+
+        for Key in EnumKeys:
+            EnumBlocks[Key] += Ifdef
+
+        for Enum in EnumName:
+            ShouldRun = True
+            for Avoid in SpecialEnumCons:
+                if Enum == Avoid:
+                    SpecEnumGlobalDefine[Enum] = Group
+                    ShouldRun = False
+            if ShouldRun == False:
+                continue
+
+            if Enums.get(Enum) != None:
+                EnumBlocks["VSTR8_PROTO"] += "char* vtostr8_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR32_PROTO"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR8_IMPL"] += "char* vtostr8_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR8_IMPL"] += "    switch(In){\n\n"
+                
+                for Case in Enums[Enum].findall("enum"):
+                    CaseName = Case.get("name")
+                    EnumBlocks["VSTR8_IMPL"] += "    case(" + CaseName + "):\n"
+                    EnumBlocks["VSTR8_IMPL"] += '        return "' + CaseName + '";\n        break;\n'
+
+                for (ExtGroup, ExtEnums) in ExtGroups.items():
+                    Ifdef = "#if " + ExtGroup + "\n"
+                    EnumBlocks["VSTR8_IMPL"] += Ifdef
+
+                    for ExtEnum in ExtEnums:
+                        if ExtEnum[1] == Enum:
+                            #print(ExtEnum)
+                            EnumBlocks["VSTR8_IMPL"] += "    case(" + ExtEnum[0] + "):\n"
+                            EnumBlocks["VSTR8_IMPL"] += '        return "' + ExtEnum[0] + '";\n        break;\n'
+
+                    if EnumBlocks["VSTR8_IMPL"].endswith(Ifdef):
+                        EnumBlocks["VSTR8_IMPL"] = EnumBlocks["VSTR8_IMPL"][:-len(Ifdef)]
+                    else:
+                        EnumBlocks["VSTR8_IMPL"] += "#endif /*  " + ExtGroup + "  */\n"
+
+                EnumBlocks["VSTR8_IMPL"] += '    default:\n        return "' + Enum + '_TOSTR_ERROR";\n\n    }\n'
+
+                EnumBlocks["VSTR8_IMPL"] += "\n}\n\n"
+
+                EnumBlocks["VSTR32_IMPL"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR32_IMPL"] += "    switch(In){\n\n"
+                
+                for Case in Enums[Enum].findall("enum"):
+                    CaseName = Case.get("name")
+                    EnumBlocks["VSTR32_IMPL"] += "    case(" + CaseName + "):\n"
+                    EnumBlocks["VSTR32_IMPL"] += '        return U"' + CaseName + '";\n        break;\n'
+
+                for (ExtGroup, ExtEnums) in ExtGroups.items():
+                    Ifdef = "#if " + ExtGroup + "\n"
+                    EnumBlocks["VSTR32_IMPL"] += Ifdef
+
+                    for ExtEnum in ExtEnums:
+                        if ExtEnum[1] == Enum:
+                            #print(ExtEnum)
+                            EnumBlocks["VSTR32_IMPL"] += "    case(" + ExtEnum[0] + "):\n"
+                            EnumBlocks["VSTR32_IMPL"] += '        return U"' + ExtEnum[0] + '";\n        break;\n'
+
+                    if EnumBlocks["VSTR32_IMPL"].endswith(Ifdef):
+                        EnumBlocks["VSTR32_IMPL"] = EnumBlocks["VSTR32_IMPL"][:-len(Ifdef)]
+                    else:
+                        EnumBlocks["VSTR32_IMPL"] += "#endif /*  " + ExtGroup + "  */\n"
+
+                EnumBlocks["VSTR32_IMPL"] += '    default:\n        return U"' + Enum + '_TOSTR_ERROR";\n\n    }\n'
+
+                EnumBlocks["VSTR32_IMPL"] += "\n}\n\n"
+
+        for Key in EnumKeys:
+            if EnumBlocks[Key].endswith(Ifdef):
+                EnumBlocks[Key] = EnumBlocks[Key][:-len(Ifdef)]
+            else:
+                EnumBlocks[Key] += "#endif /*  " + Group + "  */\n"
+
+    patch(sys.argv[2], sys.argv[4], Blocks, EnumBlocks)
+    patch(sys.argv[3], sys.argv[5], Blocks, EnumBlocks)
 
 generate();

@@ -84,6 +84,10 @@ MYTH_VK_LOAD_API void _mythVkLoadInstance(VkInstance Instance, PFN_vkGetInstance
 MYTH_VK_LOAD_API void _mythVkLoadDevice(VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc);
 MYTH_VK_LOAD_API void _mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc);
 
+//SECTION(V): VTOSTR8_PROTO
+
+//SECTION(V): VTOSTR32_PROTO
+
 struct _mythVkDeviceFuncArray{
 
 #if defined(TENX_PARSER) || defined(IDE_PARSER)

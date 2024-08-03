@@ -84,6 +84,116 @@ MYTH_VK_LOAD_API void _mythVkLoadInstance(VkInstance Instance, PFN_vkGetInstance
 MYTH_VK_LOAD_API void _mythVkLoadDevice(VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc);
 MYTH_VK_LOAD_API void _mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc);
 
+//SECTION(V): VTOSTR8_PROTO
+#if defined(VK_VERSION_1_0)
+char* vtostr8_VkResult(VkResult In);
+char* vtostr8_VkStructureType(VkStructureType In);
+char* vtostr8_VkPipelineCacheHeaderVersion(VkPipelineCacheHeaderVersion In);
+char* vtostr8_VkObjectType(VkObjectType In);
+char* vtostr8_VkVendorId(VkVendorId In);
+char* vtostr8_VkFormat(VkFormat In);
+char* vtostr8_VkImageTiling(VkImageTiling In);
+char* vtostr8_VkImageType(VkImageType In);
+char* vtostr8_VkInternalAllocationType(VkInternalAllocationType In);
+char* vtostr8_VkPhysicalDeviceType(VkPhysicalDeviceType In);
+char* vtostr8_VkSystemAllocationScope(VkSystemAllocationScope In);
+char* vtostr8_VkQueryType(VkQueryType In);
+char* vtostr8_VkSharingMode(VkSharingMode In);
+char* vtostr8_VkImageLayout(VkImageLayout In);
+char* vtostr8_VkComponentSwizzle(VkComponentSwizzle In);
+char* vtostr8_VkImageViewType(VkImageViewType In);
+char* vtostr8_VkBlendFactor(VkBlendFactor In);
+char* vtostr8_VkBlendOp(VkBlendOp In);
+char* vtostr8_VkCompareOp(VkCompareOp In);
+char* vtostr8_VkDynamicState(VkDynamicState In);
+char* vtostr8_VkFrontFace(VkFrontFace In);
+char* vtostr8_VkLogicOp(VkLogicOp In);
+char* vtostr8_VkPolygonMode(VkPolygonMode In);
+char* vtostr8_VkPrimitiveTopology(VkPrimitiveTopology In);
+char* vtostr8_VkStencilOp(VkStencilOp In);
+char* vtostr8_VkVertexInputRate(VkVertexInputRate In);
+char* vtostr8_VkBorderColor(VkBorderColor In);
+char* vtostr8_VkFilter(VkFilter In);
+char* vtostr8_VkSamplerAddressMode(VkSamplerAddressMode In);
+char* vtostr8_VkSamplerMipmapMode(VkSamplerMipmapMode In);
+char* vtostr8_VkDescriptorType(VkDescriptorType In);
+char* vtostr8_VkAttachmentLoadOp(VkAttachmentLoadOp In);
+char* vtostr8_VkAttachmentStoreOp(VkAttachmentStoreOp In);
+char* vtostr8_VkPipelineBindPoint(VkPipelineBindPoint In);
+char* vtostr8_VkCommandBufferLevel(VkCommandBufferLevel In);
+char* vtostr8_VkIndexType(VkIndexType In);
+char* vtostr8_VkSubpassContents(VkSubpassContents In);
+#endif /*  defined(VK_VERSION_1_0)  */
+#if defined(VK_VERSION_1_1)
+char* vtostr8_VkPointClippingBehavior(VkPointClippingBehavior In);
+char* vtostr8_VkTessellationDomainOrigin(VkTessellationDomainOrigin In);
+char* vtostr8_VkSamplerYcbcrModelConversion(VkSamplerYcbcrModelConversion In);
+char* vtostr8_VkSamplerYcbcrRange(VkSamplerYcbcrRange In);
+char* vtostr8_VkChromaLocation(VkChromaLocation In);
+char* vtostr8_VkDescriptorUpdateTemplateType(VkDescriptorUpdateTemplateType In);
+#endif /*  defined(VK_VERSION_1_1)  */
+#if defined(VK_VERSION_1_2)
+char* vtostr8_VkDriverId(VkDriverId In);
+char* vtostr8_VkShaderFloatControlsIndependence(VkShaderFloatControlsIndependence In);
+char* vtostr8_VkSamplerReductionMode(VkSamplerReductionMode In);
+char* vtostr8_VkSemaphoreType(VkSemaphoreType In);
+#endif /*  defined(VK_VERSION_1_2)  */
+
+//SECTION(V): VTOSTR32_PROTO
+#if defined(VK_VERSION_1_0)
+vchar* vtostr32_VkResult(VkResult In);
+vchar* vtostr32_VkStructureType(VkStructureType In);
+vchar* vtostr32_VkPipelineCacheHeaderVersion(VkPipelineCacheHeaderVersion In);
+vchar* vtostr32_VkObjectType(VkObjectType In);
+vchar* vtostr32_VkVendorId(VkVendorId In);
+vchar* vtostr32_VkFormat(VkFormat In);
+vchar* vtostr32_VkImageTiling(VkImageTiling In);
+vchar* vtostr32_VkImageType(VkImageType In);
+vchar* vtostr32_VkInternalAllocationType(VkInternalAllocationType In);
+vchar* vtostr32_VkPhysicalDeviceType(VkPhysicalDeviceType In);
+vchar* vtostr32_VkSystemAllocationScope(VkSystemAllocationScope In);
+vchar* vtostr32_VkQueryType(VkQueryType In);
+vchar* vtostr32_VkSharingMode(VkSharingMode In);
+vchar* vtostr32_VkImageLayout(VkImageLayout In);
+vchar* vtostr32_VkComponentSwizzle(VkComponentSwizzle In);
+vchar* vtostr32_VkImageViewType(VkImageViewType In);
+vchar* vtostr32_VkBlendFactor(VkBlendFactor In);
+vchar* vtostr32_VkBlendOp(VkBlendOp In);
+vchar* vtostr32_VkCompareOp(VkCompareOp In);
+vchar* vtostr32_VkDynamicState(VkDynamicState In);
+vchar* vtostr32_VkFrontFace(VkFrontFace In);
+vchar* vtostr32_VkLogicOp(VkLogicOp In);
+vchar* vtostr32_VkPolygonMode(VkPolygonMode In);
+vchar* vtostr32_VkPrimitiveTopology(VkPrimitiveTopology In);
+vchar* vtostr32_VkStencilOp(VkStencilOp In);
+vchar* vtostr32_VkVertexInputRate(VkVertexInputRate In);
+vchar* vtostr32_VkBorderColor(VkBorderColor In);
+vchar* vtostr32_VkFilter(VkFilter In);
+vchar* vtostr32_VkSamplerAddressMode(VkSamplerAddressMode In);
+vchar* vtostr32_VkSamplerMipmapMode(VkSamplerMipmapMode In);
+vchar* vtostr32_VkDescriptorType(VkDescriptorType In);
+vchar* vtostr32_VkAttachmentLoadOp(VkAttachmentLoadOp In);
+vchar* vtostr32_VkAttachmentStoreOp(VkAttachmentStoreOp In);
+vchar* vtostr32_VkPipelineBindPoint(VkPipelineBindPoint In);
+vchar* vtostr32_VkCommandBufferLevel(VkCommandBufferLevel In);
+vchar* vtostr32_VkIndexType(VkIndexType In);
+vchar* vtostr32_VkSubpassContents(VkSubpassContents In);
+#endif /*  defined(VK_VERSION_1_0)  */
+#if defined(VK_VERSION_1_1)
+vchar* vtostr32_VkPointClippingBehavior(VkPointClippingBehavior In);
+vchar* vtostr32_VkTessellationDomainOrigin(VkTessellationDomainOrigin In);
+vchar* vtostr32_VkSamplerYcbcrModelConversion(VkSamplerYcbcrModelConversion In);
+vchar* vtostr32_VkSamplerYcbcrRange(VkSamplerYcbcrRange In);
+vchar* vtostr32_VkChromaLocation(VkChromaLocation In);
+vchar* vtostr32_VkDescriptorUpdateTemplateType(VkDescriptorUpdateTemplateType In);
+#endif /*  defined(VK_VERSION_1_1)  */
+#if defined(VK_VERSION_1_2)
+vchar* vtostr32_VkDriverId(VkDriverId In);
+vchar* vtostr32_VkShaderFloatControlsIndependence(VkShaderFloatControlsIndependence In);
+vchar* vtostr32_VkSamplerReductionMode(VkSamplerReductionMode In);
+vchar* vtostr32_VkSemaphoreType(VkSemaphoreType In);
+#endif /*  defined(VK_VERSION_1_2)  */
+
 struct _mythVkDeviceFuncArray{
 
 #if defined(TENX_PARSER) || defined(IDE_PARSER)

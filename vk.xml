@@ -16934,12 +16934,16 @@ typedef void* <name>MTLSharedEvent_id</name>;
             </require>
             <require depends="VK_VERSION_1_1">
                 <comment>This duplicates definitions in VK_KHR_device_group below</comment>
+				<!--
                 <enum extends="VkStructureType" extnumber="61"  offset="7"      name="VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHR"/>
                 <enum extends="VkStructureType" extnumber="61"  offset="8"      name="VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR"/>
                 <enum extends="VkStructureType" extnumber="61"  offset="9"      name="VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR"/>
                 <enum extends="VkStructureType" extnumber="61"  offset="10"     name="VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHR"/>
                 <enum extends="VkStructureType" extnumber="61"  offset="11"     name="VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_INFO_KHR"/>
+				 -->
+				<!--
                 <enum extends="VkStructureType" extnumber="61"  offset="12"     name="VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR"/>
+				-->
                 <enum bitpos="0" extends="VkSwapchainCreateFlagBitsKHR"         name="VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR" comment="Allow images with VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT"/>
                 <type name="VkImageSwapchainCreateInfoKHR"/>
                 <type name="VkBindImageMemorySwapchainInfoKHR"/>
@@ -18131,7 +18135,9 @@ typedef void* <name>MTLSharedEvent_id</name>;
             </require>
             <require depends="VK_KHR_descriptor_update_template">
                 <command name="vkCmdPushDescriptorSetWithTemplateKHR"/>
+				<!--
                 <enum value="1" extends="VkDescriptorUpdateTemplateType"    name="VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR" comment="Create descriptor update template for pushed descriptor updates"/>
+				-->
             </require>
         </extension>
         <extension name="VK_EXT_conditional_rendering" number="82" type="device" author="NV" contact="Vikram Kushwaha @vkushwaha" depends="VK_KHR_get_physical_device_properties2,VK_VERSION_1_1" supported="vulkan">
@@ -18199,7 +18205,9 @@ typedef void* <name>MTLSharedEvent_id</name>;
             </require>
             <require depends="VK_KHR_push_descriptor">
                 <command name="vkCmdPushDescriptorSetWithTemplateKHR"/>
+				<!--
                 <enum value="1" extends="VkDescriptorUpdateTemplateType"    name="VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR" comment="Create descriptor update template for pushed descriptor updates"/>
+				-->
             </require>
             <require depends="VK_EXT_debug_report">
                 <enum extends="VkDebugReportObjectTypeEXT"                  name="VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT" alias="VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT"/>
@@ -21912,8 +21920,10 @@ typedef void* <name>MTLSharedEvent_id</name>;
                 <enum value="2"                                             name="VK_EXT_VERTEX_INPUT_DYNAMIC_STATE_SPEC_VERSION"/>
                 <enum value="&quot;VK_EXT_vertex_input_dynamic_state&quot;" name="VK_EXT_VERTEX_INPUT_DYNAMIC_STATE_EXTENSION_NAME"/>
                 <enum offset="0" extends="VkStructureType"                  name="VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT"/>
+				<!--
                 <enum offset="1" extends="VkStructureType"                  name="VK_STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT"/>
                 <enum offset="2" extends="VkStructureType"                  name="VK_STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT"/>
+				-->
                 <enum offset="0" extends="VkDynamicState"                   name="VK_DYNAMIC_STATE_VERTEX_INPUT_EXT"/>
                 <type name="VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT"/>
                 <type name="VkVertexInputBindingDescription2EXT"/>

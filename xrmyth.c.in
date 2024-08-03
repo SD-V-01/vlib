@@ -102,6 +102,8 @@ void mythXrLoadInstance(XrInstance Instance){
 
 }
 
+#ifndef MYTH_XR_NO_TOSTR
+
 //SECTION(V): XRMYTH_SPECIAL_ENUM8_IMPL
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM32_IMPL
@@ -109,6 +111,8 @@ void mythXrLoadInstance(XrInstance Instance){
 //SECTION(V): XRMYTH_TOSTR8_IMPL
 
 //SECTION(V): XRMYTH_TOSTR32_IMPL
+
+#endif
 
 void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc){
 

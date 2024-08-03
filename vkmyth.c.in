@@ -135,6 +135,8 @@ static PFN_vkVoidFunction mythVkLoadDevice_laodFunc(VkDevice Device, const char*
 
 	}
 
+	return Func;
+
 }
 
 void mythVkLoadDevice(VkDevice Device){
@@ -147,6 +149,10 @@ void mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device){
 	_mythVkLoadArrayDevice(FuncArray, Device, vkGetDeviceProcAddr);
 
 }
+
+//SECTION(V): VTOSTR8_IMPL
+
+//SECTION(V): VTOSTR32_IMPL
 
 void _mythVkLoadBasic(VkInstance Instance, PFN_vkGetInstanceProcAddr LoadFunc){
 
