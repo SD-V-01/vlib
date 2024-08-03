@@ -17,7 +17,7 @@
 #include "mderror.h"
 #include "mdos.h"
 #include "vhash.h"
-#include "mdmath.h"
+#include "vmath.h"
 #include "system.h"
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "errno.h"

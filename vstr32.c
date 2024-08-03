@@ -15,8 +15,9 @@
 #include "vstr32.h"
 #include "system.h"
 #include "vmem.h"
-#include "vtostr.h"
 #include "mdos.h"
+#include "openxr/xrmyth.h"
+#include "vulkan/vkmyth.h"
 
 #ifdef VPP
 namespace VLIB_NAMESPACE{
@@ -982,7 +983,7 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 			else if (vformatisexactmatch8(TypeParameter, "mdConVarType")) {
 				if (vstrlen8(FormatParameter) == 0) {
 					u64 Var = v_vararg(Args, u64);
-					const char* Str = vtostr_mdConVarType(Var);
+					const char* Str = vtostr_mdConVarType((mdConVarType)Var);
 					const st StrLen = vstrlen8(Str);
 					if ((BufSize - BufPosition) > StrLen) {
 						vcpy(Buf + BufPosition, Str, StrLen);
@@ -993,6 +994,40 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 				}
 				else {
 					vformaterror("Unknwon format specifier for mdConVarType");
+
+				}
+
+			}
+
+			/*else if (vformatisexactmatch8(TypeParameter, "xr") ||
+				vformatisexactmatch8(TypeParameter, "xrresult") ||
+				vformatisexactmatch8(TypeParameter, "XrResult")) {
+				if (vstrlen8(FormatParameter) == 0) {
+					u64 = v_vararg(Args, u64);
+					const char* Str = 
+
+				}
+				else {
+					vformaterror("Unknown format specifier for xr/XrResult");
+
+				}
+
+			}*/
+
+			else if (vformatisexactmatch8(TypeParameter, "xrobjecttype")) {
+				if (vstrlen8(FormatParameter) == 0) {
+					i32 Var = v_vararg(Args, i32);
+					const char* Str = vtostr8_XrObjectType((XrObjectType)Var);
+					const st StrLen = vstrlen8(Str);
+					if ((BufSize - BufPosition) > StrLen) {
+						vcpy(Buf + BufPosition, Str, StrLen);
+						BufPosition += StrLen;
+
+					}
+
+				}
+				else {
+					vformaterror("Unknown format specifier for xrobjecttype/XrObjectType");
 
 				}
 

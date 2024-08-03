@@ -145,6 +145,28 @@ typedef enum mdConVarType {
 } mdConVarType;
 
 VLIB_CABI
+inline const char* vtostr_mdConVarType(mdConVarType In) {
+	switch (In) {
+		case mdConVarType_none:
+			return "mdConVarType_none";
+			break;
+		case mdConVarType_Str:
+			return "mdConVarType_Str";
+			break;
+		case mdConVarType_Double:
+			return "mdConVarType_Double";
+			break;
+		case mdConVarType_Int:
+			return "mdConVarType_Int";
+			break;
+
+		default:
+			return "mdConVarType_TOSTR_ERROR";
+
+	};
+
+}
+
 MDCON_API const char* mdConSeverityGetUserStr(mdConSeverity In);
 
 MDCON_API void mdConStateCreate(mdConState* State, const char* Name);

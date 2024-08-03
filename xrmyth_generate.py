@@ -34,7 +34,7 @@ def defined(Key):
 def cdepends(key):
 	return re.sub(r'[a-zA-Z0-9_]+', lambda m: defined(m.group(0)), key).replace(',', ' || ').replace('+', ' && ')
 
-def patch(FileName, SourceName, Blocks):
+def patch(FileName, SourceName, Blocks, EnumBlocks, SpecialEnumsBlocks):
     Result = []
 
     with open(SourceName, "r") as File:
@@ -56,6 +56,30 @@ def patch(FileName, SourceName, Blocks):
             if Line.strip().startswith("//SECTION(V): XRMYTH_PROTOTYPE_IMPL"):
                 Result.append(Blocks["PROTOTYPE_C"])
 
+            if Line.strip().startswith("//SECTION(V): XRMYTH_TOSTR8_IMPL"):
+                Result.append(EnumBlocks["VSTR8_IMPL"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_TOSTR8_PROTO"):
+                Result.append(EnumBlocks["VSTR8_PROTO"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_TOSTR32_IMPL"):
+                Result.append(EnumBlocks["VSTR32_IMPL"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_TOSTR32_PROTO"):
+                Result.append(EnumBlocks["VSTR32_PROTO"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_SPECIAL_ENUM8_PROTO"):
+                Result.append(SpecialEnumsBlocks["VSTR8_SPEC_PROTO"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_SPECIAL_ENUM32_PROTO"):
+                Result.append(SpecialEnumsBlocks["VSTR32_SPEC_PROTO"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_SPECIAL_ENUM8_IMPL"):
+                Result.append(SpecialEnumsBlocks["VSTR8_SPEC_IMPL"])
+
+            if Line.strip().startswith("//SECTION(V): XRMYTH_SPECIAL_ENUM32_IMPL"):
+                Result.append(SpecialEnumsBlocks["VSTR32_SPEC_IMPL"])
+
     with open(FileName, "w", newline = "\n") as File:
         for Line in Result:
             File.write(Line)
@@ -66,7 +90,11 @@ def generate():
     Spec = etree.parse(sys.argv[1])
 
     CommandGroups = OrderedDict()
+    EnumGroups = OrderedDict()
     InstanceCommands = set()
+
+    SpecialEnumGroups = OrderedDict()
+    SpecialEnumsCons = {"XrStructureType", "XrObjectType", "XrResult", "XrReferenceSpaceType", "XrPassthroughLayerPurposeFB", "XrSpaceComponentTypeFB", "XrViewConfigurationType", "XrSceneComputeFeatureMSFT", "XrSceneComponentTypeMSFT", "XrHandJointSetEXT"}
 
     for Feature in Spec.findall("feature"):
         Key = defined(Feature.get("name"))
@@ -74,6 +102,29 @@ def generate():
         CommandGroups[Key] = [CmdRef.get("name") for CmdRef in CmdRefs]
 
     #print(CommandGroups)
+
+    for Feature in Spec.findall("feature"):
+        Key = defined(Feature.get("name"))
+        EnumRefs = Feature.findall("require/type")
+        EnumGroups[Key] = [CmdRef.get("name") for CmdRef in EnumRefs]
+
+    #for Feature in Spec.findall("feature"):
+    #    Key = defined(Feature.get("name"))
+    #    EnumRefs = Feature.findall("require/enum")
+    #    print(Key)
+    #    print(CmdRef.get("name") for CmdRef in EnumRefs)
+
+    #for SpecEnum in SpecialEnumsCons:
+    #    for AllEnums in Spec.findall("enums"):
+    #        if SpecEnum == AllEnums.get("name"):
+    #            Key = defined("XR_VERSION_1_0")
+    #            #SpecialEnumGroups[Key] = [IEnum for IEnum in AllEnums.findall("enum")]
+    #            for IEnum in AllEnums.findall("enum"):
+    #                #print(IEnum.get("name"))
+    #                SpecialEnumGroups.setdefault(Key, []).append(IEnum)
+
+    #print(EnumGroups)
+    #print(SpecialEnumGroups)
 
     for Ext in sorted(Spec.findall("extensions/extension"), key = lambda Ext: Ext.get("name")):
         Supported = Ext.get("supported")
@@ -103,12 +154,37 @@ def generate():
             for CmdRef in CmdRefs:
                 CommandGroups.setdefault(Key, []).append(CmdRef.get("name"))
 
+            EnumRefs = Req.findall("type")
+            for EnumRef in EnumRefs:
+                EnumGroups.setdefault(Key, []).append(EnumRef.get("name"))
+
+            for SpecEnum in Req.findall("enum"):
+                if SpecEnum.get("extends") != None:
+                    #print(SpecEnum.get("extends"))
+                    if SpecEnum.get("alias") == None:
+                        SpecialEnumGroups.setdefault(Key, []).append((SpecEnum.get("name"), SpecEnum.get("extends")))
+                    #SpecialEnumGroups.setdefault(Key, []).append((SpecEnum.get("name"), SpecEnum.get("extends")))
+
             if Type == "instance":
                 for CmdRef in CmdRefs:
                     InstanceCommands.add(CmdRef.get("name"))
 
     #print(CommandGroups)
     #print(InstanceCommands)
+    #print(EnumGroups)
+    #print(SpecialEnumGroups)
+
+
+    Enums = {}
+
+    for Enum in Spec.findall("enums"):
+        if Enum.get("type") != "enum":
+            continue
+        #print(Enum.get("name"))
+        Name = Enum.get("name")
+        Enums[Name] = Enum
+
+    #print(Enums)
 
     Commands = {}
 
@@ -134,6 +210,12 @@ def generate():
 
     Blocks = {}
     BlockKeys = {"PROTOTYPE_H", "PROTOTYPE_C", "LOAD_LOADER", "LOAD_INSTANCE"}
+
+    EnumBlocks = {}
+    EnumKeys = {"VSTR8_IMPL", "VSTR8_PROTO", "VSTR32_PROTO", "VSTR32_IMPL"}
+
+    for Key in EnumKeys:
+        EnumBlocks[Key] = ""
 
     for Key in BlockKeys:
         Blocks[Key] = ""
@@ -168,9 +250,117 @@ def generate():
             else:
                 Blocks[Key] += "#endif /*  " + Group + "   */\n"
 
+    #for Enum in Spec.findall("enums"):
+        #print(Enum.get("name"))
+
+    SpecEnumGlobalDefine = {}
+
+    for (Group, EnumName) in EnumGroups.items():
+        #print(Group)
+        #print(EnumName)
+
+        Ifdef = "#if " + Group + "\n"
+
+        for Key in EnumKeys:
+            EnumBlocks[Key] += Ifdef
+
+        for Enum in EnumName:
+            #print(Enum)
+            ShouldRun = True
+            for Avoid in SpecialEnumsCons:
+                if Enum == Avoid:
+                    #print(Ifdef)
+                    SpecEnumGlobalDefine[Enum] = Group
+                    ShouldRun = False
+            if ShouldRun == False:
+                continue
+                
+            if Enums.get(Enum) != None:
+                EnumBlocks["VSTR8_PROTO"] += "char* vtostr8_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR32_PROTO"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR8_IMPL"] += "char* vtostr8_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR8_IMPL"] += "    switch(In){\n\n"
+
+                for Case in Enums[Enum].findall("enum"):
+                    CaseName = Case.get("name")
+                    EnumBlocks["VSTR8_IMPL"] += "    case(" + CaseName + "):\n"
+                    EnumBlocks["VSTR8_IMPL"] += '        return "' + CaseName + '";\n        break;\n'
+
+                EnumBlocks["VSTR8_IMPL"] += '    default:\n        return "' + Enum + '_TOSTR_ERROR";\n\n    }\n'
+
+                EnumBlocks["VSTR8_IMPL"] += "\n}\n\n"
+
+                EnumBlocks["VSTR32_IMPL"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR32_IMPL"] += "    switch(In){\n\n"
+
+                for Case in Enums[Enum].findall("enum"):
+                    CaseName = Case.get("name")
+                    EnumBlocks["VSTR32_IMPL"] += "    case(" + CaseName + "):\n"
+                    EnumBlocks["VSTR32_IMPL"] += '        return U"' + CaseName + '";\n        break;\n'
+
+                EnumBlocks["VSTR32_IMPL"] += '    default:\n        return U"' + Enum + '_TOSTR_ERROR";\n\n    }\n'
+
+                EnumBlocks["VSTR32_IMPL"] += "\n}\n\n"
+
+        for Key in EnumKeys:
+            if EnumBlocks[Key].endswith(Ifdef):
+                EnumBlocks[Key] = EnumBlocks[Key][:-len(Ifdef)]
+            else:
+                EnumBlocks[Key] += "#endif /*  " + Group + "  */\n"
+
+    SpecialEnumBlocks = {}
+    EnumKeys = {"VSTR8_SPEC_IMPL", "VSTR8_SPEC_PROTO", "VSTR32_SPEC_PROTO", "VSTR32_SPEC_IMPL"}
+
+    for EnumKey in EnumKeys:
+        SpecialEnumBlocks[EnumKey] = ""
+
+    for SpecialEnum in SpecialEnumsCons:
+        #print(SpecialEnum)
+        SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
+        SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
+
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
+
+        SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
+        SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "    switch(In){\n"
+
+        #print(Spec.find('enums[name="' + SpecialEnum + '"]'))
+        for GlobalEnum in Spec.findall("enums"):
+            if GlobalEnum.get("name") == SpecialEnum:
+                for GlobalVal in GlobalEnum.findall("enum"):
+                    SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "    case(" + GlobalVal.get("name") + "):\n"
+                    SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += '        return "' + GlobalVal.get("name") + '";\n        break;\n'
+
+        for (Group, Enums) in SpecialEnumGroups.items():
+            Ifdef = "#if " + Group + "\n"
+            SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += Ifdef
+
+            for Enum in Enums:
+                if Enum[1] == SpecialEnum:
+                    #print(Enum)
+                    SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "    case(" + Enum[0] + "):\n"
+                    SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += '        return "' + Enum[0] + '";\n        break;\n'
+
+            if SpecialEnumBlocks["VSTR8_SPEC_IMPL"].endswith(Ifdef):
+                SpecialEnumBlocks["VSTR8_SPEC_IMPL"] = SpecialEnumBlocks["VSTR8_SPEC_IMPL"][:-len(Ifdef)]
+            else:
+                SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#endif /*  " + Group + "  */\n"
+
+        SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += '    default:\n        return "' + SpecialEnum + '_TOSTR_ERROR";\n\n    }\n\n}\n\n'
+
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#endif\n\n"
+
+    #for (Group, AttrName) in SpecialEnumGroups.items():
+    #    print(Group)
+    #    print(AttrName)
+
+    #print(SpecEnumGlobalDefine)
     #print(Blocks)
+    #print(EnumBlocks)
     
-    patch(sys.argv[2], sys.argv[4], Blocks)
-    patch(sys.argv[3], sys.argv[5], Blocks)
+    patch(sys.argv[2], sys.argv[4], Blocks, EnumBlocks, SpecialEnumBlocks)
+    patch(sys.argv[3], sys.argv[5], Blocks, EnumBlocks, SpecialEnumBlocks)
 
 generate()
