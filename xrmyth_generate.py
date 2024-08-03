@@ -316,8 +316,16 @@ def generate():
 
     for SpecialEnum in SpecialEnumsCons:
         #print(SpecialEnum)
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
+            SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
+
         SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
         SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
+
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "#endif\n"
+            SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "#endif\n"
 
         if SpecEnumGlobalDefine.get(SpecialEnum) != None:
             SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
@@ -351,6 +359,41 @@ def generate():
 
         if SpecEnumGlobalDefine.get(SpecialEnum) != None:
             SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#endif\n\n"
+
+
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
+
+        SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
+        SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "    switch(In){\n"
+
+        #print(Spec.find('enums[name="' + SpecialEnum + '"]'))
+        for GlobalEnum in Spec.findall("enums"):
+            if GlobalEnum.get("name") == SpecialEnum:
+                for GlobalVal in GlobalEnum.findall("enum"):
+                    SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "    case(" + GlobalVal.get("name") + "):\n"
+                    SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += '        return U"' + GlobalVal.get("name") + '";\n        break;\n'
+
+        for (Group, Enums) in SpecialEnumGroups.items():
+            Ifdef = "#if " + Group + "\n"
+            SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += Ifdef
+
+            for Enum in Enums:
+                if Enum[1] == SpecialEnum:
+                    #print(Enum)
+                    SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "    case(" + Enum[0] + "):\n"
+                    SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += '        return U"' + Enum[0] + '";\n        break;\n'
+
+            if SpecialEnumBlocks["VSTR32_SPEC_IMPL"].endswith(Ifdef):
+                SpecialEnumBlocks["VSTR32_SPEC_IMPL"] = SpecialEnumBlocks["VSTR32_SPEC_IMPL"][:-len(Ifdef)]
+            else:
+                SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "#endif /*  " + Group + "  */\n"
+
+        SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += '    default:\n        return U"' + SpecialEnum + '_TOSTR_ERROR";\n\n    }\n\n}\n\n'
+
+        if SpecEnumGlobalDefine.get(SpecialEnum) != None:
+            SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "#endif\n\n"
+
 
     #for (Group, AttrName) in SpecialEnumGroups.items():
     #    print(Group)
