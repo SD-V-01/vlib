@@ -17126,7 +17126,9 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <require>
                 <enum value="3"                                                 name="VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_SPEC_VERSION"/>
                 <enum value="&quot;VK_KHR_sampler_mirror_clamp_to_edge&quot;"   name="VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME"/>
+				<!--
                 <enum value="4" extends="VkSamplerAddressMode"                  name="VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE" comment="Note that this defines what was previously a core enum, and so uses the 'value' attribute rather than 'offset', and does not have a suffix. This is a special case, and should not be repeated"/>
+				-->
                 <enum           extends="VkSamplerAddressMode"                  name="VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR" alias="VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE"  deprecated="aliased" comment="Introduced for consistency with extension suffixing rules"/>
             </require>
         </extension>

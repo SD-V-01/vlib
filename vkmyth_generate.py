@@ -108,6 +108,7 @@ def generate():
     InstanceCommands = set()
 
     EnumGroups = OrderedDict()
+    ExtGroups = OrderedDict()
 
     for Feature in Spec.findall('feature'):
         Api = Feature.get('api')
@@ -118,6 +119,7 @@ def generate():
         CommandGroups[Key] = [CmdRef.get('name') for CmdRef in CmdRefs] # I can't do this shit anymore
 
     for Feature in Spec.findall("feature"):
+        #print(Feature.get("name"))
         Api = Feature.get("api")
         if "vulkan" not in Api.split(","):
             continue
@@ -125,9 +127,18 @@ def generate():
         EnumRefs = Feature.findall("require/type")
         EnumGroups[Key] = [CmdRef.get("name") for CmdRef in EnumRefs]
 
+        for Req in Feature.findall("require"):
+        #    for EnumRef in Req.findall("type"):
+        #        if EnumRef.get("alias") == None:
+        #            if EnumRef.get("name") not in EnumGroups[Key]:
+        #                EnumGroups.setdefault(Key, []).append(EnumRef.get("name"))
+            for ExtEnum in Req.findall("enum"):
+                if ExtEnum.get("extends") != None:
+                    if ExtEnum.get("alias") == None:
+                        ExtGroups.setdefault(Key, []).append((ExtEnum.get("name"), ExtEnum.get("extends")))
+
     #print(CommandGroups)
     
-    ExtGroups = OrderedDict()
 
     for Ext in sorted(Spec.findall("extensions/extension"), key = lambda Ext: Ext.get("name")):
         Supported = Ext.get("supported")

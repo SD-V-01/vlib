@@ -215,6 +215,19 @@ typedef char16_t char16;
 
 #endif
 
+#define INT8_C(c)  c
+#define INT16_C(c) c
+#define INT32_C(c) c
+#define UINT8_C(c)  c
+#define UINT16_C(c) c
+#define UINT32_C(c) c ## U
+#ifdef INT64_C
+#define INT64_C(c) c ## L
+#endif
+#ifndef UINT64_C
+#define UINT64_C(c) c ## UL
+#endif
+
 //NOTE(V): Extra standard types
 
 //NOTE(V): This is not portable bettwen compilers

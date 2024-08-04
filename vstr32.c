@@ -18,6 +18,7 @@
 #include "mdos.h"
 #include "openxr/xrmyth.h"
 #include "vulkan/vkmyth.h"
+#include "vmath.h"
 
 #ifdef VPP
 namespace VLIB_NAMESPACE{
@@ -687,6 +688,247 @@ st vinttohex8b32(u32 Var, char* Result, st MaxSize) {
 	Result[1] = 'x';
 	Result[10] = 0;
 	return 10;
+
+}
+
+static void vstr32_splitFloatInternal(double Val, u64* IntegerPart, u64* DecimalPart, i32* Exponent) {
+	(*IntegerPart) = (u64)Val;
+	double Remainder = Val - (*IntegerPart);
+
+	Remainder *= 1e9;
+	(*DecimalPart) = (u64)Remainder;
+
+	Remainder -= (*DecimalPart);
+	if (Remainder >= 0.5) {
+		(*DecimalPart)++;
+		if ((*DecimalPart) >= 1000000000) {
+			(*DecimalPart) = 0;
+			(*IntegerPart)++;
+			if ((*Exponent) != 0 && (*IntegerPart) >= 10) {
+				(*Exponent)++;
+				(*IntegerPart) = 1;
+
+			}
+
+		}
+
+	}
+
+}
+
+static i32 vstr32_normalizeFloatInternal(double Val) {
+	const double PositiveExpThreshold = 1e7;
+	const double NegativeExpThreshold = 1e-5;
+	int exponent = 0;
+
+	if (Val >= PositiveExpThreshold) {
+		if (Val >= 1e256) {
+			Val /= 1e256;
+			exponent += 256;
+		}
+		if (Val >= 1e128) {
+			Val /= 1e128;
+			exponent += 128;
+		}
+		if (Val >= 1e64) {
+			Val /= 1e64;
+			exponent += 64;
+		}
+		if (Val >= 1e32) {
+			Val /= 1e32;
+			exponent += 32;
+		}
+		if (Val >= 1e16) {
+			Val /= 1e16;
+			exponent += 16;
+		}
+		if (Val >= 1e8) {
+			Val /= 1e8;
+			exponent += 8;
+		}
+		if (Val >= 1e4) {
+			Val /= 1e4;
+			exponent += 4;
+		}
+		if (Val >= 1e2) {
+			Val /= 1e2;
+			exponent += 2;
+		}
+		if (Val >= 1e1) {
+			Val /= 1e1;
+			exponent += 1;
+		}
+	}
+
+	if (Val > 0 && Val <= NegativeExpThreshold) {
+		if (Val < 1e-255) {
+			Val *= 1e256;
+			exponent -= 256;
+		}
+		if (Val < 1e-127) {
+			Val *= 1e128;
+			exponent -= 128;
+		}
+		if (Val < 1e-63) {
+			Val *= 1e64;
+			exponent -= 64;
+		}
+		if (Val < 1e-31) {
+			Val *= 1e32;
+			exponent -= 32;
+		}
+		if (Val < 1e-15) {
+			Val *= 1e16;
+			exponent -= 16;
+		}
+		if (Val < 1e-7) {
+			Val *= 1e8;
+			exponent -= 8;
+		}
+		if (Val < 1e-3) {
+			Val *= 1e4;
+			exponent -= 4;
+		}
+		if (Val < 1e-1) {
+			Val *= 1e2;
+			exponent -= 2;
+		}
+		if (Val < 1e0) {
+			Val *= 1e1;
+			exponent -= 1;
+		}
+	}
+
+	return exponent;
+
+}
+
+st vdoubletostr8(double Val, char* Result, st MaxSize) {
+	if (vmathisnan(Val)) {
+		if (MaxSize >= 4) {
+			Result[0] = 'N';
+			Result[1] = 'A';
+			Result[2] = 'N';
+			Result[3] = 0;
+			return 3;
+
+		}
+		else {
+			return 0;
+
+		}
+
+	}
+
+	st ResPos = 0;
+
+	if (Val < 0.0) {
+		if (MaxSize < (ResPos + 2)) {
+			Result[ResPos] = 0;
+			return ResPos;
+
+		}
+		Result[ResPos] = '-';
+		ResPos++;
+
+	}
+
+	if (vmathisinf(Val)) {
+		if (MaxSize < (ResPos + 4)) {
+			Result[ResPos] = 0;
+			return ResPos;
+
+		}
+		Result[ResPos] = 'I';
+		Result[ResPos + 1] = 'F';
+		Result[ResPos + 2] = 'N';
+		ResPos += 3;
+
+	}
+
+	u64 IntegrapPart;
+	u64 DecimalPart;
+	i32 Exponent;
+	Exponent = vstr32_normalizeFloatInternal(Val);
+	vstr32_splitFloatInternal(Val, &IntegrapPart, &DecimalPart, &Exponent);
+
+	/*
+	vsys_writeConsoleInteger(IntegrapPart);
+	vsys_writeConsoleNullStr("####");
+	vsys_writeConsoleInteger(DecimalPart);
+	vsys_writeConsoleNullStr("####");
+	vsys_writeConsoleInteger(Exponent);
+		*/
+
+	if (MaxSize < ResPos) {
+		Result[MaxSize - 1] = 0;
+		return ResPos;
+
+	}
+	st IntegerSize = vinttostr8(IntegrapPart, &(Result[ResPos]), MaxSize - ResPos);
+	if (MaxSize < (ResPos + IntegerSize)) {
+		Result[MaxSize - 1] = 0;
+		return ResPos;
+
+	}
+	ResPos += IntegerSize;
+
+	if (DecimalPart != 0) {
+		if (MaxSize < (ResPos + 2)) {
+			Result[MaxSize - 1] = 0;
+			return ResPos;
+
+		}
+		Result[ResPos] = '.';
+		ResPos++;
+
+		i32 Width = 9;
+		//vsys_writeConsoleInteger(DecimalPart);
+		//vsys_writeConsoleNullStr("######");
+		while (DecimalPart % 10 == 0 && Width > 0) {
+			DecimalPart /= 10;
+			Width--;
+
+		}
+		//vsys_writeConsoleInteger(DecimalPart);
+
+		st DecimalSize = vinttostr8(DecimalPart, &(Result[ResPos]), MaxSize - ResPos);
+		if (MaxSize < (ResPos + DecimalSize)) {
+			Result[MaxSize - 1] = 0;
+			return ResPos;
+
+		}
+		ResPos += DecimalSize;
+
+	}
+
+	//vsys_writeConsoleInteger(Exponent);
+	const st SizeOfPosExp = vdigitlensigned(Exponent) + 3;
+	if (MaxSize < (ResPos + SizeOfPosExp)) {
+		Result[MaxSize - 1] = 0;
+		return ResPos;
+
+	}
+
+	if (Exponent > 0) {
+		Result[ResPos] = 'e';
+		Result[ResPos + 1] = '+';
+		ResPos += 2;
+		st ExpSize = vinttostr8(Exponent, Result + ResPos, MaxSize - ResPos);
+		ResPos += ExpSize;
+
+	}
+	else if (Exponent < 0) {
+		Result[ResPos] = 'e';
+		Result[ResPos + 1] = '-';
+		ResPos += 2;
+		st ExpSize = vinttostr8(-Exponent, Result + ResPos, MaxSize - ResPos);
+		ResPos += ExpSize;
+
+	}
+
+	Result[ResPos] = 0;
+	return ResPos;
 
 }
 

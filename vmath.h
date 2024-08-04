@@ -16,6 +16,7 @@
 
 #include "base_types.h"
 #include "float.h"
+#include "math.h"
 
 //SECTION(V): Platform detection
 
@@ -81,6 +82,23 @@ fp_force_eval(x);                 \
 fp_force_evall(x);                \
 }                                         \
 } while(0)
+
+static __inline unsigned __FLOAT_BITS(float __f)
+{
+	union {float __f; unsigned __i;} __u;
+	__u.__f = __f;
+	return __u.__i;
+}
+static __inline unsigned long long __DOUBLE_BITS(double __f)
+{
+	union {double __f; unsigned long long __i;} __u;
+	__u.__f = __f;
+	return __u.__i;
+}
+
+#define vmathisinf(x) isinf(x)
+
+#define vmathisnan(x) isnan(x)
 
 VLIB_CABI
 MDMATH_ABI double vround64(double x);
