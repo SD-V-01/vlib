@@ -91,6 +91,7 @@ VSTR32_API char* vstrlastchar8(const char* Str, int Char);
 VSTR32_API void vformaterror(const char* Message);
 VSTR32_API st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args);
 VSTR32_API st vformat8(const char* Fmt, char* Buf, st BufSize, ...);
+VSTR32_API u64 vformathash(const char* In);
 VSTR32_API bool vformatisexactmatch8(const char* Buf, const char* Search);
 
 VLIB_CABIEND
