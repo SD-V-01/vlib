@@ -963,7 +963,7 @@ u64 vformathash(const char* In) {
 
 }
 
-st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
+st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 //    NOTE(V): Why dose c++ fucking crash for no reason ???
 	//#ifdef VPP
 	//return 0;
@@ -1044,30 +1044,10 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 
 			}
 
-			//vsys_writeConsoleNullStr("#");
-			//vsys_writeConsoleNullStr(TypeParameter);
-			//vsys_writeConsoleInteger(TypeParameterPos);
-			//vsys_writeConsoleNullStr(FormatParameter);
-			//vsys_writeConsoleInteger(FormatParameterPos);
-			//            TODO(V): Use a switch with hashing to goto the right one instad of doing string comparasons like that
-
-			//const char* TestStr = "testing";
-			//char TestStrBuf[32] = "";
-			//vinttohex8(vfnv64std(TestStr, vstrlen8(TestStr)), TestStrBuf, 32);
-			//vsys_writeConsoleNullStr(TestStrBuf);
-	
 			u64 FmtHash = vformathash(TypeParameter);
-
-			//char TestStrBuf[32] = "";
-			//vinttohex8(FmtHash, TestStrBuf, 32);
-			//vsys_writeConsoleNullStr(TestStrBuf);
-			//vsys_writeConsoleNullStr("\n");
 
 			switch (FmtHash) {
 
-				//if (vformatisexactmatch8(TypeParameter, "u32") ||
-				//vformatisexactmatch8(TypeParameter, "u16") ||
-				//vformatisexactmatch8(TypeParameter, "u8")){
 				case 0xd89903186b764185: // u32
 				case 0xd89905186b76452b: // u16
 				case 0x08325307b4eb15e6: // u8
@@ -1083,13 +1063,13 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for u32");
+						u32 Dud = v_vararg(Args, u32);
+						VUNDEF(Dud);
 					
 					}
 					
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "u64")) {
 				case 0xd898fe186b76390c: // u64
 					if (vstrlen8(FormatParameter) == 0) {
 						st IntSize = vinttostr8(v_vararg(Args, u64), Buf + BufPosition, BufSize - BufPosition);
@@ -1103,13 +1083,13 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for u64");
+						u64 Dud = v_vararg(Args, u64);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "st")) {
 				case 0x08325507b4eb1930: // st
 				case 0x5c90cdc16ceef19f: // size_t
 					if (vstrlen8(FormatParameter) == 0) {
@@ -1124,13 +1104,13 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for st");
+						st Dud = v_vararg(Args, st);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "i64")) {
 				case 0xd8c1ee186b992328: // i64
 					if (vstrlen8(FormatParameter) == 0) {
 						i64 Var = v_vararg(Args, i64);
@@ -1154,17 +1134,16 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for i64");
+						i64 Dud = v_vararg(Args, i64);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "i32")) {
 				case 0xd8c1eb186b991e31: // i32
 				case 0xd8c1ed186b99215f: // i16
 				case 0x08325f07b4eb2a7a: // i8
-					//vsys_writeConsoleNullStr("VVVVV");
 					if (vstrlen8(FormatParameter) == 0) {
 						i32 Var = v_vararg(Args, i32);
 						if (Var < 0) {
@@ -1176,9 +1155,6 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 							}
 
 						}
-						//vsys_writeConsoleNullStr("######");
-						//vsys_writeConsoleInteger(Var);
-						//vsys_writeConsoleNullStr("#");
 
 						st IntSize = vinttostr8(Var, Buf + BufPosition, BufSize - BufPosition);
 						BufPosition += IntSize;
@@ -1191,66 +1167,15 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for i32/int");
+						i32 Dud = v_vararg(Args, i32);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "i16")) {
-				/*
-					if (vstrlen8(FormatParameter) == 0) {
-						i32 Var = v_vararg(Args, i32);
-						if (Var < 0) {
-							Var = -Var;
-							if ((BufSize - BufPosition) > 1) {
-								Buf[BufPosition] = '-';
-								BufPosition++;
-
-							}
-
-						}
-						st IntSize = vinttostr8(Var, Buf + BufPosition, BufSize - BufPosition);
-						BufPosition += IntSize;
-
-					}
-					else {
-						vformaterror("Unknown format specifier for i16");
-
-					}
-
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "i8")) {
-					if (vstrlen8(FormatParameter) == 0) {
-						i32 Var = v_vararg(Args, i32);
-						if (Var < 0) {
-							Var = -Var;
-							if ((BufSize - BufPosition) > 1) {
-								Buf[BufPosition] = '-';
-								BufPosition++;
-
-							}
-
-						}
-						st IntSize = vinttostr8(Var, Buf + BufPosition, BufSize - BufPosition);
-						BufPosition += IntSize;
-
-					}
-					else {
-						vformaterror("Unknown format specifier for i8");
-
-					}
-
-				//}
-
-				*/
-
 				//            NOTE(V): Floating point
-				//else if (vformatisexactmatch8(TypeParameter, "float") ||
-				//vformatisexactmatch8(TypeParameter, "double") ||
-				//vformatisexactmatch8(TypeParameter, "f32") ||
-				//vformatisexactmatch8(TypeParameter, "f64") ||
-				//vformatisexactmatch8(TypeParameter, "f")) {
+
 				case 0xec7c599ba78b9449: // float
 				case 0xf988dd63276d1506: // double
 				case 0xd8cbfb186ba18d8a: // f32
@@ -1264,15 +1189,15 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for double");
+						double Var = v_vararg(Args, double);
+						VUNDEF(Var);
 
 					}
 
 					break;
 
-				//}
-
 				//            NOTE(V): String insertion
-				//else if (vformatisexactmatch8(TypeParameter, "cstr") || vformatisexactmatch8(TypeParameter, "nullstr")) {
+
 				case 0x1c86e37ef0dafb11: // cstr
 				case 0xa117a11f63f461d7: // nullstr
 					if (vstrlen8(FormatParameter) == 0) {
@@ -1290,15 +1215,15 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for cstr/nullstr");
+						char* Dud = v_vararg(Args, char*);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-
 				//            NOTE(V): Tostr enum functions
-				//else if (vformatisexactmatch8(TypeParameter, "mdConVarType")) {
+
 				case 0xbffd56fdac81e005: // mdConVarType
 					if (vstrlen8(FormatParameter) == 0) {
 						u64 Var = v_vararg(Args, u64);
@@ -1313,31 +1238,15 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknwon format specifier for mdConVarType");
+						u64 Dud = v_vararg(Args, u64);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-
-				/*else if (vformatisexactmatch8(TypeParameter, "xr") ||
-				vformatisexactmatch8(TypeParameter, "xrresult") ||
-				vformatisexactmatch8(TypeParameter, "XrResult")) {
-				if (vstrlen8(FormatParameter) == 0) {
-					u64 = v_vararg(Args, u64);
-					const char* Str = 
-
-				}
-				else {
-					vformaterror("Unknown format specifier for xr/XrResult");
-
-				}
-
-			}*/
-
 				#ifndef MYTH_XR_NO_TOSTR
 
-				//else if (vformatisexactmatch8(TypeParameter, "xrobjecttype")) {
 				case 0xace723cabe0b998e: // xrobjecttype
 					if (vstrlen8(FormatParameter) == 0) {
 						i32 Var = v_vararg(Args, i32);
@@ -1352,17 +1261,17 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for xrobjecttype/XrObjectType");
+						i32 Dud = v_vararg(Args, i32);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-
 				#endif
 
 				//            NOTE(V): Ptr utils
-				//else if (vformatisexactmatch8(TypeParameter, "eol")) {
+
 				case 0xd8cfa7186ba4e7bf: // eol
 					if (vstrlen8(FormatParameter) == 0) {
 						if ((BufSize - BufPosition) > 1) {
@@ -1379,8 +1288,6 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "ptr") || vformatisexactmatch8(TypeParameter, "p")) {
 				case 0xd8a9be186b843fd9: // ptr
 				case 0xaf63bd4c8601b7af: // p
 					if (vstrlen8(FormatParameter) == 0) {
@@ -1395,14 +1302,15 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for ptr");
+						u64 Dud = v_vararg(Args, u64);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
 				//            NOTE(V): Binary
-				//else if (vformatisexactmatch8(TypeParameter, "bool")) {
+
 				case 0x2713257ef75d5119: // bool
 					if (vstrlen8(FormatParameter) == 0) {
 						const bool Val = v_vararg(Args, u32);
@@ -1453,13 +1361,13 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for bool");
+						u32 Dud = v_vararg(Args, u32);
+						VUNDEF(Dud);
 
 					}
 
 					break;
 
-				//}
-				//else if (vformatisexactmatch8(TypeParameter, "null")) {
 				case 0xbe851a7ebbf8a646: // null
 					if (vstrlen8(FormatParameter) == 0) {
 						if ((BufSize - BufPosition) > 1) {
@@ -1476,10 +1384,30 @@ st vformat8impl(const char* Fmt, char* Buf, st BufSize, v_varargList Args){
 
 					break;
 
-				//}
 				default:
 					vformaterror("Unknown type specifier");
 
+					if ((BufSize - BufPosition) > 16) {
+						Buf[BufPosition] = 'V';
+						Buf[BufPosition + 1] = 'F';
+						Buf[BufPosition + 2] = 'M';
+						Buf[BufPosition + 3] = 'T';
+						Buf[BufPosition + 4] = '_';
+						Buf[BufPosition + 5] = 'T';
+						Buf[BufPosition + 6] = 'Y';
+						Buf[BufPosition + 7] = 'P';
+						Buf[BufPosition + 8] = 'E';
+						Buf[BufPosition + 9] = '_';
+						Buf[BufPosition + 10] = 'E';
+						Buf[BufPosition + 11] = 'R';
+						Buf[BufPosition + 12] = 'R';
+						Buf[BufPosition + 13] = 'O';
+						Buf[BufPosition + 14] = 'R';
+						Buf[BufPosition + 15] = 0;
+						BufPosition += 15;
+						return BufPosition;
+
+					}
 
 			}
 
