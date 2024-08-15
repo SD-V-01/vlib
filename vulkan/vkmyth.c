@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vkmyth.h"
-#include "mdos.h"
+#include "../mdos.h"
 
 #ifdef __APPLE__
 #error Dont even think about it, the apple vision pro is a misstake
