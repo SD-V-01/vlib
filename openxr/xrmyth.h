@@ -15,7 +15,7 @@
 #ifndef MTYH_XR_LOADER_H
 #define MTYH_XR_LOADER_H
 
-#include "base_types.h"
+#include "../base_types.h"
 #include "../vulkan/vkmyth.h"
 
 #if defined(OPENXR_H_) && !defined(XR_NO_PROTOTYPES)
@@ -93,48 +93,48 @@ MYTH_XR_LOAD_API void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadF
 #ifndef MYTH_XR_NO_TOSTR
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM8_PROTO
-char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
-#if defined(XR_VERSION_1_0)
-char* vtostr8_XrObjectType(XrObjectType In);
-#endif
-char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In);
-char* vtostr8_XrResult(XrResult In);
-#if defined(XR_FB_spatial_entity)
-char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
-#endif
-char* vtostr8_XrStructureType(XrStructureType In);
-#if defined(XR_EXT_hand_tracking)
-char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In);
-#endif
-#if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
-#endif
 #if defined(XR_MSFT_scene_understanding)
 char* vtostr8_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
 #endif
+#if defined(XR_FB_spatial_entity)
+char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
+#endif
+#if defined(XR_EXT_hand_tracking)
+char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In);
+#endif
+char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In);
+char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
+char* vtostr8_XrStructureType(XrStructureType In);
+char* vtostr8_XrResult(XrResult In);
+#if defined(XR_VERSION_1_0)
+char* vtostr8_XrObjectType(XrObjectType In);
+#endif
 char* vtostr8_XrReferenceSpaceType(XrReferenceSpaceType In);
+#if defined(XR_MSFT_scene_understanding)
+char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
+#endif
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM32_PROTO
-vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
-#if defined(XR_VERSION_1_0)
-vchar* vtostr32_XrObjectType(XrObjectType In);
-#endif
-vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In);
-vchar* vtostr32_XrResult(XrResult In);
-#if defined(XR_FB_spatial_entity)
-vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
-#endif
-vchar* vtostr32_XrStructureType(XrStructureType In);
-#if defined(XR_EXT_hand_tracking)
-vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In);
-#endif
-#if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
-#endif
 #if defined(XR_MSFT_scene_understanding)
 vchar* vtostr32_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
 #endif
+#if defined(XR_FB_spatial_entity)
+vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
+#endif
+#if defined(XR_EXT_hand_tracking)
+vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In);
+#endif
+vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In);
+vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
+vchar* vtostr32_XrStructureType(XrStructureType In);
+vchar* vtostr32_XrResult(XrResult In);
+#if defined(XR_VERSION_1_0)
+vchar* vtostr32_XrObjectType(XrObjectType In);
+#endif
 vchar* vtostr32_XrReferenceSpaceType(XrReferenceSpaceType In);
+#if defined(XR_MSFT_scene_understanding)
+vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
+#endif
 
 //SECTION(V): XRMYTH_TOSTR8_PROTO
 #if defined(XR_EXT_future)

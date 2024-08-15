@@ -105,591 +105,39 @@ void mythXrLoadInstance(XrInstance Instance){
 #ifndef MYTH_XR_NO_TOSTR
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM8_IMPL
-char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In){
-    switch(In){
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB):
-        return "XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB";
-        break;
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB):
-        return "XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB";
-        break;
-#if defined(XR_FB_passthrough_keyboard_hands)
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB):
-        return "XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB";
-        break;
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB):
-        return "XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough_keyboard_hands)  */
-    default:
-        return "XrPassthroughLayerPurposeFB_TOSTR_ERROR";
-
-    }
-
-}
-
-#if defined(XR_VERSION_1_0)
-char* vtostr8_XrObjectType(XrObjectType In){
-    switch(In){
-    case(XR_OBJECT_TYPE_UNKNOWN):
-        return "XR_OBJECT_TYPE_UNKNOWN";
-        break;
-    case(XR_OBJECT_TYPE_INSTANCE):
-        return "XR_OBJECT_TYPE_INSTANCE";
-        break;
-    case(XR_OBJECT_TYPE_SESSION):
-        return "XR_OBJECT_TYPE_SESSION";
-        break;
-    case(XR_OBJECT_TYPE_SWAPCHAIN):
-        return "XR_OBJECT_TYPE_SWAPCHAIN";
-        break;
-    case(XR_OBJECT_TYPE_SPACE):
-        return "XR_OBJECT_TYPE_SPACE";
-        break;
-    case(XR_OBJECT_TYPE_ACTION_SET):
-        return "XR_OBJECT_TYPE_ACTION_SET";
-        break;
-    case(XR_OBJECT_TYPE_ACTION):
-        return "XR_OBJECT_TYPE_ACTION";
-        break;
-#if defined(XR_EXT_debug_utils)
-    case(XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT):
-        return "XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT";
-        break;
-#endif /*  defined(XR_EXT_debug_utils)  */
-#if defined(XR_EXT_hand_tracking)
-    case(XR_OBJECT_TYPE_HAND_TRACKER_EXT):
-        return "XR_OBJECT_TYPE_HAND_TRACKER_EXT";
-        break;
-#endif /*  defined(XR_EXT_hand_tracking)  */
-#if defined(XR_EXT_plane_detection)
-    case(XR_OBJECT_TYPE_PLANE_DETECTOR_EXT):
-        return "XR_OBJECT_TYPE_PLANE_DETECTOR_EXT";
-        break;
-#endif /*  defined(XR_EXT_plane_detection)  */
-#if defined(XR_FB_body_tracking)
-    case(XR_OBJECT_TYPE_BODY_TRACKER_FB):
-        return "XR_OBJECT_TYPE_BODY_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_body_tracking)  */
-#if defined(XR_FB_eye_tracking_social)
-    case(XR_OBJECT_TYPE_EYE_TRACKER_FB):
-        return "XR_OBJECT_TYPE_EYE_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_eye_tracking_social)  */
-#if defined(XR_FB_face_tracking)
-    case(XR_OBJECT_TYPE_FACE_TRACKER_FB):
-        return "XR_OBJECT_TYPE_FACE_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_face_tracking)  */
-#if defined(XR_FB_face_tracking2)
-    case(XR_OBJECT_TYPE_FACE_TRACKER2_FB):
-        return "XR_OBJECT_TYPE_FACE_TRACKER2_FB";
-        break;
-#endif /*  defined(XR_FB_face_tracking2)  */
-#if defined(XR_FB_foveation)
-    case(XR_OBJECT_TYPE_FOVEATION_PROFILE_FB):
-        return "XR_OBJECT_TYPE_FOVEATION_PROFILE_FB";
-        break;
-#endif /*  defined(XR_FB_foveation)  */
-#if defined(XR_FB_passthrough)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_FB):
-        return "XR_OBJECT_TYPE_PASSTHROUGH_FB";
-        break;
-    case(XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB):
-        return "XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB";
-        break;
-    case(XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB):
-        return "XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough)  */
-#if defined(XR_FB_spatial_entity_user)
-    case(XR_OBJECT_TYPE_SPACE_USER_FB):
-        return "XR_OBJECT_TYPE_SPACE_USER_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity_user)  */
-#if defined(XR_FB_triangle_mesh)
-    case(XR_OBJECT_TYPE_TRIANGLE_MESH_FB):
-        return "XR_OBJECT_TYPE_TRIANGLE_MESH_FB";
-        break;
-#endif /*  defined(XR_FB_triangle_mesh)  */
-#if defined(XR_HTC_facial_tracking)
-    case(XR_OBJECT_TYPE_FACIAL_TRACKER_HTC):
-        return "XR_OBJECT_TYPE_FACIAL_TRACKER_HTC";
-        break;
-#endif /*  defined(XR_HTC_facial_tracking)  */
-#if defined(XR_HTC_passthrough)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_HTC):
-        return "XR_OBJECT_TYPE_PASSTHROUGH_HTC";
-        break;
-#endif /*  defined(XR_HTC_passthrough)  */
-#if defined(XR_META_environment_depth)
-    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META):
-        return "XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META";
-        break;
-    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META):
-        return "XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META";
-        break;
-#endif /*  defined(XR_META_environment_depth)  */
-#if defined(XR_META_passthrough_color_lut)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META):
-        return "XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META";
-        break;
-#endif /*  defined(XR_META_passthrough_color_lut)  */
-#if defined(XR_META_virtual_keyboard)
-    case(XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META):
-        return "XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META";
-        break;
-#endif /*  defined(XR_META_virtual_keyboard)  */
-#if defined(XR_ML_localization_map)
-    case(XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML):
-        return "XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML";
-        break;
-#endif /*  defined(XR_ML_localization_map)  */
-#if defined(XR_ML_marker_understanding)
-    case(XR_OBJECT_TYPE_MARKER_DETECTOR_ML):
-        return "XR_OBJECT_TYPE_MARKER_DETECTOR_ML";
-        break;
-#endif /*  defined(XR_ML_marker_understanding)  */
 #if defined(XR_MSFT_scene_understanding)
-    case(XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT):
-        return "XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT";
+char* vtostr8_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In){
+    switch(In){
+    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT";
         break;
-    case(XR_OBJECT_TYPE_SCENE_MSFT):
-        return "XR_OBJECT_TYPE_SCENE_MSFT";
+    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_scene_understanding)  */
-#if defined(XR_MSFT_spatial_anchor)
-    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT):
-        return "XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT";
+    case(XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_anchor)  */
-#if defined(XR_MSFT_spatial_anchor_persistence)
-    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT):
-        return "XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT";
+    case(XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
-#if defined(XR_MSFT_spatial_graph_bridge)
-    case(XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT):
-        return "XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT";
+#if defined(XR_MSFT_scene_marker)
+    case(XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
+#endif /*  defined(XR_MSFT_scene_marker)  */
+#if defined(XR_MSFT_scene_understanding_serialization)
+    case(XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT):
+        return "XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
     default:
-        return "XrObjectType_TOSTR_ERROR";
+        return "XrSceneComputeFeatureMSFT_TOSTR_ERROR";
 
     }
 
 }
 
 #endif
-
-char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In){
-    switch(In){
-    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO):
-        return "XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO";
-        break;
-    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO):
-        return "XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO";
-        break;
-#if defined(XR_MSFT_first_person_observer)
-    case(XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT):
-        return "XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_first_person_observer)  */
-    default:
-        return "XrViewConfigurationType_TOSTR_ERROR";
-
-    }
-
-}
-
-char* vtostr8_XrResult(XrResult In){
-    switch(In){
-    case(XR_SUCCESS):
-        return "XR_SUCCESS";
-        break;
-    case(XR_TIMEOUT_EXPIRED):
-        return "XR_TIMEOUT_EXPIRED";
-        break;
-    case(XR_SESSION_LOSS_PENDING):
-        return "XR_SESSION_LOSS_PENDING";
-        break;
-    case(XR_EVENT_UNAVAILABLE):
-        return "XR_EVENT_UNAVAILABLE";
-        break;
-    case(XR_SPACE_BOUNDS_UNAVAILABLE):
-        return "XR_SPACE_BOUNDS_UNAVAILABLE";
-        break;
-    case(XR_SESSION_NOT_FOCUSED):
-        return "XR_SESSION_NOT_FOCUSED";
-        break;
-    case(XR_FRAME_DISCARDED):
-        return "XR_FRAME_DISCARDED";
-        break;
-    case(XR_ERROR_VALIDATION_FAILURE):
-        return "XR_ERROR_VALIDATION_FAILURE";
-        break;
-    case(XR_ERROR_RUNTIME_FAILURE):
-        return "XR_ERROR_RUNTIME_FAILURE";
-        break;
-    case(XR_ERROR_OUT_OF_MEMORY):
-        return "XR_ERROR_OUT_OF_MEMORY";
-        break;
-    case(XR_ERROR_API_VERSION_UNSUPPORTED):
-        return "XR_ERROR_API_VERSION_UNSUPPORTED";
-        break;
-    case(XR_ERROR_INITIALIZATION_FAILED):
-        return "XR_ERROR_INITIALIZATION_FAILED";
-        break;
-    case(XR_ERROR_FUNCTION_UNSUPPORTED):
-        return "XR_ERROR_FUNCTION_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FEATURE_UNSUPPORTED):
-        return "XR_ERROR_FEATURE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_EXTENSION_NOT_PRESENT):
-        return "XR_ERROR_EXTENSION_NOT_PRESENT";
-        break;
-    case(XR_ERROR_LIMIT_REACHED):
-        return "XR_ERROR_LIMIT_REACHED";
-        break;
-    case(XR_ERROR_SIZE_INSUFFICIENT):
-        return "XR_ERROR_SIZE_INSUFFICIENT";
-        break;
-    case(XR_ERROR_HANDLE_INVALID):
-        return "XR_ERROR_HANDLE_INVALID";
-        break;
-    case(XR_ERROR_INSTANCE_LOST):
-        return "XR_ERROR_INSTANCE_LOST";
-        break;
-    case(XR_ERROR_SESSION_RUNNING):
-        return "XR_ERROR_SESSION_RUNNING";
-        break;
-    case(XR_ERROR_SESSION_NOT_RUNNING):
-        return "XR_ERROR_SESSION_NOT_RUNNING";
-        break;
-    case(XR_ERROR_SESSION_LOST):
-        return "XR_ERROR_SESSION_LOST";
-        break;
-    case(XR_ERROR_SYSTEM_INVALID):
-        return "XR_ERROR_SYSTEM_INVALID";
-        break;
-    case(XR_ERROR_PATH_INVALID):
-        return "XR_ERROR_PATH_INVALID";
-        break;
-    case(XR_ERROR_PATH_COUNT_EXCEEDED):
-        return "XR_ERROR_PATH_COUNT_EXCEEDED";
-        break;
-    case(XR_ERROR_PATH_FORMAT_INVALID):
-        return "XR_ERROR_PATH_FORMAT_INVALID";
-        break;
-    case(XR_ERROR_PATH_UNSUPPORTED):
-        return "XR_ERROR_PATH_UNSUPPORTED";
-        break;
-    case(XR_ERROR_LAYER_INVALID):
-        return "XR_ERROR_LAYER_INVALID";
-        break;
-    case(XR_ERROR_LAYER_LIMIT_EXCEEDED):
-        return "XR_ERROR_LAYER_LIMIT_EXCEEDED";
-        break;
-    case(XR_ERROR_SWAPCHAIN_RECT_INVALID):
-        return "XR_ERROR_SWAPCHAIN_RECT_INVALID";
-        break;
-    case(XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED):
-        return "XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED";
-        break;
-    case(XR_ERROR_ACTION_TYPE_MISMATCH):
-        return "XR_ERROR_ACTION_TYPE_MISMATCH";
-        break;
-    case(XR_ERROR_SESSION_NOT_READY):
-        return "XR_ERROR_SESSION_NOT_READY";
-        break;
-    case(XR_ERROR_SESSION_NOT_STOPPING):
-        return "XR_ERROR_SESSION_NOT_STOPPING";
-        break;
-    case(XR_ERROR_TIME_INVALID):
-        return "XR_ERROR_TIME_INVALID";
-        break;
-    case(XR_ERROR_REFERENCE_SPACE_UNSUPPORTED):
-        return "XR_ERROR_REFERENCE_SPACE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FILE_ACCESS_ERROR):
-        return "XR_ERROR_FILE_ACCESS_ERROR";
-        break;
-    case(XR_ERROR_FILE_CONTENTS_INVALID):
-        return "XR_ERROR_FILE_CONTENTS_INVALID";
-        break;
-    case(XR_ERROR_FORM_FACTOR_UNSUPPORTED):
-        return "XR_ERROR_FORM_FACTOR_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FORM_FACTOR_UNAVAILABLE):
-        return "XR_ERROR_FORM_FACTOR_UNAVAILABLE";
-        break;
-    case(XR_ERROR_API_LAYER_NOT_PRESENT):
-        return "XR_ERROR_API_LAYER_NOT_PRESENT";
-        break;
-    case(XR_ERROR_CALL_ORDER_INVALID):
-        return "XR_ERROR_CALL_ORDER_INVALID";
-        break;
-    case(XR_ERROR_GRAPHICS_DEVICE_INVALID):
-        return "XR_ERROR_GRAPHICS_DEVICE_INVALID";
-        break;
-    case(XR_ERROR_POSE_INVALID):
-        return "XR_ERROR_POSE_INVALID";
-        break;
-    case(XR_ERROR_INDEX_OUT_OF_RANGE):
-        return "XR_ERROR_INDEX_OUT_OF_RANGE";
-        break;
-    case(XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED):
-        return "XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED):
-        return "XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_NAME_DUPLICATED):
-        return "XR_ERROR_NAME_DUPLICATED";
-        break;
-    case(XR_ERROR_NAME_INVALID):
-        return "XR_ERROR_NAME_INVALID";
-        break;
-    case(XR_ERROR_ACTIONSET_NOT_ATTACHED):
-        return "XR_ERROR_ACTIONSET_NOT_ATTACHED";
-        break;
-    case(XR_ERROR_ACTIONSETS_ALREADY_ATTACHED):
-        return "XR_ERROR_ACTIONSETS_ALREADY_ATTACHED";
-        break;
-    case(XR_ERROR_LOCALIZED_NAME_DUPLICATED):
-        return "XR_ERROR_LOCALIZED_NAME_DUPLICATED";
-        break;
-    case(XR_ERROR_LOCALIZED_NAME_INVALID):
-        return "XR_ERROR_LOCALIZED_NAME_INVALID";
-        break;
-    case(XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING):
-        return "XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING";
-        break;
-    case(XR_ERROR_RUNTIME_UNAVAILABLE):
-        return "XR_ERROR_RUNTIME_UNAVAILABLE";
-        break;
-#if defined(XR_EXT_future)
-    case(XR_ERROR_FUTURE_PENDING_EXT):
-        return "XR_ERROR_FUTURE_PENDING_EXT";
-        break;
-    case(XR_ERROR_FUTURE_INVALID_EXT):
-        return "XR_ERROR_FUTURE_INVALID_EXT";
-        break;
-#endif /*  defined(XR_EXT_future)  */
-#if defined(XR_EXT_plane_detection)
-    case(XR_ERROR_SPACE_NOT_LOCATABLE_EXT):
-        return "XR_ERROR_SPACE_NOT_LOCATABLE_EXT";
-        break;
-    case(XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT):
-        return "XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT";
-        break;
-#endif /*  defined(XR_EXT_plane_detection)  */
-#if defined(XR_FB_color_space)
-    case(XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB):
-        return "XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB";
-        break;
-#endif /*  defined(XR_FB_color_space)  */
-#if defined(XR_FB_display_refresh_rate)
-    case(XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB):
-        return "XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB";
-        break;
-#endif /*  defined(XR_FB_display_refresh_rate)  */
-#if defined(XR_FB_passthrough)
-    case(XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB):
-        return "XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB):
-        return "XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB):
-        return "XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB):
-        return "XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB):
-        return "XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_UNKNOWN_PASSTHROUGH_FB):
-        return "XR_ERROR_UNKNOWN_PASSTHROUGH_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough)  */
-#if defined(XR_FB_render_model)
-    case(XR_ERROR_RENDER_MODEL_KEY_INVALID_FB):
-        return "XR_ERROR_RENDER_MODEL_KEY_INVALID_FB";
-        break;
-    case(XR_RENDER_MODEL_UNAVAILABLE_FB):
-        return "XR_RENDER_MODEL_UNAVAILABLE_FB";
-        break;
-#endif /*  defined(XR_FB_render_model)  */
-#if defined(XR_FB_spatial_entity)
-    case(XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB):
-        return "XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB):
-        return "XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB):
-        return "XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB):
-        return "XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity)  */
-#if defined(XR_FB_spatial_entity_sharing)
-    case(XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB):
-        return "XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB";
-        break;
-    case(XR_ERROR_SPACE_LOCALIZATION_FAILED_FB):
-        return "XR_ERROR_SPACE_LOCALIZATION_FAILED_FB";
-        break;
-    case(XR_ERROR_SPACE_NETWORK_TIMEOUT_FB):
-        return "XR_ERROR_SPACE_NETWORK_TIMEOUT_FB";
-        break;
-    case(XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB):
-        return "XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB";
-        break;
-    case(XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB):
-        return "XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity_sharing)  */
-#if defined(XR_HTC_anchor)
-    case(XR_ERROR_NOT_AN_ANCHOR_HTC):
-        return "XR_ERROR_NOT_AN_ANCHOR_HTC";
-        break;
-#endif /*  defined(XR_HTC_anchor)  */
-#if defined(XR_KHR_android_thread_settings)
-    case(XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR):
-        return "XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR";
-        break;
-    case(XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR):
-        return "XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR";
-        break;
-#endif /*  defined(XR_KHR_android_thread_settings)  */
-#if defined(XR_META_environment_depth)
-    case(XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META):
-        return "XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META";
-        break;
-#endif /*  defined(XR_META_environment_depth)  */
-#if defined(XR_META_passthrough_color_lut)
-    case(XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META):
-        return "XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META";
-        break;
-#endif /*  defined(XR_META_passthrough_color_lut)  */
-#if defined(XR_ML_localization_map)
-    case(XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_FAIL_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_FAIL_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML):
-        return "XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML";
-        break;
-#endif /*  defined(XR_ML_localization_map)  */
-#if defined(XR_ML_marker_understanding)
-    case(XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML):
-        return "XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML):
-        return "XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML):
-        return "XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML):
-        return "XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML";
-        break;
-    case(XR_ERROR_MARKER_INVALID_ML):
-        return "XR_ERROR_MARKER_INVALID_ML";
-        break;
-#endif /*  defined(XR_ML_marker_understanding)  */
-#if defined(XR_MSFT_composition_layer_reprojection)
-    case(XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT):
-        return "XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
-#if defined(XR_MSFT_controller_model)
-    case(XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT):
-        return "XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_controller_model)  */
-#if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_MARKER_DATA_NOT_STRING_MSFT):
-        return "XR_SCENE_MARKER_DATA_NOT_STRING_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding)
-    case(XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT):
-        return "XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT):
-        return "XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT):
-        return "XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT";
-        break;
-    case(XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT):
-        return "XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT):
-        return "XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT):
-        return "XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding)  */
-#if defined(XR_MSFT_secondary_view_configuration)
-    case(XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT):
-        return "XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_secondary_view_configuration)  */
-#if defined(XR_MSFT_spatial_anchor)
-    case(XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT):
-        return "XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_spatial_anchor)  */
-#if defined(XR_MSFT_spatial_anchor_persistence)
-    case(XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT):
-        return "XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT";
-        break;
-    case(XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT):
-        return "XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
-#if defined(XR_QCOM_tracking_optimization_settings)
-    case(XR_ERROR_HINT_ALREADY_SET_QCOM):
-        return "XR_ERROR_HINT_ALREADY_SET_QCOM";
-        break;
-#endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
-#if defined(XR_VARJO_marker_tracking)
-    case(XR_ERROR_MARKER_NOT_TRACKED_VARJO):
-        return "XR_ERROR_MARKER_NOT_TRACKED_VARJO";
-        break;
-    case(XR_ERROR_MARKER_ID_INVALID_VARJO):
-        return "XR_ERROR_MARKER_ID_INVALID_VARJO";
-        break;
-#endif /*  defined(XR_VARJO_marker_tracking)  */
-    default:
-        return "XrResult_TOSTR_ERROR";
-
-    }
-
-}
 
 #if defined(XR_FB_spatial_entity)
 char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In){
@@ -731,6 +179,69 @@ char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In){
 }
 
 #endif
+
+#if defined(XR_EXT_hand_tracking)
+char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In){
+    switch(In){
+    case(XR_HAND_JOINT_SET_DEFAULT_EXT):
+        return "XR_HAND_JOINT_SET_DEFAULT_EXT";
+        break;
+#if defined(XR_ULTRALEAP_hand_tracking_forearm)
+    case(XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP):
+        return "XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP";
+        break;
+#endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
+    default:
+        return "XrHandJointSetEXT_TOSTR_ERROR";
+
+    }
+
+}
+
+#endif
+
+char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In){
+    switch(In){
+    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO):
+        return "XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO";
+        break;
+    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO):
+        return "XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO";
+        break;
+#if defined(XR_MSFT_first_person_observer)
+    case(XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT):
+        return "XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_first_person_observer)  */
+    default:
+        return "XrViewConfigurationType_TOSTR_ERROR";
+
+    }
+
+}
+
+char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In){
+    switch(In){
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB):
+        return "XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB";
+        break;
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB):
+        return "XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB";
+        break;
+#if defined(XR_FB_passthrough_keyboard_hands)
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB):
+        return "XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB";
+        break;
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB):
+        return "XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough_keyboard_hands)  */
+    default:
+        return "XrPassthroughLayerPurposeFB_TOSTR_ERROR";
+
+    }
+
+}
 
 char* vtostr8_XrStructureType(XrStructureType In){
     switch(In){
@@ -2011,90 +1522,542 @@ char* vtostr8_XrStructureType(XrStructureType In){
 
 }
 
+char* vtostr8_XrResult(XrResult In){
+    switch(In){
+    case(XR_SUCCESS):
+        return "XR_SUCCESS";
+        break;
+    case(XR_TIMEOUT_EXPIRED):
+        return "XR_TIMEOUT_EXPIRED";
+        break;
+    case(XR_SESSION_LOSS_PENDING):
+        return "XR_SESSION_LOSS_PENDING";
+        break;
+    case(XR_EVENT_UNAVAILABLE):
+        return "XR_EVENT_UNAVAILABLE";
+        break;
+    case(XR_SPACE_BOUNDS_UNAVAILABLE):
+        return "XR_SPACE_BOUNDS_UNAVAILABLE";
+        break;
+    case(XR_SESSION_NOT_FOCUSED):
+        return "XR_SESSION_NOT_FOCUSED";
+        break;
+    case(XR_FRAME_DISCARDED):
+        return "XR_FRAME_DISCARDED";
+        break;
+    case(XR_ERROR_VALIDATION_FAILURE):
+        return "XR_ERROR_VALIDATION_FAILURE";
+        break;
+    case(XR_ERROR_RUNTIME_FAILURE):
+        return "XR_ERROR_RUNTIME_FAILURE";
+        break;
+    case(XR_ERROR_OUT_OF_MEMORY):
+        return "XR_ERROR_OUT_OF_MEMORY";
+        break;
+    case(XR_ERROR_API_VERSION_UNSUPPORTED):
+        return "XR_ERROR_API_VERSION_UNSUPPORTED";
+        break;
+    case(XR_ERROR_INITIALIZATION_FAILED):
+        return "XR_ERROR_INITIALIZATION_FAILED";
+        break;
+    case(XR_ERROR_FUNCTION_UNSUPPORTED):
+        return "XR_ERROR_FUNCTION_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FEATURE_UNSUPPORTED):
+        return "XR_ERROR_FEATURE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_EXTENSION_NOT_PRESENT):
+        return "XR_ERROR_EXTENSION_NOT_PRESENT";
+        break;
+    case(XR_ERROR_LIMIT_REACHED):
+        return "XR_ERROR_LIMIT_REACHED";
+        break;
+    case(XR_ERROR_SIZE_INSUFFICIENT):
+        return "XR_ERROR_SIZE_INSUFFICIENT";
+        break;
+    case(XR_ERROR_HANDLE_INVALID):
+        return "XR_ERROR_HANDLE_INVALID";
+        break;
+    case(XR_ERROR_INSTANCE_LOST):
+        return "XR_ERROR_INSTANCE_LOST";
+        break;
+    case(XR_ERROR_SESSION_RUNNING):
+        return "XR_ERROR_SESSION_RUNNING";
+        break;
+    case(XR_ERROR_SESSION_NOT_RUNNING):
+        return "XR_ERROR_SESSION_NOT_RUNNING";
+        break;
+    case(XR_ERROR_SESSION_LOST):
+        return "XR_ERROR_SESSION_LOST";
+        break;
+    case(XR_ERROR_SYSTEM_INVALID):
+        return "XR_ERROR_SYSTEM_INVALID";
+        break;
+    case(XR_ERROR_PATH_INVALID):
+        return "XR_ERROR_PATH_INVALID";
+        break;
+    case(XR_ERROR_PATH_COUNT_EXCEEDED):
+        return "XR_ERROR_PATH_COUNT_EXCEEDED";
+        break;
+    case(XR_ERROR_PATH_FORMAT_INVALID):
+        return "XR_ERROR_PATH_FORMAT_INVALID";
+        break;
+    case(XR_ERROR_PATH_UNSUPPORTED):
+        return "XR_ERROR_PATH_UNSUPPORTED";
+        break;
+    case(XR_ERROR_LAYER_INVALID):
+        return "XR_ERROR_LAYER_INVALID";
+        break;
+    case(XR_ERROR_LAYER_LIMIT_EXCEEDED):
+        return "XR_ERROR_LAYER_LIMIT_EXCEEDED";
+        break;
+    case(XR_ERROR_SWAPCHAIN_RECT_INVALID):
+        return "XR_ERROR_SWAPCHAIN_RECT_INVALID";
+        break;
+    case(XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED):
+        return "XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED";
+        break;
+    case(XR_ERROR_ACTION_TYPE_MISMATCH):
+        return "XR_ERROR_ACTION_TYPE_MISMATCH";
+        break;
+    case(XR_ERROR_SESSION_NOT_READY):
+        return "XR_ERROR_SESSION_NOT_READY";
+        break;
+    case(XR_ERROR_SESSION_NOT_STOPPING):
+        return "XR_ERROR_SESSION_NOT_STOPPING";
+        break;
+    case(XR_ERROR_TIME_INVALID):
+        return "XR_ERROR_TIME_INVALID";
+        break;
+    case(XR_ERROR_REFERENCE_SPACE_UNSUPPORTED):
+        return "XR_ERROR_REFERENCE_SPACE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FILE_ACCESS_ERROR):
+        return "XR_ERROR_FILE_ACCESS_ERROR";
+        break;
+    case(XR_ERROR_FILE_CONTENTS_INVALID):
+        return "XR_ERROR_FILE_CONTENTS_INVALID";
+        break;
+    case(XR_ERROR_FORM_FACTOR_UNSUPPORTED):
+        return "XR_ERROR_FORM_FACTOR_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FORM_FACTOR_UNAVAILABLE):
+        return "XR_ERROR_FORM_FACTOR_UNAVAILABLE";
+        break;
+    case(XR_ERROR_API_LAYER_NOT_PRESENT):
+        return "XR_ERROR_API_LAYER_NOT_PRESENT";
+        break;
+    case(XR_ERROR_CALL_ORDER_INVALID):
+        return "XR_ERROR_CALL_ORDER_INVALID";
+        break;
+    case(XR_ERROR_GRAPHICS_DEVICE_INVALID):
+        return "XR_ERROR_GRAPHICS_DEVICE_INVALID";
+        break;
+    case(XR_ERROR_POSE_INVALID):
+        return "XR_ERROR_POSE_INVALID";
+        break;
+    case(XR_ERROR_INDEX_OUT_OF_RANGE):
+        return "XR_ERROR_INDEX_OUT_OF_RANGE";
+        break;
+    case(XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED):
+        return "XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED):
+        return "XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_NAME_DUPLICATED):
+        return "XR_ERROR_NAME_DUPLICATED";
+        break;
+    case(XR_ERROR_NAME_INVALID):
+        return "XR_ERROR_NAME_INVALID";
+        break;
+    case(XR_ERROR_ACTIONSET_NOT_ATTACHED):
+        return "XR_ERROR_ACTIONSET_NOT_ATTACHED";
+        break;
+    case(XR_ERROR_ACTIONSETS_ALREADY_ATTACHED):
+        return "XR_ERROR_ACTIONSETS_ALREADY_ATTACHED";
+        break;
+    case(XR_ERROR_LOCALIZED_NAME_DUPLICATED):
+        return "XR_ERROR_LOCALIZED_NAME_DUPLICATED";
+        break;
+    case(XR_ERROR_LOCALIZED_NAME_INVALID):
+        return "XR_ERROR_LOCALIZED_NAME_INVALID";
+        break;
+    case(XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING):
+        return "XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING";
+        break;
+    case(XR_ERROR_RUNTIME_UNAVAILABLE):
+        return "XR_ERROR_RUNTIME_UNAVAILABLE";
+        break;
+#if defined(XR_EXT_future)
+    case(XR_ERROR_FUTURE_PENDING_EXT):
+        return "XR_ERROR_FUTURE_PENDING_EXT";
+        break;
+    case(XR_ERROR_FUTURE_INVALID_EXT):
+        return "XR_ERROR_FUTURE_INVALID_EXT";
+        break;
+#endif /*  defined(XR_EXT_future)  */
+#if defined(XR_EXT_plane_detection)
+    case(XR_ERROR_SPACE_NOT_LOCATABLE_EXT):
+        return "XR_ERROR_SPACE_NOT_LOCATABLE_EXT";
+        break;
+    case(XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT):
+        return "XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT";
+        break;
+#endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_FB_color_space)
+    case(XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB):
+        return "XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB";
+        break;
+#endif /*  defined(XR_FB_color_space)  */
+#if defined(XR_FB_display_refresh_rate)
+    case(XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB):
+        return "XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB";
+        break;
+#endif /*  defined(XR_FB_display_refresh_rate)  */
+#if defined(XR_FB_passthrough)
+    case(XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB):
+        return "XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB):
+        return "XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB):
+        return "XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB):
+        return "XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB):
+        return "XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_UNKNOWN_PASSTHROUGH_FB):
+        return "XR_ERROR_UNKNOWN_PASSTHROUGH_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough)  */
+#if defined(XR_FB_render_model)
+    case(XR_ERROR_RENDER_MODEL_KEY_INVALID_FB):
+        return "XR_ERROR_RENDER_MODEL_KEY_INVALID_FB";
+        break;
+    case(XR_RENDER_MODEL_UNAVAILABLE_FB):
+        return "XR_RENDER_MODEL_UNAVAILABLE_FB";
+        break;
+#endif /*  defined(XR_FB_render_model)  */
+#if defined(XR_FB_spatial_entity)
+    case(XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB):
+        return "XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB):
+        return "XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB):
+        return "XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB):
+        return "XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity)  */
+#if defined(XR_FB_spatial_entity_sharing)
+    case(XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB):
+        return "XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB";
+        break;
+    case(XR_ERROR_SPACE_LOCALIZATION_FAILED_FB):
+        return "XR_ERROR_SPACE_LOCALIZATION_FAILED_FB";
+        break;
+    case(XR_ERROR_SPACE_NETWORK_TIMEOUT_FB):
+        return "XR_ERROR_SPACE_NETWORK_TIMEOUT_FB";
+        break;
+    case(XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB):
+        return "XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB";
+        break;
+    case(XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB):
+        return "XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity_sharing)  */
+#if defined(XR_HTC_anchor)
+    case(XR_ERROR_NOT_AN_ANCHOR_HTC):
+        return "XR_ERROR_NOT_AN_ANCHOR_HTC";
+        break;
+#endif /*  defined(XR_HTC_anchor)  */
+#if defined(XR_KHR_android_thread_settings)
+    case(XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR):
+        return "XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR";
+        break;
+    case(XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR):
+        return "XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR";
+        break;
+#endif /*  defined(XR_KHR_android_thread_settings)  */
+#if defined(XR_META_environment_depth)
+    case(XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META):
+        return "XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META";
+        break;
+#endif /*  defined(XR_META_environment_depth)  */
+#if defined(XR_META_passthrough_color_lut)
+    case(XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META):
+        return "XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META";
+        break;
+#endif /*  defined(XR_META_passthrough_color_lut)  */
+#if defined(XR_ML_localization_map)
+    case(XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_FAIL_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_FAIL_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML):
+        return "XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML";
+        break;
+#endif /*  defined(XR_ML_localization_map)  */
+#if defined(XR_ML_marker_understanding)
+    case(XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML):
+        return "XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML):
+        return "XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML):
+        return "XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML):
+        return "XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML";
+        break;
+    case(XR_ERROR_MARKER_INVALID_ML):
+        return "XR_ERROR_MARKER_INVALID_ML";
+        break;
+#endif /*  defined(XR_ML_marker_understanding)  */
+#if defined(XR_MSFT_composition_layer_reprojection)
+    case(XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT):
+        return "XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
+#if defined(XR_MSFT_controller_model)
+    case(XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT):
+        return "XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_controller_model)  */
+#if defined(XR_MSFT_scene_marker)
+    case(XR_SCENE_MARKER_DATA_NOT_STRING_MSFT):
+        return "XR_SCENE_MARKER_DATA_NOT_STRING_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_marker)  */
+#if defined(XR_MSFT_scene_understanding)
+    case(XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT):
+        return "XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT):
+        return "XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT):
+        return "XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT";
+        break;
+    case(XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT):
+        return "XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT):
+        return "XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT):
+        return "XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_understanding)  */
+#if defined(XR_MSFT_secondary_view_configuration)
+    case(XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT):
+        return "XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_secondary_view_configuration)  */
+#if defined(XR_MSFT_spatial_anchor)
+    case(XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT):
+        return "XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_spatial_anchor)  */
+#if defined(XR_MSFT_spatial_anchor_persistence)
+    case(XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT):
+        return "XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT";
+        break;
+    case(XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT):
+        return "XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
+#if defined(XR_QCOM_tracking_optimization_settings)
+    case(XR_ERROR_HINT_ALREADY_SET_QCOM):
+        return "XR_ERROR_HINT_ALREADY_SET_QCOM";
+        break;
+#endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
+#if defined(XR_VARJO_marker_tracking)
+    case(XR_ERROR_MARKER_NOT_TRACKED_VARJO):
+        return "XR_ERROR_MARKER_NOT_TRACKED_VARJO";
+        break;
+    case(XR_ERROR_MARKER_ID_INVALID_VARJO):
+        return "XR_ERROR_MARKER_ID_INVALID_VARJO";
+        break;
+#endif /*  defined(XR_VARJO_marker_tracking)  */
+    default:
+        return "XrResult_TOSTR_ERROR";
+
+    }
+
+}
+
+#if defined(XR_VERSION_1_0)
+char* vtostr8_XrObjectType(XrObjectType In){
+    switch(In){
+    case(XR_OBJECT_TYPE_UNKNOWN):
+        return "XR_OBJECT_TYPE_UNKNOWN";
+        break;
+    case(XR_OBJECT_TYPE_INSTANCE):
+        return "XR_OBJECT_TYPE_INSTANCE";
+        break;
+    case(XR_OBJECT_TYPE_SESSION):
+        return "XR_OBJECT_TYPE_SESSION";
+        break;
+    case(XR_OBJECT_TYPE_SWAPCHAIN):
+        return "XR_OBJECT_TYPE_SWAPCHAIN";
+        break;
+    case(XR_OBJECT_TYPE_SPACE):
+        return "XR_OBJECT_TYPE_SPACE";
+        break;
+    case(XR_OBJECT_TYPE_ACTION_SET):
+        return "XR_OBJECT_TYPE_ACTION_SET";
+        break;
+    case(XR_OBJECT_TYPE_ACTION):
+        return "XR_OBJECT_TYPE_ACTION";
+        break;
+#if defined(XR_EXT_debug_utils)
+    case(XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT):
+        return "XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT";
+        break;
+#endif /*  defined(XR_EXT_debug_utils)  */
 #if defined(XR_EXT_hand_tracking)
-char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In){
-    switch(In){
-    case(XR_HAND_JOINT_SET_DEFAULT_EXT):
-        return "XR_HAND_JOINT_SET_DEFAULT_EXT";
+    case(XR_OBJECT_TYPE_HAND_TRACKER_EXT):
+        return "XR_OBJECT_TYPE_HAND_TRACKER_EXT";
         break;
-#if defined(XR_ULTRALEAP_hand_tracking_forearm)
-    case(XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP):
-        return "XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP";
+#endif /*  defined(XR_EXT_hand_tracking)  */
+#if defined(XR_EXT_plane_detection)
+    case(XR_OBJECT_TYPE_PLANE_DETECTOR_EXT):
+        return "XR_OBJECT_TYPE_PLANE_DETECTOR_EXT";
         break;
-#endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
-    default:
-        return "XrHandJointSetEXT_TOSTR_ERROR";
-
-    }
-
-}
-
-#endif
-
+#endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_FB_body_tracking)
+    case(XR_OBJECT_TYPE_BODY_TRACKER_FB):
+        return "XR_OBJECT_TYPE_BODY_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_body_tracking)  */
+#if defined(XR_FB_eye_tracking_social)
+    case(XR_OBJECT_TYPE_EYE_TRACKER_FB):
+        return "XR_OBJECT_TYPE_EYE_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_eye_tracking_social)  */
+#if defined(XR_FB_face_tracking)
+    case(XR_OBJECT_TYPE_FACE_TRACKER_FB):
+        return "XR_OBJECT_TYPE_FACE_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_face_tracking)  */
+#if defined(XR_FB_face_tracking2)
+    case(XR_OBJECT_TYPE_FACE_TRACKER2_FB):
+        return "XR_OBJECT_TYPE_FACE_TRACKER2_FB";
+        break;
+#endif /*  defined(XR_FB_face_tracking2)  */
+#if defined(XR_FB_foveation)
+    case(XR_OBJECT_TYPE_FOVEATION_PROFILE_FB):
+        return "XR_OBJECT_TYPE_FOVEATION_PROFILE_FB";
+        break;
+#endif /*  defined(XR_FB_foveation)  */
+#if defined(XR_FB_passthrough)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_FB):
+        return "XR_OBJECT_TYPE_PASSTHROUGH_FB";
+        break;
+    case(XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB):
+        return "XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB";
+        break;
+    case(XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB):
+        return "XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough)  */
+#if defined(XR_FB_spatial_entity_user)
+    case(XR_OBJECT_TYPE_SPACE_USER_FB):
+        return "XR_OBJECT_TYPE_SPACE_USER_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity_user)  */
+#if defined(XR_FB_triangle_mesh)
+    case(XR_OBJECT_TYPE_TRIANGLE_MESH_FB):
+        return "XR_OBJECT_TYPE_TRIANGLE_MESH_FB";
+        break;
+#endif /*  defined(XR_FB_triangle_mesh)  */
+#if defined(XR_HTC_facial_tracking)
+    case(XR_OBJECT_TYPE_FACIAL_TRACKER_HTC):
+        return "XR_OBJECT_TYPE_FACIAL_TRACKER_HTC";
+        break;
+#endif /*  defined(XR_HTC_facial_tracking)  */
+#if defined(XR_HTC_passthrough)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_HTC):
+        return "XR_OBJECT_TYPE_PASSTHROUGH_HTC";
+        break;
+#endif /*  defined(XR_HTC_passthrough)  */
+#if defined(XR_META_environment_depth)
+    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META):
+        return "XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META";
+        break;
+    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META):
+        return "XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META";
+        break;
+#endif /*  defined(XR_META_environment_depth)  */
+#if defined(XR_META_passthrough_color_lut)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META):
+        return "XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META";
+        break;
+#endif /*  defined(XR_META_passthrough_color_lut)  */
+#if defined(XR_META_virtual_keyboard)
+    case(XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META):
+        return "XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META";
+        break;
+#endif /*  defined(XR_META_virtual_keyboard)  */
+#if defined(XR_ML_localization_map)
+    case(XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML):
+        return "XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML";
+        break;
+#endif /*  defined(XR_ML_localization_map)  */
+#if defined(XR_ML_marker_understanding)
+    case(XR_OBJECT_TYPE_MARKER_DETECTOR_ML):
+        return "XR_OBJECT_TYPE_MARKER_DETECTOR_ML";
+        break;
+#endif /*  defined(XR_ML_marker_understanding)  */
 #if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In){
-    switch(In){
-    case(XR_SCENE_COMPONENT_TYPE_INVALID_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_INVALID_MSFT";
+    case(XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT):
+        return "XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT";
+    case(XR_OBJECT_TYPE_SCENE_MSFT):
+        return "XR_OBJECT_TYPE_SCENE_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_PLANE_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_PLANE_MSFT";
+#endif /*  defined(XR_MSFT_scene_understanding)  */
+#if defined(XR_MSFT_spatial_anchor)
+    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT):
+        return "XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT";
+#endif /*  defined(XR_MSFT_spatial_anchor)  */
+#if defined(XR_MSFT_spatial_anchor_persistence)
+    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT):
+        return "XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT";
+#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
+#if defined(XR_MSFT_spatial_graph_bridge)
+    case(XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT):
+        return "XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT";
         break;
-#if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_COMPONENT_TYPE_MARKER_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_MARKER_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding_serialization)
-    case(XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT):
-        return "XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
+#endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
     default:
-        return "XrSceneComponentTypeMSFT_TOSTR_ERROR";
-
-    }
-
-}
-
-#endif
-
-#if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In){
-    switch(In){
-    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT";
-        break;
-#if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding_serialization)
-    case(XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT):
-        return "XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
-    default:
-        return "XrSceneComputeFeatureMSFT_TOSTR_ERROR";
+        return "XrObjectType_TOSTR_ERROR";
 
     }
 
@@ -2135,179 +2098,36 @@ char* vtostr8_XrReferenceSpaceType(XrReferenceSpaceType In){
 
 }
 
-
-//SECTION(V): XRMYTH_SPECIAL_ENUM32_IMPL
-vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In){
-    switch(In){
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB):
-        return U"XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB";
-        break;
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB):
-        return U"XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB";
-        break;
-#if defined(XR_FB_passthrough_keyboard_hands)
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB):
-        return U"XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB";
-        break;
-    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB):
-        return U"XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough_keyboard_hands)  */
-    default:
-        return U"XrPassthroughLayerPurposeFB_TOSTR_ERROR";
-
-    }
-
-}
-
-#if defined(XR_VERSION_1_0)
-vchar* vtostr32_XrObjectType(XrObjectType In){
-    switch(In){
-    case(XR_OBJECT_TYPE_UNKNOWN):
-        return U"XR_OBJECT_TYPE_UNKNOWN";
-        break;
-    case(XR_OBJECT_TYPE_INSTANCE):
-        return U"XR_OBJECT_TYPE_INSTANCE";
-        break;
-    case(XR_OBJECT_TYPE_SESSION):
-        return U"XR_OBJECT_TYPE_SESSION";
-        break;
-    case(XR_OBJECT_TYPE_SWAPCHAIN):
-        return U"XR_OBJECT_TYPE_SWAPCHAIN";
-        break;
-    case(XR_OBJECT_TYPE_SPACE):
-        return U"XR_OBJECT_TYPE_SPACE";
-        break;
-    case(XR_OBJECT_TYPE_ACTION_SET):
-        return U"XR_OBJECT_TYPE_ACTION_SET";
-        break;
-    case(XR_OBJECT_TYPE_ACTION):
-        return U"XR_OBJECT_TYPE_ACTION";
-        break;
-#if defined(XR_EXT_debug_utils)
-    case(XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT):
-        return U"XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT";
-        break;
-#endif /*  defined(XR_EXT_debug_utils)  */
-#if defined(XR_EXT_hand_tracking)
-    case(XR_OBJECT_TYPE_HAND_TRACKER_EXT):
-        return U"XR_OBJECT_TYPE_HAND_TRACKER_EXT";
-        break;
-#endif /*  defined(XR_EXT_hand_tracking)  */
-#if defined(XR_EXT_plane_detection)
-    case(XR_OBJECT_TYPE_PLANE_DETECTOR_EXT):
-        return U"XR_OBJECT_TYPE_PLANE_DETECTOR_EXT";
-        break;
-#endif /*  defined(XR_EXT_plane_detection)  */
-#if defined(XR_FB_body_tracking)
-    case(XR_OBJECT_TYPE_BODY_TRACKER_FB):
-        return U"XR_OBJECT_TYPE_BODY_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_body_tracking)  */
-#if defined(XR_FB_eye_tracking_social)
-    case(XR_OBJECT_TYPE_EYE_TRACKER_FB):
-        return U"XR_OBJECT_TYPE_EYE_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_eye_tracking_social)  */
-#if defined(XR_FB_face_tracking)
-    case(XR_OBJECT_TYPE_FACE_TRACKER_FB):
-        return U"XR_OBJECT_TYPE_FACE_TRACKER_FB";
-        break;
-#endif /*  defined(XR_FB_face_tracking)  */
-#if defined(XR_FB_face_tracking2)
-    case(XR_OBJECT_TYPE_FACE_TRACKER2_FB):
-        return U"XR_OBJECT_TYPE_FACE_TRACKER2_FB";
-        break;
-#endif /*  defined(XR_FB_face_tracking2)  */
-#if defined(XR_FB_foveation)
-    case(XR_OBJECT_TYPE_FOVEATION_PROFILE_FB):
-        return U"XR_OBJECT_TYPE_FOVEATION_PROFILE_FB";
-        break;
-#endif /*  defined(XR_FB_foveation)  */
-#if defined(XR_FB_passthrough)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_FB):
-        return U"XR_OBJECT_TYPE_PASSTHROUGH_FB";
-        break;
-    case(XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB):
-        return U"XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB";
-        break;
-    case(XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB):
-        return U"XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough)  */
-#if defined(XR_FB_spatial_entity_user)
-    case(XR_OBJECT_TYPE_SPACE_USER_FB):
-        return U"XR_OBJECT_TYPE_SPACE_USER_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity_user)  */
-#if defined(XR_FB_triangle_mesh)
-    case(XR_OBJECT_TYPE_TRIANGLE_MESH_FB):
-        return U"XR_OBJECT_TYPE_TRIANGLE_MESH_FB";
-        break;
-#endif /*  defined(XR_FB_triangle_mesh)  */
-#if defined(XR_HTC_facial_tracking)
-    case(XR_OBJECT_TYPE_FACIAL_TRACKER_HTC):
-        return U"XR_OBJECT_TYPE_FACIAL_TRACKER_HTC";
-        break;
-#endif /*  defined(XR_HTC_facial_tracking)  */
-#if defined(XR_HTC_passthrough)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_HTC):
-        return U"XR_OBJECT_TYPE_PASSTHROUGH_HTC";
-        break;
-#endif /*  defined(XR_HTC_passthrough)  */
-#if defined(XR_META_environment_depth)
-    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META):
-        return U"XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META";
-        break;
-    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META):
-        return U"XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META";
-        break;
-#endif /*  defined(XR_META_environment_depth)  */
-#if defined(XR_META_passthrough_color_lut)
-    case(XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META):
-        return U"XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META";
-        break;
-#endif /*  defined(XR_META_passthrough_color_lut)  */
-#if defined(XR_META_virtual_keyboard)
-    case(XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META):
-        return U"XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META";
-        break;
-#endif /*  defined(XR_META_virtual_keyboard)  */
-#if defined(XR_ML_localization_map)
-    case(XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML):
-        return U"XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML";
-        break;
-#endif /*  defined(XR_ML_localization_map)  */
-#if defined(XR_ML_marker_understanding)
-    case(XR_OBJECT_TYPE_MARKER_DETECTOR_ML):
-        return U"XR_OBJECT_TYPE_MARKER_DETECTOR_ML";
-        break;
-#endif /*  defined(XR_ML_marker_understanding)  */
 #if defined(XR_MSFT_scene_understanding)
-    case(XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT):
-        return U"XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT";
+char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In){
+    switch(In){
+    case(XR_SCENE_COMPONENT_TYPE_INVALID_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_INVALID_MSFT";
         break;
-    case(XR_OBJECT_TYPE_SCENE_MSFT):
-        return U"XR_OBJECT_TYPE_SCENE_MSFT";
+    case(XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT";
         break;
-#endif /*  defined(XR_MSFT_scene_understanding)  */
-#if defined(XR_MSFT_spatial_anchor)
-    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT):
-        return U"XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT";
+    case(XR_SCENE_COMPONENT_TYPE_PLANE_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_PLANE_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_anchor)  */
-#if defined(XR_MSFT_spatial_anchor_persistence)
-    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT):
-        return U"XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT";
+    case(XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
-#if defined(XR_MSFT_spatial_graph_bridge)
-    case(XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT):
-        return U"XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT";
+    case(XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
+#if defined(XR_MSFT_scene_marker)
+    case(XR_SCENE_COMPONENT_TYPE_MARKER_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_MARKER_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_marker)  */
+#if defined(XR_MSFT_scene_understanding_serialization)
+    case(XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT):
+        return "XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
     default:
-        return U"XrObjectType_TOSTR_ERROR";
+        return "XrSceneComponentTypeMSFT_TOSTR_ERROR";
 
     }
 
@@ -2315,413 +2135,41 @@ vchar* vtostr32_XrObjectType(XrObjectType In){
 
 #endif
 
-vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In){
+
+//SECTION(V): XRMYTH_SPECIAL_ENUM32_IMPL
+#if defined(XR_MSFT_scene_understanding)
+vchar* vtostr32_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In){
     switch(In){
-    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO):
-        return U"XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO";
+    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT";
         break;
-    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO):
-        return U"XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO";
+    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT";
         break;
-#if defined(XR_MSFT_first_person_observer)
-    case(XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT):
-        return U"XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT";
+    case(XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT";
         break;
-#endif /*  defined(XR_MSFT_first_person_observer)  */
-    default:
-        return U"XrViewConfigurationType_TOSTR_ERROR";
-
-    }
-
-}
-
-vchar* vtostr32_XrResult(XrResult In){
-    switch(In){
-    case(XR_SUCCESS):
-        return U"XR_SUCCESS";
+    case(XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT";
         break;
-    case(XR_TIMEOUT_EXPIRED):
-        return U"XR_TIMEOUT_EXPIRED";
-        break;
-    case(XR_SESSION_LOSS_PENDING):
-        return U"XR_SESSION_LOSS_PENDING";
-        break;
-    case(XR_EVENT_UNAVAILABLE):
-        return U"XR_EVENT_UNAVAILABLE";
-        break;
-    case(XR_SPACE_BOUNDS_UNAVAILABLE):
-        return U"XR_SPACE_BOUNDS_UNAVAILABLE";
-        break;
-    case(XR_SESSION_NOT_FOCUSED):
-        return U"XR_SESSION_NOT_FOCUSED";
-        break;
-    case(XR_FRAME_DISCARDED):
-        return U"XR_FRAME_DISCARDED";
-        break;
-    case(XR_ERROR_VALIDATION_FAILURE):
-        return U"XR_ERROR_VALIDATION_FAILURE";
-        break;
-    case(XR_ERROR_RUNTIME_FAILURE):
-        return U"XR_ERROR_RUNTIME_FAILURE";
-        break;
-    case(XR_ERROR_OUT_OF_MEMORY):
-        return U"XR_ERROR_OUT_OF_MEMORY";
-        break;
-    case(XR_ERROR_API_VERSION_UNSUPPORTED):
-        return U"XR_ERROR_API_VERSION_UNSUPPORTED";
-        break;
-    case(XR_ERROR_INITIALIZATION_FAILED):
-        return U"XR_ERROR_INITIALIZATION_FAILED";
-        break;
-    case(XR_ERROR_FUNCTION_UNSUPPORTED):
-        return U"XR_ERROR_FUNCTION_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FEATURE_UNSUPPORTED):
-        return U"XR_ERROR_FEATURE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_EXTENSION_NOT_PRESENT):
-        return U"XR_ERROR_EXTENSION_NOT_PRESENT";
-        break;
-    case(XR_ERROR_LIMIT_REACHED):
-        return U"XR_ERROR_LIMIT_REACHED";
-        break;
-    case(XR_ERROR_SIZE_INSUFFICIENT):
-        return U"XR_ERROR_SIZE_INSUFFICIENT";
-        break;
-    case(XR_ERROR_HANDLE_INVALID):
-        return U"XR_ERROR_HANDLE_INVALID";
-        break;
-    case(XR_ERROR_INSTANCE_LOST):
-        return U"XR_ERROR_INSTANCE_LOST";
-        break;
-    case(XR_ERROR_SESSION_RUNNING):
-        return U"XR_ERROR_SESSION_RUNNING";
-        break;
-    case(XR_ERROR_SESSION_NOT_RUNNING):
-        return U"XR_ERROR_SESSION_NOT_RUNNING";
-        break;
-    case(XR_ERROR_SESSION_LOST):
-        return U"XR_ERROR_SESSION_LOST";
-        break;
-    case(XR_ERROR_SYSTEM_INVALID):
-        return U"XR_ERROR_SYSTEM_INVALID";
-        break;
-    case(XR_ERROR_PATH_INVALID):
-        return U"XR_ERROR_PATH_INVALID";
-        break;
-    case(XR_ERROR_PATH_COUNT_EXCEEDED):
-        return U"XR_ERROR_PATH_COUNT_EXCEEDED";
-        break;
-    case(XR_ERROR_PATH_FORMAT_INVALID):
-        return U"XR_ERROR_PATH_FORMAT_INVALID";
-        break;
-    case(XR_ERROR_PATH_UNSUPPORTED):
-        return U"XR_ERROR_PATH_UNSUPPORTED";
-        break;
-    case(XR_ERROR_LAYER_INVALID):
-        return U"XR_ERROR_LAYER_INVALID";
-        break;
-    case(XR_ERROR_LAYER_LIMIT_EXCEEDED):
-        return U"XR_ERROR_LAYER_LIMIT_EXCEEDED";
-        break;
-    case(XR_ERROR_SWAPCHAIN_RECT_INVALID):
-        return U"XR_ERROR_SWAPCHAIN_RECT_INVALID";
-        break;
-    case(XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED):
-        return U"XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED";
-        break;
-    case(XR_ERROR_ACTION_TYPE_MISMATCH):
-        return U"XR_ERROR_ACTION_TYPE_MISMATCH";
-        break;
-    case(XR_ERROR_SESSION_NOT_READY):
-        return U"XR_ERROR_SESSION_NOT_READY";
-        break;
-    case(XR_ERROR_SESSION_NOT_STOPPING):
-        return U"XR_ERROR_SESSION_NOT_STOPPING";
-        break;
-    case(XR_ERROR_TIME_INVALID):
-        return U"XR_ERROR_TIME_INVALID";
-        break;
-    case(XR_ERROR_REFERENCE_SPACE_UNSUPPORTED):
-        return U"XR_ERROR_REFERENCE_SPACE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FILE_ACCESS_ERROR):
-        return U"XR_ERROR_FILE_ACCESS_ERROR";
-        break;
-    case(XR_ERROR_FILE_CONTENTS_INVALID):
-        return U"XR_ERROR_FILE_CONTENTS_INVALID";
-        break;
-    case(XR_ERROR_FORM_FACTOR_UNSUPPORTED):
-        return U"XR_ERROR_FORM_FACTOR_UNSUPPORTED";
-        break;
-    case(XR_ERROR_FORM_FACTOR_UNAVAILABLE):
-        return U"XR_ERROR_FORM_FACTOR_UNAVAILABLE";
-        break;
-    case(XR_ERROR_API_LAYER_NOT_PRESENT):
-        return U"XR_ERROR_API_LAYER_NOT_PRESENT";
-        break;
-    case(XR_ERROR_CALL_ORDER_INVALID):
-        return U"XR_ERROR_CALL_ORDER_INVALID";
-        break;
-    case(XR_ERROR_GRAPHICS_DEVICE_INVALID):
-        return U"XR_ERROR_GRAPHICS_DEVICE_INVALID";
-        break;
-    case(XR_ERROR_POSE_INVALID):
-        return U"XR_ERROR_POSE_INVALID";
-        break;
-    case(XR_ERROR_INDEX_OUT_OF_RANGE):
-        return U"XR_ERROR_INDEX_OUT_OF_RANGE";
-        break;
-    case(XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED):
-        return U"XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED):
-        return U"XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED";
-        break;
-    case(XR_ERROR_NAME_DUPLICATED):
-        return U"XR_ERROR_NAME_DUPLICATED";
-        break;
-    case(XR_ERROR_NAME_INVALID):
-        return U"XR_ERROR_NAME_INVALID";
-        break;
-    case(XR_ERROR_ACTIONSET_NOT_ATTACHED):
-        return U"XR_ERROR_ACTIONSET_NOT_ATTACHED";
-        break;
-    case(XR_ERROR_ACTIONSETS_ALREADY_ATTACHED):
-        return U"XR_ERROR_ACTIONSETS_ALREADY_ATTACHED";
-        break;
-    case(XR_ERROR_LOCALIZED_NAME_DUPLICATED):
-        return U"XR_ERROR_LOCALIZED_NAME_DUPLICATED";
-        break;
-    case(XR_ERROR_LOCALIZED_NAME_INVALID):
-        return U"XR_ERROR_LOCALIZED_NAME_INVALID";
-        break;
-    case(XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING):
-        return U"XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING";
-        break;
-    case(XR_ERROR_RUNTIME_UNAVAILABLE):
-        return U"XR_ERROR_RUNTIME_UNAVAILABLE";
-        break;
-#if defined(XR_EXT_future)
-    case(XR_ERROR_FUTURE_PENDING_EXT):
-        return U"XR_ERROR_FUTURE_PENDING_EXT";
-        break;
-    case(XR_ERROR_FUTURE_INVALID_EXT):
-        return U"XR_ERROR_FUTURE_INVALID_EXT";
-        break;
-#endif /*  defined(XR_EXT_future)  */
-#if defined(XR_EXT_plane_detection)
-    case(XR_ERROR_SPACE_NOT_LOCATABLE_EXT):
-        return U"XR_ERROR_SPACE_NOT_LOCATABLE_EXT";
-        break;
-    case(XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT):
-        return U"XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT";
-        break;
-#endif /*  defined(XR_EXT_plane_detection)  */
-#if defined(XR_FB_color_space)
-    case(XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB):
-        return U"XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB";
-        break;
-#endif /*  defined(XR_FB_color_space)  */
-#if defined(XR_FB_display_refresh_rate)
-    case(XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB):
-        return U"XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB";
-        break;
-#endif /*  defined(XR_FB_display_refresh_rate)  */
-#if defined(XR_FB_passthrough)
-    case(XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB):
-        return U"XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB):
-        return U"XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB):
-        return U"XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB):
-        return U"XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB):
-        return U"XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB";
-        break;
-    case(XR_ERROR_UNKNOWN_PASSTHROUGH_FB):
-        return U"XR_ERROR_UNKNOWN_PASSTHROUGH_FB";
-        break;
-#endif /*  defined(XR_FB_passthrough)  */
-#if defined(XR_FB_render_model)
-    case(XR_ERROR_RENDER_MODEL_KEY_INVALID_FB):
-        return U"XR_ERROR_RENDER_MODEL_KEY_INVALID_FB";
-        break;
-    case(XR_RENDER_MODEL_UNAVAILABLE_FB):
-        return U"XR_RENDER_MODEL_UNAVAILABLE_FB";
-        break;
-#endif /*  defined(XR_FB_render_model)  */
-#if defined(XR_FB_spatial_entity)
-    case(XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB):
-        return U"XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB):
-        return U"XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB):
-        return U"XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB";
-        break;
-    case(XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB):
-        return U"XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity)  */
-#if defined(XR_FB_spatial_entity_sharing)
-    case(XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB):
-        return U"XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB";
-        break;
-    case(XR_ERROR_SPACE_LOCALIZATION_FAILED_FB):
-        return U"XR_ERROR_SPACE_LOCALIZATION_FAILED_FB";
-        break;
-    case(XR_ERROR_SPACE_NETWORK_TIMEOUT_FB):
-        return U"XR_ERROR_SPACE_NETWORK_TIMEOUT_FB";
-        break;
-    case(XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB):
-        return U"XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB";
-        break;
-    case(XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB):
-        return U"XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB";
-        break;
-#endif /*  defined(XR_FB_spatial_entity_sharing)  */
-#if defined(XR_HTC_anchor)
-    case(XR_ERROR_NOT_AN_ANCHOR_HTC):
-        return U"XR_ERROR_NOT_AN_ANCHOR_HTC";
-        break;
-#endif /*  defined(XR_HTC_anchor)  */
-#if defined(XR_KHR_android_thread_settings)
-    case(XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR):
-        return U"XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR";
-        break;
-    case(XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR):
-        return U"XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR";
-        break;
-#endif /*  defined(XR_KHR_android_thread_settings)  */
-#if defined(XR_META_environment_depth)
-    case(XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META):
-        return U"XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META";
-        break;
-#endif /*  defined(XR_META_environment_depth)  */
-#if defined(XR_META_passthrough_color_lut)
-    case(XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META):
-        return U"XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META";
-        break;
-#endif /*  defined(XR_META_passthrough_color_lut)  */
-#if defined(XR_ML_localization_map)
-    case(XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_FAIL_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_FAIL_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML";
-        break;
-    case(XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML):
-        return U"XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML";
-        break;
-#endif /*  defined(XR_ML_localization_map)  */
-#if defined(XR_ML_marker_understanding)
-    case(XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML):
-        return U"XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML):
-        return U"XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML):
-        return U"XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML";
-        break;
-    case(XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML):
-        return U"XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML";
-        break;
-    case(XR_ERROR_MARKER_INVALID_ML):
-        return U"XR_ERROR_MARKER_INVALID_ML";
-        break;
-#endif /*  defined(XR_ML_marker_understanding)  */
-#if defined(XR_MSFT_composition_layer_reprojection)
-    case(XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT):
-        return U"XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
-#if defined(XR_MSFT_controller_model)
-    case(XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT):
-        return U"XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_controller_model)  */
 #if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_MARKER_DATA_NOT_STRING_MSFT):
-        return U"XR_SCENE_MARKER_DATA_NOT_STRING_MSFT";
+    case(XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT";
         break;
 #endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding)
-    case(XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT):
-        return U"XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT";
+#if defined(XR_MSFT_scene_understanding_serialization)
+    case(XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT):
+        return U"XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT";
         break;
-    case(XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT):
-        return U"XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT):
-        return U"XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT";
-        break;
-    case(XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT):
-        return U"XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT):
-        return U"XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT";
-        break;
-    case(XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT):
-        return U"XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding)  */
-#if defined(XR_MSFT_secondary_view_configuration)
-    case(XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT):
-        return U"XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_secondary_view_configuration)  */
-#if defined(XR_MSFT_spatial_anchor)
-    case(XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT):
-        return U"XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_spatial_anchor)  */
-#if defined(XR_MSFT_spatial_anchor_persistence)
-    case(XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT):
-        return U"XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT";
-        break;
-    case(XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT):
-        return U"XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
-#if defined(XR_QCOM_tracking_optimization_settings)
-    case(XR_ERROR_HINT_ALREADY_SET_QCOM):
-        return U"XR_ERROR_HINT_ALREADY_SET_QCOM";
-        break;
-#endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
-#if defined(XR_VARJO_marker_tracking)
-    case(XR_ERROR_MARKER_NOT_TRACKED_VARJO):
-        return U"XR_ERROR_MARKER_NOT_TRACKED_VARJO";
-        break;
-    case(XR_ERROR_MARKER_ID_INVALID_VARJO):
-        return U"XR_ERROR_MARKER_ID_INVALID_VARJO";
-        break;
-#endif /*  defined(XR_VARJO_marker_tracking)  */
+#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
     default:
-        return U"XrResult_TOSTR_ERROR";
+        return U"XrSceneComputeFeatureMSFT_TOSTR_ERROR";
 
     }
 
 }
+
+#endif
 
 #if defined(XR_FB_spatial_entity)
 vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In){
@@ -2763,6 +2211,69 @@ vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In){
 }
 
 #endif
+
+#if defined(XR_EXT_hand_tracking)
+vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In){
+    switch(In){
+    case(XR_HAND_JOINT_SET_DEFAULT_EXT):
+        return U"XR_HAND_JOINT_SET_DEFAULT_EXT";
+        break;
+#if defined(XR_ULTRALEAP_hand_tracking_forearm)
+    case(XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP):
+        return U"XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP";
+        break;
+#endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
+    default:
+        return U"XrHandJointSetEXT_TOSTR_ERROR";
+
+    }
+
+}
+
+#endif
+
+vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In){
+    switch(In){
+    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO):
+        return U"XR_VIEW_CONFIGURATION_TYPE_PRIMARY_MONO";
+        break;
+    case(XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO):
+        return U"XR_VIEW_CONFIGURATION_TYPE_PRIMARY_STEREO";
+        break;
+#if defined(XR_MSFT_first_person_observer)
+    case(XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT):
+        return U"XR_VIEW_CONFIGURATION_TYPE_SECONDARY_MONO_FIRST_PERSON_OBSERVER_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_first_person_observer)  */
+    default:
+        return U"XrViewConfigurationType_TOSTR_ERROR";
+
+    }
+
+}
+
+vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In){
+    switch(In){
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB):
+        return U"XR_PASSTHROUGH_LAYER_PURPOSE_RECONSTRUCTION_FB";
+        break;
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB):
+        return U"XR_PASSTHROUGH_LAYER_PURPOSE_PROJECTED_FB";
+        break;
+#if defined(XR_FB_passthrough_keyboard_hands)
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB):
+        return U"XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_HANDS_FB";
+        break;
+    case(XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB):
+        return U"XR_PASSTHROUGH_LAYER_PURPOSE_TRACKED_KEYBOARD_MASKED_HANDS_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough_keyboard_hands)  */
+    default:
+        return U"XrPassthroughLayerPurposeFB_TOSTR_ERROR";
+
+    }
+
+}
 
 vchar* vtostr32_XrStructureType(XrStructureType In){
     switch(In){
@@ -4043,90 +3554,542 @@ vchar* vtostr32_XrStructureType(XrStructureType In){
 
 }
 
+vchar* vtostr32_XrResult(XrResult In){
+    switch(In){
+    case(XR_SUCCESS):
+        return U"XR_SUCCESS";
+        break;
+    case(XR_TIMEOUT_EXPIRED):
+        return U"XR_TIMEOUT_EXPIRED";
+        break;
+    case(XR_SESSION_LOSS_PENDING):
+        return U"XR_SESSION_LOSS_PENDING";
+        break;
+    case(XR_EVENT_UNAVAILABLE):
+        return U"XR_EVENT_UNAVAILABLE";
+        break;
+    case(XR_SPACE_BOUNDS_UNAVAILABLE):
+        return U"XR_SPACE_BOUNDS_UNAVAILABLE";
+        break;
+    case(XR_SESSION_NOT_FOCUSED):
+        return U"XR_SESSION_NOT_FOCUSED";
+        break;
+    case(XR_FRAME_DISCARDED):
+        return U"XR_FRAME_DISCARDED";
+        break;
+    case(XR_ERROR_VALIDATION_FAILURE):
+        return U"XR_ERROR_VALIDATION_FAILURE";
+        break;
+    case(XR_ERROR_RUNTIME_FAILURE):
+        return U"XR_ERROR_RUNTIME_FAILURE";
+        break;
+    case(XR_ERROR_OUT_OF_MEMORY):
+        return U"XR_ERROR_OUT_OF_MEMORY";
+        break;
+    case(XR_ERROR_API_VERSION_UNSUPPORTED):
+        return U"XR_ERROR_API_VERSION_UNSUPPORTED";
+        break;
+    case(XR_ERROR_INITIALIZATION_FAILED):
+        return U"XR_ERROR_INITIALIZATION_FAILED";
+        break;
+    case(XR_ERROR_FUNCTION_UNSUPPORTED):
+        return U"XR_ERROR_FUNCTION_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FEATURE_UNSUPPORTED):
+        return U"XR_ERROR_FEATURE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_EXTENSION_NOT_PRESENT):
+        return U"XR_ERROR_EXTENSION_NOT_PRESENT";
+        break;
+    case(XR_ERROR_LIMIT_REACHED):
+        return U"XR_ERROR_LIMIT_REACHED";
+        break;
+    case(XR_ERROR_SIZE_INSUFFICIENT):
+        return U"XR_ERROR_SIZE_INSUFFICIENT";
+        break;
+    case(XR_ERROR_HANDLE_INVALID):
+        return U"XR_ERROR_HANDLE_INVALID";
+        break;
+    case(XR_ERROR_INSTANCE_LOST):
+        return U"XR_ERROR_INSTANCE_LOST";
+        break;
+    case(XR_ERROR_SESSION_RUNNING):
+        return U"XR_ERROR_SESSION_RUNNING";
+        break;
+    case(XR_ERROR_SESSION_NOT_RUNNING):
+        return U"XR_ERROR_SESSION_NOT_RUNNING";
+        break;
+    case(XR_ERROR_SESSION_LOST):
+        return U"XR_ERROR_SESSION_LOST";
+        break;
+    case(XR_ERROR_SYSTEM_INVALID):
+        return U"XR_ERROR_SYSTEM_INVALID";
+        break;
+    case(XR_ERROR_PATH_INVALID):
+        return U"XR_ERROR_PATH_INVALID";
+        break;
+    case(XR_ERROR_PATH_COUNT_EXCEEDED):
+        return U"XR_ERROR_PATH_COUNT_EXCEEDED";
+        break;
+    case(XR_ERROR_PATH_FORMAT_INVALID):
+        return U"XR_ERROR_PATH_FORMAT_INVALID";
+        break;
+    case(XR_ERROR_PATH_UNSUPPORTED):
+        return U"XR_ERROR_PATH_UNSUPPORTED";
+        break;
+    case(XR_ERROR_LAYER_INVALID):
+        return U"XR_ERROR_LAYER_INVALID";
+        break;
+    case(XR_ERROR_LAYER_LIMIT_EXCEEDED):
+        return U"XR_ERROR_LAYER_LIMIT_EXCEEDED";
+        break;
+    case(XR_ERROR_SWAPCHAIN_RECT_INVALID):
+        return U"XR_ERROR_SWAPCHAIN_RECT_INVALID";
+        break;
+    case(XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED):
+        return U"XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED";
+        break;
+    case(XR_ERROR_ACTION_TYPE_MISMATCH):
+        return U"XR_ERROR_ACTION_TYPE_MISMATCH";
+        break;
+    case(XR_ERROR_SESSION_NOT_READY):
+        return U"XR_ERROR_SESSION_NOT_READY";
+        break;
+    case(XR_ERROR_SESSION_NOT_STOPPING):
+        return U"XR_ERROR_SESSION_NOT_STOPPING";
+        break;
+    case(XR_ERROR_TIME_INVALID):
+        return U"XR_ERROR_TIME_INVALID";
+        break;
+    case(XR_ERROR_REFERENCE_SPACE_UNSUPPORTED):
+        return U"XR_ERROR_REFERENCE_SPACE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FILE_ACCESS_ERROR):
+        return U"XR_ERROR_FILE_ACCESS_ERROR";
+        break;
+    case(XR_ERROR_FILE_CONTENTS_INVALID):
+        return U"XR_ERROR_FILE_CONTENTS_INVALID";
+        break;
+    case(XR_ERROR_FORM_FACTOR_UNSUPPORTED):
+        return U"XR_ERROR_FORM_FACTOR_UNSUPPORTED";
+        break;
+    case(XR_ERROR_FORM_FACTOR_UNAVAILABLE):
+        return U"XR_ERROR_FORM_FACTOR_UNAVAILABLE";
+        break;
+    case(XR_ERROR_API_LAYER_NOT_PRESENT):
+        return U"XR_ERROR_API_LAYER_NOT_PRESENT";
+        break;
+    case(XR_ERROR_CALL_ORDER_INVALID):
+        return U"XR_ERROR_CALL_ORDER_INVALID";
+        break;
+    case(XR_ERROR_GRAPHICS_DEVICE_INVALID):
+        return U"XR_ERROR_GRAPHICS_DEVICE_INVALID";
+        break;
+    case(XR_ERROR_POSE_INVALID):
+        return U"XR_ERROR_POSE_INVALID";
+        break;
+    case(XR_ERROR_INDEX_OUT_OF_RANGE):
+        return U"XR_ERROR_INDEX_OUT_OF_RANGE";
+        break;
+    case(XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED):
+        return U"XR_ERROR_VIEW_CONFIGURATION_TYPE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED):
+        return U"XR_ERROR_ENVIRONMENT_BLEND_MODE_UNSUPPORTED";
+        break;
+    case(XR_ERROR_NAME_DUPLICATED):
+        return U"XR_ERROR_NAME_DUPLICATED";
+        break;
+    case(XR_ERROR_NAME_INVALID):
+        return U"XR_ERROR_NAME_INVALID";
+        break;
+    case(XR_ERROR_ACTIONSET_NOT_ATTACHED):
+        return U"XR_ERROR_ACTIONSET_NOT_ATTACHED";
+        break;
+    case(XR_ERROR_ACTIONSETS_ALREADY_ATTACHED):
+        return U"XR_ERROR_ACTIONSETS_ALREADY_ATTACHED";
+        break;
+    case(XR_ERROR_LOCALIZED_NAME_DUPLICATED):
+        return U"XR_ERROR_LOCALIZED_NAME_DUPLICATED";
+        break;
+    case(XR_ERROR_LOCALIZED_NAME_INVALID):
+        return U"XR_ERROR_LOCALIZED_NAME_INVALID";
+        break;
+    case(XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING):
+        return U"XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING";
+        break;
+    case(XR_ERROR_RUNTIME_UNAVAILABLE):
+        return U"XR_ERROR_RUNTIME_UNAVAILABLE";
+        break;
+#if defined(XR_EXT_future)
+    case(XR_ERROR_FUTURE_PENDING_EXT):
+        return U"XR_ERROR_FUTURE_PENDING_EXT";
+        break;
+    case(XR_ERROR_FUTURE_INVALID_EXT):
+        return U"XR_ERROR_FUTURE_INVALID_EXT";
+        break;
+#endif /*  defined(XR_EXT_future)  */
+#if defined(XR_EXT_plane_detection)
+    case(XR_ERROR_SPACE_NOT_LOCATABLE_EXT):
+        return U"XR_ERROR_SPACE_NOT_LOCATABLE_EXT";
+        break;
+    case(XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT):
+        return U"XR_ERROR_PLANE_DETECTION_PERMISSION_DENIED_EXT";
+        break;
+#endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_FB_color_space)
+    case(XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB):
+        return U"XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB";
+        break;
+#endif /*  defined(XR_FB_color_space)  */
+#if defined(XR_FB_display_refresh_rate)
+    case(XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB):
+        return U"XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB";
+        break;
+#endif /*  defined(XR_FB_display_refresh_rate)  */
+#if defined(XR_FB_passthrough)
+    case(XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB):
+        return U"XR_ERROR_UNEXPECTED_STATE_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB):
+        return U"XR_ERROR_FEATURE_ALREADY_CREATED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB):
+        return U"XR_ERROR_FEATURE_REQUIRED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB):
+        return U"XR_ERROR_NOT_PERMITTED_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB):
+        return U"XR_ERROR_INSUFFICIENT_RESOURCES_PASSTHROUGH_FB";
+        break;
+    case(XR_ERROR_UNKNOWN_PASSTHROUGH_FB):
+        return U"XR_ERROR_UNKNOWN_PASSTHROUGH_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough)  */
+#if defined(XR_FB_render_model)
+    case(XR_ERROR_RENDER_MODEL_KEY_INVALID_FB):
+        return U"XR_ERROR_RENDER_MODEL_KEY_INVALID_FB";
+        break;
+    case(XR_RENDER_MODEL_UNAVAILABLE_FB):
+        return U"XR_RENDER_MODEL_UNAVAILABLE_FB";
+        break;
+#endif /*  defined(XR_FB_render_model)  */
+#if defined(XR_FB_spatial_entity)
+    case(XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB):
+        return U"XR_ERROR_SPACE_COMPONENT_NOT_SUPPORTED_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB):
+        return U"XR_ERROR_SPACE_COMPONENT_NOT_ENABLED_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB):
+        return U"XR_ERROR_SPACE_COMPONENT_STATUS_PENDING_FB";
+        break;
+    case(XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB):
+        return U"XR_ERROR_SPACE_COMPONENT_STATUS_ALREADY_SET_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity)  */
+#if defined(XR_FB_spatial_entity_sharing)
+    case(XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB):
+        return U"XR_ERROR_SPACE_MAPPING_INSUFFICIENT_FB";
+        break;
+    case(XR_ERROR_SPACE_LOCALIZATION_FAILED_FB):
+        return U"XR_ERROR_SPACE_LOCALIZATION_FAILED_FB";
+        break;
+    case(XR_ERROR_SPACE_NETWORK_TIMEOUT_FB):
+        return U"XR_ERROR_SPACE_NETWORK_TIMEOUT_FB";
+        break;
+    case(XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB):
+        return U"XR_ERROR_SPACE_NETWORK_REQUEST_FAILED_FB";
+        break;
+    case(XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB):
+        return U"XR_ERROR_SPACE_CLOUD_STORAGE_DISABLED_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity_sharing)  */
+#if defined(XR_HTC_anchor)
+    case(XR_ERROR_NOT_AN_ANCHOR_HTC):
+        return U"XR_ERROR_NOT_AN_ANCHOR_HTC";
+        break;
+#endif /*  defined(XR_HTC_anchor)  */
+#if defined(XR_KHR_android_thread_settings)
+    case(XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR):
+        return U"XR_ERROR_ANDROID_THREAD_SETTINGS_ID_INVALID_KHR";
+        break;
+    case(XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR):
+        return U"XR_ERROR_ANDROID_THREAD_SETTINGS_FAILURE_KHR";
+        break;
+#endif /*  defined(XR_KHR_android_thread_settings)  */
+#if defined(XR_META_environment_depth)
+    case(XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META):
+        return U"XR_ENVIRONMENT_DEPTH_NOT_AVAILABLE_META";
+        break;
+#endif /*  defined(XR_META_environment_depth)  */
+#if defined(XR_META_passthrough_color_lut)
+    case(XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META):
+        return U"XR_ERROR_PASSTHROUGH_COLOR_LUT_BUFFER_SIZE_MISMATCH_META";
+        break;
+#endif /*  defined(XR_META_passthrough_color_lut)  */
+#if defined(XR_ML_localization_map)
+    case(XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_INCOMPATIBLE_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_UNAVAILABLE_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_FAIL_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_FAIL_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_IMPORT_EXPORT_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_ALREADY_EXISTS_ML";
+        break;
+    case(XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML):
+        return U"XR_ERROR_LOCALIZATION_MAP_CANNOT_EXPORT_CLOUD_MAP_ML";
+        break;
+#endif /*  defined(XR_ML_localization_map)  */
+#if defined(XR_ML_marker_understanding)
+    case(XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML):
+        return U"XR_ERROR_MARKER_DETECTOR_PERMISSION_DENIED_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML):
+        return U"XR_ERROR_MARKER_DETECTOR_LOCATE_FAILED_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML):
+        return U"XR_ERROR_MARKER_DETECTOR_INVALID_DATA_QUERY_ML";
+        break;
+    case(XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML):
+        return U"XR_ERROR_MARKER_DETECTOR_INVALID_CREATE_INFO_ML";
+        break;
+    case(XR_ERROR_MARKER_INVALID_ML):
+        return U"XR_ERROR_MARKER_INVALID_ML";
+        break;
+#endif /*  defined(XR_ML_marker_understanding)  */
+#if defined(XR_MSFT_composition_layer_reprojection)
+    case(XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT):
+        return U"XR_ERROR_REPROJECTION_MODE_UNSUPPORTED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
+#if defined(XR_MSFT_controller_model)
+    case(XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT):
+        return U"XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_controller_model)  */
+#if defined(XR_MSFT_scene_marker)
+    case(XR_SCENE_MARKER_DATA_NOT_STRING_MSFT):
+        return U"XR_SCENE_MARKER_DATA_NOT_STRING_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_marker)  */
+#if defined(XR_MSFT_scene_understanding)
+    case(XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT):
+        return U"XR_ERROR_COMPUTE_NEW_SCENE_NOT_COMPLETED_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT):
+        return U"XR_ERROR_SCENE_COMPONENT_ID_INVALID_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT):
+        return U"XR_ERROR_SCENE_COMPONENT_TYPE_MISMATCH_MSFT";
+        break;
+    case(XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT):
+        return U"XR_ERROR_SCENE_MESH_BUFFER_ID_INVALID_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT):
+        return U"XR_ERROR_SCENE_COMPUTE_FEATURE_INCOMPATIBLE_MSFT";
+        break;
+    case(XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT):
+        return U"XR_ERROR_SCENE_COMPUTE_CONSISTENCY_MISMATCH_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_understanding)  */
+#if defined(XR_MSFT_secondary_view_configuration)
+    case(XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT):
+        return U"XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_secondary_view_configuration)  */
+#if defined(XR_MSFT_spatial_anchor)
+    case(XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT):
+        return U"XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_spatial_anchor)  */
+#if defined(XR_MSFT_spatial_anchor_persistence)
+    case(XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT):
+        return U"XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT";
+        break;
+    case(XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT):
+        return U"XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
+#if defined(XR_QCOM_tracking_optimization_settings)
+    case(XR_ERROR_HINT_ALREADY_SET_QCOM):
+        return U"XR_ERROR_HINT_ALREADY_SET_QCOM";
+        break;
+#endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
+#if defined(XR_VARJO_marker_tracking)
+    case(XR_ERROR_MARKER_NOT_TRACKED_VARJO):
+        return U"XR_ERROR_MARKER_NOT_TRACKED_VARJO";
+        break;
+    case(XR_ERROR_MARKER_ID_INVALID_VARJO):
+        return U"XR_ERROR_MARKER_ID_INVALID_VARJO";
+        break;
+#endif /*  defined(XR_VARJO_marker_tracking)  */
+    default:
+        return U"XrResult_TOSTR_ERROR";
+
+    }
+
+}
+
+#if defined(XR_VERSION_1_0)
+vchar* vtostr32_XrObjectType(XrObjectType In){
+    switch(In){
+    case(XR_OBJECT_TYPE_UNKNOWN):
+        return U"XR_OBJECT_TYPE_UNKNOWN";
+        break;
+    case(XR_OBJECT_TYPE_INSTANCE):
+        return U"XR_OBJECT_TYPE_INSTANCE";
+        break;
+    case(XR_OBJECT_TYPE_SESSION):
+        return U"XR_OBJECT_TYPE_SESSION";
+        break;
+    case(XR_OBJECT_TYPE_SWAPCHAIN):
+        return U"XR_OBJECT_TYPE_SWAPCHAIN";
+        break;
+    case(XR_OBJECT_TYPE_SPACE):
+        return U"XR_OBJECT_TYPE_SPACE";
+        break;
+    case(XR_OBJECT_TYPE_ACTION_SET):
+        return U"XR_OBJECT_TYPE_ACTION_SET";
+        break;
+    case(XR_OBJECT_TYPE_ACTION):
+        return U"XR_OBJECT_TYPE_ACTION";
+        break;
+#if defined(XR_EXT_debug_utils)
+    case(XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT):
+        return U"XR_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT";
+        break;
+#endif /*  defined(XR_EXT_debug_utils)  */
 #if defined(XR_EXT_hand_tracking)
-vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In){
-    switch(In){
-    case(XR_HAND_JOINT_SET_DEFAULT_EXT):
-        return U"XR_HAND_JOINT_SET_DEFAULT_EXT";
+    case(XR_OBJECT_TYPE_HAND_TRACKER_EXT):
+        return U"XR_OBJECT_TYPE_HAND_TRACKER_EXT";
         break;
-#if defined(XR_ULTRALEAP_hand_tracking_forearm)
-    case(XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP):
-        return U"XR_HAND_JOINT_SET_HAND_WITH_FOREARM_ULTRALEAP";
+#endif /*  defined(XR_EXT_hand_tracking)  */
+#if defined(XR_EXT_plane_detection)
+    case(XR_OBJECT_TYPE_PLANE_DETECTOR_EXT):
+        return U"XR_OBJECT_TYPE_PLANE_DETECTOR_EXT";
         break;
-#endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
-    default:
-        return U"XrHandJointSetEXT_TOSTR_ERROR";
-
-    }
-
-}
-
-#endif
-
+#endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_FB_body_tracking)
+    case(XR_OBJECT_TYPE_BODY_TRACKER_FB):
+        return U"XR_OBJECT_TYPE_BODY_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_body_tracking)  */
+#if defined(XR_FB_eye_tracking_social)
+    case(XR_OBJECT_TYPE_EYE_TRACKER_FB):
+        return U"XR_OBJECT_TYPE_EYE_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_eye_tracking_social)  */
+#if defined(XR_FB_face_tracking)
+    case(XR_OBJECT_TYPE_FACE_TRACKER_FB):
+        return U"XR_OBJECT_TYPE_FACE_TRACKER_FB";
+        break;
+#endif /*  defined(XR_FB_face_tracking)  */
+#if defined(XR_FB_face_tracking2)
+    case(XR_OBJECT_TYPE_FACE_TRACKER2_FB):
+        return U"XR_OBJECT_TYPE_FACE_TRACKER2_FB";
+        break;
+#endif /*  defined(XR_FB_face_tracking2)  */
+#if defined(XR_FB_foveation)
+    case(XR_OBJECT_TYPE_FOVEATION_PROFILE_FB):
+        return U"XR_OBJECT_TYPE_FOVEATION_PROFILE_FB";
+        break;
+#endif /*  defined(XR_FB_foveation)  */
+#if defined(XR_FB_passthrough)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_FB):
+        return U"XR_OBJECT_TYPE_PASSTHROUGH_FB";
+        break;
+    case(XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB):
+        return U"XR_OBJECT_TYPE_PASSTHROUGH_LAYER_FB";
+        break;
+    case(XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB):
+        return U"XR_OBJECT_TYPE_GEOMETRY_INSTANCE_FB";
+        break;
+#endif /*  defined(XR_FB_passthrough)  */
+#if defined(XR_FB_spatial_entity_user)
+    case(XR_OBJECT_TYPE_SPACE_USER_FB):
+        return U"XR_OBJECT_TYPE_SPACE_USER_FB";
+        break;
+#endif /*  defined(XR_FB_spatial_entity_user)  */
+#if defined(XR_FB_triangle_mesh)
+    case(XR_OBJECT_TYPE_TRIANGLE_MESH_FB):
+        return U"XR_OBJECT_TYPE_TRIANGLE_MESH_FB";
+        break;
+#endif /*  defined(XR_FB_triangle_mesh)  */
+#if defined(XR_HTC_facial_tracking)
+    case(XR_OBJECT_TYPE_FACIAL_TRACKER_HTC):
+        return U"XR_OBJECT_TYPE_FACIAL_TRACKER_HTC";
+        break;
+#endif /*  defined(XR_HTC_facial_tracking)  */
+#if defined(XR_HTC_passthrough)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_HTC):
+        return U"XR_OBJECT_TYPE_PASSTHROUGH_HTC";
+        break;
+#endif /*  defined(XR_HTC_passthrough)  */
+#if defined(XR_META_environment_depth)
+    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META):
+        return U"XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_PROVIDER_META";
+        break;
+    case(XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META):
+        return U"XR_OBJECT_TYPE_ENVIRONMENT_DEPTH_SWAPCHAIN_META";
+        break;
+#endif /*  defined(XR_META_environment_depth)  */
+#if defined(XR_META_passthrough_color_lut)
+    case(XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META):
+        return U"XR_OBJECT_TYPE_PASSTHROUGH_COLOR_LUT_META";
+        break;
+#endif /*  defined(XR_META_passthrough_color_lut)  */
+#if defined(XR_META_virtual_keyboard)
+    case(XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META):
+        return U"XR_OBJECT_TYPE_VIRTUAL_KEYBOARD_META";
+        break;
+#endif /*  defined(XR_META_virtual_keyboard)  */
+#if defined(XR_ML_localization_map)
+    case(XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML):
+        return U"XR_OBJECT_TYPE_EXPORTED_LOCALIZATION_MAP_ML";
+        break;
+#endif /*  defined(XR_ML_localization_map)  */
+#if defined(XR_ML_marker_understanding)
+    case(XR_OBJECT_TYPE_MARKER_DETECTOR_ML):
+        return U"XR_OBJECT_TYPE_MARKER_DETECTOR_ML";
+        break;
+#endif /*  defined(XR_ML_marker_understanding)  */
 #if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In){
-    switch(In){
-    case(XR_SCENE_COMPONENT_TYPE_INVALID_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_INVALID_MSFT";
+    case(XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT):
+        return U"XR_OBJECT_TYPE_SCENE_OBSERVER_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT";
+    case(XR_OBJECT_TYPE_SCENE_MSFT):
+        return U"XR_OBJECT_TYPE_SCENE_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_PLANE_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_PLANE_MSFT";
+#endif /*  defined(XR_MSFT_scene_understanding)  */
+#if defined(XR_MSFT_spatial_anchor)
+    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT):
+        return U"XR_OBJECT_TYPE_SPATIAL_ANCHOR_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT";
+#endif /*  defined(XR_MSFT_spatial_anchor)  */
+#if defined(XR_MSFT_spatial_anchor_persistence)
+    case(XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT):
+        return U"XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT";
         break;
-    case(XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT";
+#endif /*  defined(XR_MSFT_spatial_anchor_persistence)  */
+#if defined(XR_MSFT_spatial_graph_bridge)
+    case(XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT):
+        return U"XR_OBJECT_TYPE_SPATIAL_GRAPH_NODE_BINDING_MSFT";
         break;
-#if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_COMPONENT_TYPE_MARKER_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_MARKER_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding_serialization)
-    case(XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT):
-        return U"XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
+#endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
     default:
-        return U"XrSceneComponentTypeMSFT_TOSTR_ERROR";
-
-    }
-
-}
-
-#endif
-
-#if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In){
-    switch(In){
-    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_PLANE_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_PLANE_MESH_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_VISUAL_MESH_MSFT";
-        break;
-    case(XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_COLLIDER_MESH_MSFT";
-        break;
-#if defined(XR_MSFT_scene_marker)
-    case(XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_MARKER_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_marker)  */
-#if defined(XR_MSFT_scene_understanding_serialization)
-    case(XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT):
-        return U"XR_SCENE_COMPUTE_FEATURE_SERIALIZE_SCENE_MSFT";
-        break;
-#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
-    default:
-        return U"XrSceneComputeFeatureMSFT_TOSTR_ERROR";
+        return U"XrObjectType_TOSTR_ERROR";
 
     }
 
@@ -4166,6 +4129,43 @@ vchar* vtostr32_XrReferenceSpaceType(XrReferenceSpaceType In){
     }
 
 }
+
+#if defined(XR_MSFT_scene_understanding)
+vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In){
+    switch(In){
+    case(XR_SCENE_COMPONENT_TYPE_INVALID_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_INVALID_MSFT";
+        break;
+    case(XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_OBJECT_MSFT";
+        break;
+    case(XR_SCENE_COMPONENT_TYPE_PLANE_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_PLANE_MSFT";
+        break;
+    case(XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_VISUAL_MESH_MSFT";
+        break;
+    case(XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_COLLIDER_MESH_MSFT";
+        break;
+#if defined(XR_MSFT_scene_marker)
+    case(XR_SCENE_COMPONENT_TYPE_MARKER_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_MARKER_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_marker)  */
+#if defined(XR_MSFT_scene_understanding_serialization)
+    case(XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT):
+        return U"XR_SCENE_COMPONENT_TYPE_SERIALIZED_SCENE_FRAGMENT_MSFT";
+        break;
+#endif /*  defined(XR_MSFT_scene_understanding_serialization)  */
+    default:
+        return U"XrSceneComponentTypeMSFT_TOSTR_ERROR";
+
+    }
+
+}
+
+#endif
 
 
 //SECTION(V): XRMYTH_TOSTR8_IMPL
