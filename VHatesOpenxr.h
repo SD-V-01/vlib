@@ -32,7 +32,6 @@ XRSUCKS_API st xrsuxFindNameInList(const char* Key, const char** List, st ListSi
 XRSUCKS_API bool xrsuxIsLayerPresent(const char* Wanted);
 XRSUCKS_API bool xrsuxIsExtensionPresent(const char* Wanted);
 XRSUCKS_API void xrsuxDumpInstanceInfo();
-XRSUCKS_API void 
 
 VLIB_CABIEND
 
