@@ -15,6 +15,8 @@
 #ifndef MYTH_VK_LOADER_H
 #define MYTH_VK_LOADER_H
 
+#include "../base_types.h"
+
 #if defined(VULKAN_H_) && !defined(VK_NO_PROTOTYPES)
 #error Please define VK_NO_PROTOTYPES to prevent vulkan.h from defining function definitions
 
