@@ -14,25 +14,11 @@
 
 #pragma once
 
+#define VLIB_VMATH_IMPL
+
 #include "base_types.h"
 #include "float.h"
 #include "math.h"
-
-//SECTION(V): Platform detection
-
-#if defined(_MSC_VER)
-#error implement
-
-#endif
-
-#if defined(__AVX2__)
-#define VMATH_AVX
-#define VMATH_SSE
-
-#elif defined(__SSE4_1__)
-#define VMATH_SSE
-
-#endif
 
 //SECTION(V): math utils
 
@@ -107,4 +93,12 @@ VLIB_CABIEND
 
 //SECTION(V): vector math
 
+#ifdef _MSC_VER
+#define VMATH_ALIGN(type) __declspec(align(16)) type
 
+#elif defined(__GNUC__) || defined(__clang__)
+#define VMATH_ALIGN(type) type __attribute__((aligned(16)))
+
+#endif
+
+#include "vvector.inl.h"
