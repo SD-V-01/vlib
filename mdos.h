@@ -145,7 +145,7 @@ typedef enum mdConVarType {
 } mdConVarType;
 
 VLIB_CABI
-inline const char* vtostr_mdConVarType(mdConVarType In) {
+vinl const char* vtostr_mdConVarType(mdConVarType In) {
 	switch (In) {
 		case mdConVarType_none:
 			return "mdConVarType_none";

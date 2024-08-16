@@ -18,6 +18,11 @@
 
 #endif
 
+#ifndef VLIB_VMATH_IMPL
+#error Try to include "vmath.h"
+
+#endif
+
 #define vmathVectorSplat(X, E) _mm_shuffle_ps(X, X, _MM_SHUFFLE(E, E, E, E))
 
 vinl __m128 vmathVectorSelect(__m128 A, __m128 B, __m128 Mask){
@@ -69,142 +74,142 @@ union {
 
 #ifdef VPP
 
-explicit vinl vec3(){}
+explicit vinlpp vec3(){}
 
-explicit vinl vec3(float X, float Y, float W) {
+explicit vinlpp vec3(float X, float Y, float W) {
 	Simd = _mm_setr_ps(X, Y, W, 0.0f);
 
 }
 
-explicit vinl vec3(float Scalar) {
+explicit vinlpp vec3(float Scalar) {
 	Simd = _mm_set1_ps(Scalar);
 
 }
 
-explicit vinl vec3(__m128 In) {
+explicit vinlpp vec3(__m128 In) {
 	Simd = In;
 
 }
 
-vinl void setAllLanes(float Scalar) {
+vinlpp void setAllLanes(float Scalar) {
 	Simd = _mm_set1_ps(Scalar);
 
 }
 
-vinl void zero() {
+vinlpp void zero() {
 	Simd = _mm_setzero_ps();
 
 }
 
-vinl void one() {
+vinlpp void one() {
 	Simd = _mm_setr_ps(1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
-vinl vec3& operator=(const vec3& Vec) {
+vinlpp vec3& operator=(const vec3& Vec) {
 	Simd = Vec.Simd;
 	return *this;
 
 }
 
-vinl void Lset(float In, st Lane) {
+vinlpp void Lset(float In, st Lane) {
 	((float *)&(Simd))[Lane] = In;
 
 }
 
-vinl float Lget(st Lane) {
+vinlpp float Lget(st Lane) {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl float operator[](int Lane) {
+vinlpp float operator[](int Lane) {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl const float operator[](int Lane) const {
+vinlpp const float operator[](int Lane) const {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl const vec3 operator+(const vec3& Vec) const {
+vinlpp const vec3 operator+(const vec3& Vec) const {
 	return vec3(_mm_add_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec3 operator+(float Scalar) const {
+vinlpp const vec3 operator+(float Scalar) const {
 	return vec3(_mm_add_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec3 operator-(const vec3& Vec) const {
+vinlpp const vec3 operator-(const vec3& Vec) const {
 	return vec3(_mm_sub_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec3 operator-(float Scalar) const {
+vinlpp const vec3 operator-(float Scalar) const {
 	return vec3(_mm_sub_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec3 operator*(const vec3& Vec) const {
+vinlpp const vec3 operator*(const vec3& Vec) const {
 	return vec3(_mm_mul_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec3 operator*(float Scalar) const {
+vinlpp const vec3 operator*(float Scalar) const {
 	return vec3(_mm_mul_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec3 operator/(float Scalar) const {
+vinlpp const vec3 operator/(float Scalar) const {
 	return vec3(_mm_div_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec3& operator+=(const vec3& Vec) {
+vinlpp const vec3& operator+=(const vec3& Vec) {
 	*this = *this + Vec;
 	return *this;
 
 }
 
-vinl const vec3& operator+=(float Scalar) {
+vinlpp const vec3& operator+=(float Scalar) {
 	*this = *this + Scalar;
 	return *this;
 
 }
 
-vinl const vec3& operator-=(const vec3& Vec) {
+vinlpp const vec3& operator-=(const vec3& Vec) {
 	*this = *this - Vec;
 	return *this;
 
 }
 
-vinl const vec3& operator-=(float Scalar) {
+vinlpp const vec3& operator-=(float Scalar) {
 	*this = *this - Scalar;
 	return *this;
 
 }
 
-vinl const vec3& operator*=(const vec3& Vec) {
+vinlpp const vec3& operator*=(const vec3& Vec) {
 	*this = *this * Vec;
 	return *this;
 
 }
 
-vinl const vec3& operator*=(float Scalar) {
+vinlpp const vec3& operator*=(float Scalar) {
 	*this = *this * Scalar;
 	return *this;
 
 }
 
-vinl const vec3& operator/=(float Scalar) {
+vinlpp const vec3& operator/=(float Scalar) {
 	*this = *this / Scalar;
 	return *this;
 
 }
 
-vinl const vec3 recip(const vec3& Vec) {
+vinlpp const vec3 recip(const vec3& Vec) {
 	return vec3(_mm_rcp_ps(Vec.Simd));
 
 }
@@ -393,45 +398,45 @@ union {
 
 #ifdef VPP
 
-explicit vinl vec4(){}
+explicit vinlpp vec4(){}
 
-explicit vinl vec4(float X, float Y, float Z, float W) {
+explicit vinlpp vec4(float X, float Y, float Z, float W) {
 	Simd = _mm_setr_ps(X, Y, Z, W);
 
 }
 
-explicit vinl vec4(float Scalar) {
+explicit vinlpp vec4(float Scalar) {
 	Simd = _mm_set1_ps(Scalar);
 
 }
 
-explicit vinl vec4(__m128 In) {
+explicit vinlpp vec4(__m128 In) {
 	Simd = In;
 
 }
 
-vinl void setAllLanes(float Scalar) {
+vinlpp void setAllLanes(float Scalar) {
 	Simd = _mm_set1_ps(Scalar);
 
 }
 
-vinl void zero() {
+vinlpp void zero() {
 	Simd = _mm_setzero_ps();
 
 }
 
-vinl void one() {
+vinlpp void one() {
 	Simd = _mm_setr_ps(1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
-vinl vec4& operator=(const vec4& Vec) {
+vinlpp vec4& operator=(const vec4& Vec) {
 	Simd = Vec.Simd;
 	return *this;
 
 }
 
-vinl vec4& setXYZ(const vec3& Vec) {
+vinlpp vec4& setXYZ(const vec3& Vec) {
 	const u32 AllOne = 0xFFFFFFFF;
 	const float* AllOnePtr = (float*)&AllOne;
 	__m128 S = _mm_setr_ps(0, 0, 0, *AllOnePtr);
@@ -440,115 +445,115 @@ vinl vec4& setXYZ(const vec3& Vec) {
 
 }
 
-vinl void Lset(float In, st Lane) {
+vinlpp void Lset(float In, st Lane) {
 	((float *)&(Simd))[Lane] = In;
 
 }
 
-vinl float Lget(st Lane) {
+vinlpp float Lget(st Lane) {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl float operator[](int Lane) {
+vinlpp float operator[](int Lane) {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl const float operator[](int Lane) const {
+vinlpp const float operator[](int Lane) const {
 	return ((float *)&(Simd))[Lane];
 
 }
 
-vinl const vec4 operator+(const vec4& Vec) const {
+vinlpp const vec4 operator+(const vec4& Vec) const {
 	return vec4(_mm_add_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec4 operator+(float Scalar) const {
+vinlpp const vec4 operator+(float Scalar) const {
 	return vec4(_mm_add_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec4 operator-(const vec4& Vec) const {
+vinlpp const vec4 operator-(const vec4& Vec) const {
 	return vec4(_mm_sub_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec4 operator-(float Scalar) const {
+vinlpp const vec4 operator-(float Scalar) const {
 	return vec4(_mm_sub_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec4 operator*(const vec4& Vec) const {
+vinlpp const vec4 operator*(const vec4& Vec) const {
 	return vec4(_mm_mul_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec4 operator*(float Scalar) const {
+vinlpp const vec4 operator*(float Scalar) const {
 	return vec4(_mm_mul_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec4 operator/(const vec4& Vec) const {
+vinlpp const vec4 operator/(const vec4& Vec) const {
 	return vec4(_mm_div_ps(Simd, Vec.Simd));
 
 }
 
-vinl const vec4 operator/(float Scalar) const {
+vinlpp const vec4 operator/(float Scalar) const {
 	return vec4(_mm_div_ps(Simd, _mm_set1_ps(Scalar)));
 
 }
 
-vinl const vec4& operator+=(const vec4& Vec) {
+vinlpp const vec4& operator+=(const vec4& Vec) {
 	*this = *this + Vec;
 	return *this;
 
 }
 
-vinl const vec4& operator+=(float Scalar) {
+vinlpp const vec4& operator+=(float Scalar) {
 	*this = *this + Scalar;
 	return *this;
 
 }
 
-vinl const vec4& operator-=(const vec4& Vec) {
+vinlpp const vec4& operator-=(const vec4& Vec) {
 	*this = *this - Vec;
 	return *this;
 
 }
 
-vinl const vec4& operator-=(float Scalar) {
+vinlpp const vec4& operator-=(float Scalar) {
 	*this = *this - Scalar;
 	return *this;
 
 }
 
-vinl const vec4& operator*=(const vec4& Vec) {
+vinlpp const vec4& operator*=(const vec4& Vec) {
 	*this = *this * Vec;
 	return *this;
 
 }
 
-vinl const vec4& operator*=(float Scalar) {
+vinlpp const vec4& operator*=(float Scalar) {
 	*this = *this * Scalar;
 	return *this;
 
 }
 
-vinl const vec4& operator/=(const vec4& Vec) {
+vinlpp const vec4& operator/=(const vec4& Vec) {
 	*this = *this / Vec;
 	return *this;
 
 }
 
-vinl const vec4& operator/=(float Scalar) {
+vinlpp const vec4& operator/=(float Scalar) {
 	*this = *this / Scalar;
 	return *this;
 
 }
 
-vinl const vec4 recip(const vec4& Vec) {
+vinlpp const vec4 recip(const vec4& Vec) {
 	return vec4(_mm_rcp_ps(Vec.Simd));
 
 }

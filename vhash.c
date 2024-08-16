@@ -13,11 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
-<<<<<<< HEAD
 #ifdef __SSE3__
-=======
-#ifdef VLIB_X64
->>>>>>> fcb56b00c301d10495f9dcffdeeb42cd553560f8
 #include "vmeowhash.h"
 
 #elif VLIB_ARM

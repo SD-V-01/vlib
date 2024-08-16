@@ -100,7 +100,16 @@
 #define VLIB_ALLOCATOR_IMPL_VALLOC 4
 #define VLIB_ALLOCATOR_IMPL_SYSTEM 5
 
+#ifdef VPP
 #define vinl inline
+#define vinlpp inline
+
+#else
+#define vinl inline static
+#define vinlpp inline
+
+#endif
+
 #define rv const
 
 #ifndef VLIB_ALLOCATOR_IMPL
