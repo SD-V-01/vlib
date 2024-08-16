@@ -145,6 +145,28 @@ typedef enum mdConVarType {
 } mdConVarType;
 
 VLIB_CABI
+inline const char* vtostr_mdConVarType(mdConVarType In) {
+	switch (In) {
+		case mdConVarType_none:
+			return "mdConVarType_none";
+			break;
+		case mdConVarType_Str:
+			return "mdConVarType_Str";
+			break;
+		case mdConVarType_Double:
+			return "mdConVarType_Double";
+			break;
+		case mdConVarType_Int:
+			return "mdConVarType_Int";
+			break;
+
+		default:
+			return "mdConVarType_TOSTR_ERROR";
+
+	};
+
+}
+
 MDCON_API const char* mdConSeverityGetUserStr(mdConSeverity In);
 
 MDCON_API void mdConStateCreate(mdConState* State, const char* Name);
@@ -271,6 +293,7 @@ VLIB_CABIEND
 
 #if defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
 typedef void* mdsoHandle;
+#define mdsoNullHandle NULL;
 
 #else
 #error Implement for platform
@@ -286,14 +309,18 @@ typedef enum mdsoFlags {
 
 } mdsoFlags;
 
-MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags);
-MDSO_API void* mdosGetFunc(mdsoHandle Handle, const char* Symbol);
+VLIB_CABI
+MDSO_API mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags);
+MDSO_API void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol);
 MDSO_API void mdsoClose(mdsoHandle Handle);
+
+VLIB_CABIEND
 
 //SECTION(V): System info
 
 #define MDSYSTEMINFO_API
 
+VLIB_CABI
 MDSYSTEMINFO_API u64 mdsysTotalRam();
 MDSYSTEMINFO_API u64 mdsysTotalHighRam();
 MDSYSTEMINFO_API u64 mdsysTotalSwap();
@@ -304,6 +331,7 @@ MDSYSTEMINFO_API u64 mdsysSharedRam();
 MDSYSTEMINFO_API u64 mdsysBufferRam();
 MDSYSTEMINFO_API u64 mdsysTotalProcesses();
 MDSYSTEMINFO_API u64 mdsysUptime();
+VLIB_CABIEND
 
 //SECTION(V): Init
 

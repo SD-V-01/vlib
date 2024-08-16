@@ -17,7 +17,7 @@
 #include "mderror.h"
 #include "mdos.h"
 #include "vhash.h"
-#include "mdmath.h"
+#include "vmath.h"
 #include "system.h"
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "errno.h"
@@ -360,14 +360,14 @@ void mdConStateDumpToStdout(mdConState* State) {
 }
 
 void mdConStateDumpDbToSelfe(mdConState* State) {
-	mdConStatePrint(State, "mdOS", "Dumping all CVAR's", mdConSeverity_info);
+	mdConStatePrint(State, "Dunia", "Dumping all CVAR's to self", mdConSeverity_info);
 	st Count = 0;
 
 	for (st v = 0; v < State->HtAlloc; v++) {
 		if (State->HtPtr[v].Name != NULL) {
 			char Buff[2048] = { 0 };
 			mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
-			mdConStatePrint(State, "mdOS", Buff, mdConSeverity_info);
+			mdConStatePrint(State, "Dunia", Buff, mdConSeverity_info);
 
 			Count++;
 
@@ -375,7 +375,7 @@ void mdConStateDumpDbToSelfe(mdConState* State) {
 
 	}
 
-	mdConStateFmt(State, "mdOS", "Found {st} CVAR's", mdConSeverity_info, Count);
+	mdConStateFmt(State, "Dunia", "Found {st} CVAR's", mdConSeverity_info, Count);
 
 }
 
@@ -832,10 +832,10 @@ VLIB_CABIEND
 #endif
 #include <dlfcn.h>
 
-mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
+mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
 	void* Result = NULL;
 	int GnuFlags = 0;
-	if ((*Flags & mdsoFlags_lazyBind) == mdsoFlags_lazyBind) {
+	if ((Flags & mdsoFlags_lazyBind) == mdsoFlags_lazyBind) {
 		GnuFlags |= RTLD_LAZY;
 
 	}
@@ -844,12 +844,12 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
 
 	}
 
-	if ((*Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
+	if ((Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
 		GnuFlags |= RTLD_NOLOAD;
 
 	}
 
-	if ((*Flags & mdsoFlags_localSymbols) == mdsoFlags_localSymbols) {
+	if ((Flags & mdsoFlags_localSymbols) == mdsoFlags_localSymbols) {
 		GnuFlags |= RTLD_LOCAL;
 
 	}
@@ -864,12 +864,16 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags* Flags) {
 		VDERR("SharedObject", "Failed to load library {cstr} flags {u32:hex} with error \"{cstr}\"", Name, Flags, ErrorStr);
 
 	}
+	else {
+		VDLOG("SharedObject", "Loaded library {cstr} with flags {u32:hex} sucessfully", Name, Flags);
+
+	}
 
 	return Result;
 
 }
 
-void* mdosGetFunc(mdsoHandle Handle, const char* Symbol) {
+void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol) {
 	void* Result;
 	Result = dlsym((void*)Handle, Symbol);
 	if (Result == NULL) {

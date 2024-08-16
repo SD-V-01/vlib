@@ -62,6 +62,8 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::UniqueHandle;
 #endif /*VULKAN_HPP_NO_SMART_HANDLE*/
 
+  using VULKAN_HPP_NAMESPACE::exchange;
+
   //==================
   //=== BASE TYPEs ===
   //==================
@@ -236,37 +238,48 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::ChromaLocationKHR;
   using VULKAN_HPP_NAMESPACE::CommandPoolTrimFlagBits;
   using VULKAN_HPP_NAMESPACE::CommandPoolTrimFlags;
+  using VULKAN_HPP_NAMESPACE::CommandPoolTrimFlagsKHR;
   using VULKAN_HPP_NAMESPACE::DescriptorUpdateTemplateCreateFlagBits;
   using VULKAN_HPP_NAMESPACE::DescriptorUpdateTemplateCreateFlags;
+  using VULKAN_HPP_NAMESPACE::DescriptorUpdateTemplateCreateFlagsKHR;
   using VULKAN_HPP_NAMESPACE::DescriptorUpdateTemplateType;
   using VULKAN_HPP_NAMESPACE::DescriptorUpdateTemplateTypeKHR;
   using VULKAN_HPP_NAMESPACE::ExternalFenceFeatureFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalFenceFeatureFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalFenceFeatureFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalFenceFeatureFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalFenceHandleTypeFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalFenceHandleTypeFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalFenceHandleTypeFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalFenceHandleTypeFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryFeatureFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryFeatureFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryFeatureFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalMemoryFeatureFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryHandleTypeFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryHandleTypeFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalMemoryHandleTypeFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalMemoryHandleTypeFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreFeatureFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreFeatureFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreFeatureFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalSemaphoreFeatureFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreHandleTypeFlagBits;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreHandleTypeFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ExternalSemaphoreHandleTypeFlags;
+  using VULKAN_HPP_NAMESPACE::ExternalSemaphoreHandleTypeFlagsKHR;
   using VULKAN_HPP_NAMESPACE::FenceImportFlagBits;
   using VULKAN_HPP_NAMESPACE::FenceImportFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::FenceImportFlags;
+  using VULKAN_HPP_NAMESPACE::FenceImportFlagsKHR;
   using VULKAN_HPP_NAMESPACE::MemoryAllocateFlagBits;
   using VULKAN_HPP_NAMESPACE::MemoryAllocateFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::MemoryAllocateFlags;
+  using VULKAN_HPP_NAMESPACE::MemoryAllocateFlagsKHR;
   using VULKAN_HPP_NAMESPACE::PeerMemoryFeatureFlagBits;
   using VULKAN_HPP_NAMESPACE::PeerMemoryFeatureFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::PeerMemoryFeatureFlags;
+  using VULKAN_HPP_NAMESPACE::PeerMemoryFeatureFlagsKHR;
   using VULKAN_HPP_NAMESPACE::PointClippingBehavior;
   using VULKAN_HPP_NAMESPACE::PointClippingBehaviorKHR;
   using VULKAN_HPP_NAMESPACE::SamplerYcbcrModelConversion;
@@ -276,6 +289,7 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::SemaphoreImportFlagBits;
   using VULKAN_HPP_NAMESPACE::SemaphoreImportFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::SemaphoreImportFlags;
+  using VULKAN_HPP_NAMESPACE::SemaphoreImportFlagsKHR;
   using VULKAN_HPP_NAMESPACE::SubgroupFeatureFlagBits;
   using VULKAN_HPP_NAMESPACE::SubgroupFeatureFlags;
   using VULKAN_HPP_NAMESPACE::TessellationDomainOrigin;
@@ -285,11 +299,13 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::DescriptorBindingFlagBits;
   using VULKAN_HPP_NAMESPACE::DescriptorBindingFlagBitsEXT;
   using VULKAN_HPP_NAMESPACE::DescriptorBindingFlags;
+  using VULKAN_HPP_NAMESPACE::DescriptorBindingFlagsEXT;
   using VULKAN_HPP_NAMESPACE::DriverId;
   using VULKAN_HPP_NAMESPACE::DriverIdKHR;
   using VULKAN_HPP_NAMESPACE::ResolveModeFlagBits;
   using VULKAN_HPP_NAMESPACE::ResolveModeFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::ResolveModeFlags;
+  using VULKAN_HPP_NAMESPACE::ResolveModeFlagsKHR;
   using VULKAN_HPP_NAMESPACE::SamplerReductionMode;
   using VULKAN_HPP_NAMESPACE::SamplerReductionModeEXT;
   using VULKAN_HPP_NAMESPACE::SemaphoreType;
@@ -297,6 +313,7 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::SemaphoreWaitFlagBits;
   using VULKAN_HPP_NAMESPACE::SemaphoreWaitFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::SemaphoreWaitFlags;
+  using VULKAN_HPP_NAMESPACE::SemaphoreWaitFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ShaderFloatControlsIndependence;
   using VULKAN_HPP_NAMESPACE::ShaderFloatControlsIndependenceKHR;
 
@@ -304,27 +321,35 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::AccessFlagBits2;
   using VULKAN_HPP_NAMESPACE::AccessFlagBits2KHR;
   using VULKAN_HPP_NAMESPACE::AccessFlags2;
+  using VULKAN_HPP_NAMESPACE::AccessFlags2KHR;
   using VULKAN_HPP_NAMESPACE::FormatFeatureFlagBits2;
   using VULKAN_HPP_NAMESPACE::FormatFeatureFlagBits2KHR;
   using VULKAN_HPP_NAMESPACE::FormatFeatureFlags2;
+  using VULKAN_HPP_NAMESPACE::FormatFeatureFlags2KHR;
   using VULKAN_HPP_NAMESPACE::PipelineCreationFeedbackFlagBits;
   using VULKAN_HPP_NAMESPACE::PipelineCreationFeedbackFlagBitsEXT;
   using VULKAN_HPP_NAMESPACE::PipelineCreationFeedbackFlags;
+  using VULKAN_HPP_NAMESPACE::PipelineCreationFeedbackFlagsEXT;
   using VULKAN_HPP_NAMESPACE::PipelineStageFlagBits2;
   using VULKAN_HPP_NAMESPACE::PipelineStageFlagBits2KHR;
   using VULKAN_HPP_NAMESPACE::PipelineStageFlags2;
+  using VULKAN_HPP_NAMESPACE::PipelineStageFlags2KHR;
   using VULKAN_HPP_NAMESPACE::PrivateDataSlotCreateFlagBits;
   using VULKAN_HPP_NAMESPACE::PrivateDataSlotCreateFlagBitsEXT;
   using VULKAN_HPP_NAMESPACE::PrivateDataSlotCreateFlags;
+  using VULKAN_HPP_NAMESPACE::PrivateDataSlotCreateFlagsEXT;
   using VULKAN_HPP_NAMESPACE::RenderingFlagBits;
   using VULKAN_HPP_NAMESPACE::RenderingFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::RenderingFlags;
+  using VULKAN_HPP_NAMESPACE::RenderingFlagsKHR;
   using VULKAN_HPP_NAMESPACE::SubmitFlagBits;
   using VULKAN_HPP_NAMESPACE::SubmitFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::SubmitFlags;
+  using VULKAN_HPP_NAMESPACE::SubmitFlagsKHR;
   using VULKAN_HPP_NAMESPACE::ToolPurposeFlagBits;
   using VULKAN_HPP_NAMESPACE::ToolPurposeFlagBitsEXT;
   using VULKAN_HPP_NAMESPACE::ToolPurposeFlags;
+  using VULKAN_HPP_NAMESPACE::ToolPurposeFlagsEXT;
 
   //=== VK_KHR_surface ===
   using VULKAN_HPP_NAMESPACE::ColorSpaceKHR;
@@ -551,15 +576,18 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::BuildAccelerationStructureFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::BuildAccelerationStructureFlagBitsNV;
   using VULKAN_HPP_NAMESPACE::BuildAccelerationStructureFlagsKHR;
+  using VULKAN_HPP_NAMESPACE::BuildAccelerationStructureFlagsNV;
   using VULKAN_HPP_NAMESPACE::BuildAccelerationStructureModeKHR;
   using VULKAN_HPP_NAMESPACE::CopyAccelerationStructureModeKHR;
   using VULKAN_HPP_NAMESPACE::CopyAccelerationStructureModeNV;
   using VULKAN_HPP_NAMESPACE::GeometryFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::GeometryFlagBitsNV;
   using VULKAN_HPP_NAMESPACE::GeometryFlagsKHR;
+  using VULKAN_HPP_NAMESPACE::GeometryFlagsNV;
   using VULKAN_HPP_NAMESPACE::GeometryInstanceFlagBitsKHR;
   using VULKAN_HPP_NAMESPACE::GeometryInstanceFlagBitsNV;
   using VULKAN_HPP_NAMESPACE::GeometryInstanceFlagsKHR;
+  using VULKAN_HPP_NAMESPACE::GeometryInstanceFlagsNV;
   using VULKAN_HPP_NAMESPACE::GeometryTypeKHR;
   using VULKAN_HPP_NAMESPACE::GeometryTypeNV;
 
@@ -806,6 +834,10 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::PipelineCreateFlagBits2KHR;
   using VULKAN_HPP_NAMESPACE::PipelineCreateFlags2KHR;
 
+  //=== VK_AMD_anti_lag ===
+  using VULKAN_HPP_NAMESPACE::AntiLagModeAMD;
+  using VULKAN_HPP_NAMESPACE::AntiLagStageAMD;
+
   //=== VK_EXT_shader_object ===
   using VULKAN_HPP_NAMESPACE::ShaderCodeTypeEXT;
   using VULKAN_HPP_NAMESPACE::ShaderCreateFlagBitsEXT;
@@ -843,6 +875,9 @@ export namespace VULKAN_HPP_NAMESPACE
   //=== VK_KHR_calibrated_timestamps ===
   using VULKAN_HPP_NAMESPACE::TimeDomainEXT;
   using VULKAN_HPP_NAMESPACE::TimeDomainKHR;
+
+  //=== VK_KHR_maintenance7 ===
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceLayeredApiKHR;
 
   //=========================
   //=== Index Type Traits ===
@@ -2355,6 +2390,10 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::KHRMaintenance5ExtensionName;
   using VULKAN_HPP_NAMESPACE::KHRMaintenance5SpecVersion;
 
+  //=== VK_AMD_anti_lag ===
+  using VULKAN_HPP_NAMESPACE::AMDAntiLagExtensionName;
+  using VULKAN_HPP_NAMESPACE::AMDAntiLagSpecVersion;
+
   //=== VK_KHR_ray_tracing_position_fetch ===
   using VULKAN_HPP_NAMESPACE::KHRRayTracingPositionFetchExtensionName;
   using VULKAN_HPP_NAMESPACE::KHRRayTracingPositionFetchSpecVersion;
@@ -2502,13 +2541,29 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::NVRawAccessChainsExtensionName;
   using VULKAN_HPP_NAMESPACE::NVRawAccessChainsSpecVersion;
 
+  //=== VK_KHR_shader_relaxed_extended_instruction ===
+  using VULKAN_HPP_NAMESPACE::KHRShaderRelaxedExtendedInstructionExtensionName;
+  using VULKAN_HPP_NAMESPACE::KHRShaderRelaxedExtendedInstructionSpecVersion;
+
+  //=== VK_KHR_maintenance7 ===
+  using VULKAN_HPP_NAMESPACE::KHRMaintenance7ExtensionName;
+  using VULKAN_HPP_NAMESPACE::KHRMaintenance7SpecVersion;
+
   //=== VK_NV_shader_atomic_float16_vector ===
   using VULKAN_HPP_NAMESPACE::NVShaderAtomicFloat16VectorExtensionName;
   using VULKAN_HPP_NAMESPACE::NVShaderAtomicFloat16VectorSpecVersion;
 
+  //=== VK_EXT_shader_replicated_composites ===
+  using VULKAN_HPP_NAMESPACE::EXTShaderReplicatedCompositesExtensionName;
+  using VULKAN_HPP_NAMESPACE::EXTShaderReplicatedCompositesSpecVersion;
+
   //=== VK_NV_ray_tracing_validation ===
   using VULKAN_HPP_NAMESPACE::NVRayTracingValidationExtensionName;
   using VULKAN_HPP_NAMESPACE::NVRayTracingValidationSpecVersion;
+
+  //=== VK_MESA_image_alignment_control ===
+  using VULKAN_HPP_NAMESPACE::MESAImageAlignmentControlExtensionName;
+  using VULKAN_HPP_NAMESPACE::MESAImageAlignmentControlSpecVersion;
 
   //========================
   //=== CONSTEXPR VALUEs ===
@@ -4187,6 +4242,11 @@ export namespace VULKAN_HPP_NAMESPACE
   using VULKAN_HPP_NAMESPACE::SubresourceLayout2EXT;
   using VULKAN_HPP_NAMESPACE::SubresourceLayout2KHR;
 
+  //=== VK_AMD_anti_lag ===
+  using VULKAN_HPP_NAMESPACE::AntiLagDataAMD;
+  using VULKAN_HPP_NAMESPACE::AntiLagPresentationInfoAMD;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceAntiLagFeaturesAMD;
+
   //=== VK_KHR_ray_tracing_position_fetch ===
   using VULKAN_HPP_NAMESPACE::PhysicalDeviceRayTracingPositionFetchFeaturesKHR;
 
@@ -4354,11 +4414,29 @@ export namespace VULKAN_HPP_NAMESPACE
   //=== VK_NV_raw_access_chains ===
   using VULKAN_HPP_NAMESPACE::PhysicalDeviceRawAccessChainsFeaturesNV;
 
+  //=== VK_KHR_shader_relaxed_extended_instruction ===
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceShaderRelaxedExtendedInstructionFeaturesKHR;
+
+  //=== VK_KHR_maintenance7 ===
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceLayeredApiPropertiesKHR;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceLayeredApiPropertiesListKHR;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceLayeredApiVulkanPropertiesKHR;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceMaintenance7FeaturesKHR;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceMaintenance7PropertiesKHR;
+
   //=== VK_NV_shader_atomic_float16_vector ===
   using VULKAN_HPP_NAMESPACE::PhysicalDeviceShaderAtomicFloat16VectorFeaturesNV;
 
+  //=== VK_EXT_shader_replicated_composites ===
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceShaderReplicatedCompositesFeaturesEXT;
+
   //=== VK_NV_ray_tracing_validation ===
   using VULKAN_HPP_NAMESPACE::PhysicalDeviceRayTracingValidationFeaturesNV;
+
+  //=== VK_MESA_image_alignment_control ===
+  using VULKAN_HPP_NAMESPACE::ImageAlignmentControlCreateInfoMESA;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceImageAlignmentControlFeaturesMESA;
+  using VULKAN_HPP_NAMESPACE::PhysicalDeviceImageAlignmentControlPropertiesMESA;
 
   //===============
   //=== HANDLEs ===
@@ -4736,7 +4814,6 @@ export namespace VULKAN_HPP_NAMESPACE
     using VULKAN_HPP_RAII_NAMESPACE::Context;
     using VULKAN_HPP_RAII_NAMESPACE::ContextDispatcher;
     using VULKAN_HPP_RAII_NAMESPACE::DeviceDispatcher;
-    using VULKAN_HPP_RAII_NAMESPACE::exchange;
     using VULKAN_HPP_RAII_NAMESPACE::InstanceDispatcher;
 
     //====================

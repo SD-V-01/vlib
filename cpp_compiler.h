@@ -37,7 +37,25 @@
 
 #endif
 
+#ifdef __ARM_NEON
+#define VLIB_ARM
 
+#elif defined(__x86_64__)
+#define VLIB_X64
+
+#if defined(__AVX2__)
+#define VMATH_AVX
+#define VMATH_SSE
+
+#elif defined(__SSE4_1__)
+#define VMATH_SSE
+
+#endif
+
+#else
+#error Implement cpu arch
+
+#endif
 
 #ifdef __cplusplus
 #define VCPP
@@ -58,7 +76,7 @@
 #define VLIBPP_START
 #define VLIBPP_END
 
-#define VLIB_STRUCT(Name) typedef struct {
+#define VLIB_STRUCT(Name) typedef struct s_##Name {
 #define VLIB_STRUCTEND(Name) } Name;
 
 #define VLIB_CABI
@@ -81,6 +99,9 @@
 #define VLIB_ALLOCATOR_IMPL_MIMALLOC 3
 #define VLIB_ALLOCATOR_IMPL_VALLOC 4
 #define VLIB_ALLOCATOR_IMPL_SYSTEM 5
+
+#define vinl inline
+#define rv const
 
 #ifndef VLIB_ALLOCATOR_IMPL
 #ifdef VLIB_NO_ALLOCATOR

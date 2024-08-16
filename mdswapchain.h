@@ -14,6 +14,8 @@
 
 #pragma once
 
+#ifdef VLIB_EXPERIMENTAL
+
 #include "base_types.h"
 
 typedef enum MDSC_BACKEND{
@@ -37,3 +39,5 @@ typedef enum MDSC_ERROR {
 MDSC_ERROR mdscTestWayland();
 MDSC_ERROR mdscTestTerm();
 MDSC_ERROR mdscGetBestSwapchainBackend(MDSC_BACKEND* Result);
+
+#endif

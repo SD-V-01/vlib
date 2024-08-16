@@ -13,10 +13,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "cpp_compiler.h"
-#if defined(__x86_64)
+#if defined(VLIB_X64)
 #include "immintrin.h"
 
-#elif defined __ARM_NEON
+#elif defined(VLIB_ARM)
 #include "arm_neon.h"
 
 #else
@@ -213,6 +213,19 @@ typedef char32_t vchar;
 typedef char32_t wchar;
 typedef char16_t char16;
 
+#endif
+
+#define INT8_C(c)  c
+#define INT16_C(c) c
+#define INT32_C(c) c
+#define UINT8_C(c)  c
+#define UINT16_C(c) c
+#define UINT32_C(c) c ## U
+#ifdef INT64_C
+#define INT64_C(c) c ## L
+#endif
+#ifndef UINT64_C
+#define UINT64_C(c) c ## UL
 #endif
 
 //NOTE(V): Extra standard types

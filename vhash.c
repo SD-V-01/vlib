@@ -13,10 +13,14 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
+<<<<<<< HEAD
 #ifdef __SSE3__
+=======
+#ifdef VLIB_X64
+>>>>>>> fcb56b00c301d10495f9dcffdeeb42cd553560f8
 #include "vmeowhash.h"
 
-#elif __ARM_NEON
+#elif VLIB_ARM
 #include "vneonmeow.h"
 
 #else
@@ -26,14 +30,10 @@
 
 VLIB_CABI
 
-#ifndef UINT64_C
-#ifdef VPP
-#define UINT64_C(c) static_cast<u64>(c ## LLU)
-#else
-#define UINT64_C(c) (u64)(c ## LLU)
-#endif
+extern inline u32 vrotl32(u32 X, u32 R);
+extern inline u64 vrotl64(u64 X, u64 R);
 
-#endif
+
 
 u64 vfnv64std(const char* Data, u32 Size) {
 	if (Size == 0) {

@@ -12,6 +12,7 @@
 #include <array>     // ArrayWrapperND
 #include <string.h>  // strnlen
 #include <string>    // std::string
+#include <utility>   // std::exchange
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_hpp_macros.hpp>
 
@@ -56,7 +57,7 @@ extern "C" __declspec( dllimport ) FARPROC __stdcall GetProcAddress( HINSTANCE h
 #  include <span>
 #endif
 
-static_assert( VK_HEADER_VERSION == 284, "Wrong VK_HEADER_VERSION!" );
+static_assert( VK_HEADER_VERSION == 292, "Wrong VK_HEADER_VERSION!" );
 
 // <tuple> includes <sys/sysmacros.h> through some other header
 // this results in major(x) being resolved to gnu_dev_major(x)
@@ -146,66 +147,72 @@ namespace VULKAN_HPP_NAMESPACE
     }
 #endif
 
-#if defined( VULKAN_HPP_HAS_SPACESHIP_OPERATOR )
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    std::strong_ordering operator<=>( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) <=> *static_cast<std::array<char, N> const *>( &rhs );
-    }
-#else
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator<( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) < *static_cast<std::array<char, N> const *>( &rhs );
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator<=( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) <= *static_cast<std::array<char, N> const *>( &rhs );
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator>( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) > *static_cast<std::array<char, N> const *>( &rhs );
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator>=( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) >= *static_cast<std::array<char, N> const *>( &rhs );
-    }
-#endif
-
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator==( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) == *static_cast<std::array<char, N> const *>( &rhs );
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_same<B, char>::value, int>::type = 0>
-    bool operator!=( ArrayWrapper1D<char, N> const & rhs ) const VULKAN_HPP_NOEXCEPT
-    {
-      return *static_cast<std::array<char, N> const *>( this ) != *static_cast<std::array<char, N> const *>( &rhs );
-    }
-
   private:
     VULKAN_HPP_CONSTEXPR_14 void copy( char const * data, size_t len ) VULKAN_HPP_NOEXCEPT
     {
-      size_t n = std::min( N, len );
+      size_t n = ( std::min )( N - 1, len );
       for ( size_t i = 0; i < n; ++i )
       {
         ( *this )[i] = data[i];
       }
-      for ( size_t i = n; i < N; ++i )
-      {
-        ( *this )[i] = 0;
-      }
+      ( *this )[n] = 0;
     }
   };
 
-  // specialization of relational operators between std::string and arrays of chars
+// relational operators between ArrayWrapper1D of chars with potentially different sizes
+#if defined( VULKAN_HPP_HAS_SPACESHIP_OPERATOR )
+  template <size_t N, size_t M>
+  std::strong_ordering operator<=>( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    int result = strcmp( lhs.data(), rhs.data() );
+    return ( result < 0 ) ? std::strong_ordering::less : ( ( result > 0 ) ? std::strong_ordering::greater : std::strong_ordering::equal );
+  }
+#else
+  template <size_t N, size_t M>
+  bool operator<( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) < 0;
+  }
+
+  template <size_t N, size_t M>
+  bool operator<=( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) <= 0;
+  }
+
+  template <size_t N, size_t M>
+  bool operator>( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) > 0;
+  }
+
+  template <size_t N, size_t M>
+  bool operator>=( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) >= 0;
+  }
+#endif
+
+  template <size_t N, size_t M>
+  bool operator==( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) == 0;
+  }
+
+  template <size_t N, size_t M>
+  bool operator!=( ArrayWrapper1D<char, N> const & lhs, ArrayWrapper1D<char, M> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return strcmp( lhs.data(), rhs.data() ) != 0;
+  }
+
+// specialization of relational operators between std::string and arrays of chars
+#if defined( VULKAN_HPP_HAS_SPACESHIP_OPERATOR )
+  template <size_t N>
+  std::strong_ordering operator<=>( std::string const & lhs, ArrayWrapper1D<char, N> const & rhs ) VULKAN_HPP_NOEXCEPT
+  {
+    return lhs <=> rhs.data();
+  }
+#else
   template <size_t N>
   bool operator<( std::string const & lhs, ArrayWrapper1D<char, N> const & rhs ) VULKAN_HPP_NOEXCEPT
   {
@@ -229,6 +236,7 @@ namespace VULKAN_HPP_NAMESPACE
   {
     return lhs >= rhs.data();
   }
+#endif
 
   template <size_t N>
   bool operator==( std::string const & lhs, ArrayWrapper1D<char, N> const & rhs ) VULKAN_HPP_NOEXCEPT
@@ -381,33 +389,14 @@ namespace VULKAN_HPP_NAMESPACE
     {
     }
 
-    ArrayProxyNoTemporaries( T & value ) VULKAN_HPP_NOEXCEPT
+    template <typename B = T, typename std::enable_if<std::is_convertible<B, T>::value && std::is_lvalue_reference<B>::value, int>::type = 0>
+    ArrayProxyNoTemporaries( B && value ) VULKAN_HPP_NOEXCEPT
       : m_count( 1 )
       , m_ptr( &value )
     {
     }
-
-    template <typename V>
-    ArrayProxyNoTemporaries( V && value ) = delete;
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( typename std::remove_const<T>::type & value ) VULKAN_HPP_NOEXCEPT
-      : m_count( 1 )
-      , m_ptr( &value )
-    {
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( typename std::remove_const<T>::type && value ) = delete;
 
     ArrayProxyNoTemporaries( uint32_t count, T * ptr ) VULKAN_HPP_NOEXCEPT
-      : m_count( count )
-      , m_ptr( ptr )
-    {
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( uint32_t count, typename std::remove_const<T>::type * ptr ) VULKAN_HPP_NOEXCEPT
       : m_count( count )
       , m_ptr( ptr )
     {
@@ -423,59 +412,26 @@ namespace VULKAN_HPP_NAMESPACE
     template <std::size_t C>
     ArrayProxyNoTemporaries( T ( &&ptr )[C] ) = delete;
 
-    template <std::size_t C, typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( typename std::remove_const<T>::type ( &ptr )[C] ) VULKAN_HPP_NOEXCEPT
-      : m_count( C )
-      , m_ptr( ptr )
-    {
-    }
-
-    template <std::size_t C, typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( typename std::remove_const<T>::type ( &&ptr )[C] ) = delete;
-
-    ArrayProxyNoTemporaries( std::initializer_list<T> const & list ) VULKAN_HPP_NOEXCEPT
-      : m_count( static_cast<uint32_t>( list.size() ) )
-      , m_ptr( list.begin() )
-    {
-    }
-
-    ArrayProxyNoTemporaries( std::initializer_list<T> const && list ) = delete;
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( std::initializer_list<typename std::remove_const<T>::type> const & list ) VULKAN_HPP_NOEXCEPT
-      : m_count( static_cast<uint32_t>( list.size() ) )
-      , m_ptr( list.begin() )
-    {
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( std::initializer_list<typename std::remove_const<T>::type> const && list ) = delete;
-
-    ArrayProxyNoTemporaries( std::initializer_list<T> & list ) VULKAN_HPP_NOEXCEPT
-      : m_count( static_cast<uint32_t>( list.size() ) )
-      , m_ptr( list.begin() )
-    {
-    }
-
-    ArrayProxyNoTemporaries( std::initializer_list<T> && list ) = delete;
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( std::initializer_list<typename std::remove_const<T>::type> & list ) VULKAN_HPP_NOEXCEPT
-      : m_count( static_cast<uint32_t>( list.size() ) )
-      , m_ptr( list.begin() )
-    {
-    }
-
-    template <typename B = T, typename std::enable_if<std::is_const<B>::value, int>::type = 0>
-    ArrayProxyNoTemporaries( std::initializer_list<typename std::remove_const<T>::type> && list ) = delete;
-
-    // Any type with a .data() return type implicitly convertible to T*, and a .size() return type implicitly convertible to size_t.
+    // Any l-value reference with a .data() return type implicitly convertible to T*, and a .size() return type implicitly convertible to size_t.
     template <typename V,
-              typename std::enable_if<std::is_convertible<decltype( std::declval<V>().data() ), T *>::value &&
-                                      std::is_convertible<decltype( std::declval<V>().size() ), std::size_t>::value>::type * = nullptr>
-    ArrayProxyNoTemporaries( V & v ) VULKAN_HPP_NOEXCEPT
+              typename std::enable_if<!std::is_convertible<decltype( std::declval<V>().begin() ), T *>::value &&
+                                        std::is_convertible<decltype( std::declval<V>().data() ), T *>::value &&
+                                        std::is_convertible<decltype( std::declval<V>().size() ), std::size_t>::value && std::is_lvalue_reference<V>::value,
+                                      int>::type = 0>
+    ArrayProxyNoTemporaries( V && v ) VULKAN_HPP_NOEXCEPT
       : m_count( static_cast<uint32_t>( v.size() ) )
       , m_ptr( v.data() )
+    {
+    }
+
+    // Any l-value reference with a .begin() return type implicitly convertible to T*, and a .size() return type implicitly convertible to size_t.
+    template <typename V,
+              typename std::enable_if<std::is_convertible<decltype( std::declval<V>().begin() ), T *>::value &&
+                                        std::is_convertible<decltype( std::declval<V>().size() ), std::size_t>::value && std::is_lvalue_reference<V>::value,
+                                      int>::type = 0>
+    ArrayProxyNoTemporaries( V && v ) VULKAN_HPP_NOEXCEPT
+      : m_count( static_cast<uint32_t>( v.size() ) )
+      , m_ptr( v.begin() )
     {
     }
 
@@ -4395,9 +4351,9 @@ namespace VULKAN_HPP_NAMESPACE
     }
 
     void vkCmdSetRenderingInputAttachmentIndicesKHR( VkCommandBuffer                                commandBuffer,
-                                                     const VkRenderingInputAttachmentIndexInfoKHR * pLocationInfo ) const VULKAN_HPP_NOEXCEPT
+                                                     const VkRenderingInputAttachmentIndexInfoKHR * pInputAttachmentIndexInfo ) const VULKAN_HPP_NOEXCEPT
     {
-      return ::vkCmdSetRenderingInputAttachmentIndicesKHR( commandBuffer, pLocationInfo );
+      return ::vkCmdSetRenderingInputAttachmentIndicesKHR( commandBuffer, pInputAttachmentIndexInfo );
     }
 
     //=== VK_EXT_buffer_device_address ===
@@ -5759,6 +5715,13 @@ namespace VULKAN_HPP_NAMESPACE
       return ::vkGetImageSubresourceLayout2KHR( device, image, pSubresource, pLayout );
     }
 
+    //=== VK_AMD_anti_lag ===
+
+    void vkAntiLagUpdateAMD( VkDevice device, const VkAntiLagDataAMD * pData ) const VULKAN_HPP_NOEXCEPT
+    {
+      return ::vkAntiLagUpdateAMD( device, pData );
+    }
+
     //=== VK_EXT_shader_object ===
 
     VkResult vkCreateShadersEXT( VkDevice                      device,
@@ -5924,6 +5887,18 @@ namespace VULKAN_HPP_NAMESPACE
   {
     static ::VULKAN_HPP_NAMESPACE::DispatchLoaderStatic dls;
     return dls;
+  }
+#endif
+
+#if ( 14 <= VULKAN_HPP_CPP_VERSION )
+  using std::exchange;
+#else
+  template <class T, class U = T>
+  VULKAN_HPP_CONSTEXPR_14 VULKAN_HPP_INLINE T exchange( T & obj, U && newValue )
+  {
+    T oldValue = std::move( obj );
+    obj        = std::forward<U>( newValue );
+    return oldValue;
   }
 #endif
 
@@ -6144,7 +6119,7 @@ namespace VULKAN_HPP_NAMESPACE
   using RemoteAddressNV = void *;
   using SampleMask      = uint32_t;
 
-  template <typename Type, Type value = 0>
+  template <typename Type, Type value = Type{}>
   struct CppType
   {
   };
@@ -7621,8 +7596,10 @@ namespace VULKAN_HPP_NAMESPACE
   VULKAN_HPP_CONSTEXPR_INLINE auto NVShadingRateImageSpecVersion   = VK_NV_SHADING_RATE_IMAGE_SPEC_VERSION;
 
   //=== VK_NV_ray_tracing ===
+  VULKAN_HPP_DEPRECATED( "The VK_NV_ray_tracing extension has been deprecated by VK_KHR_ray_tracing_pipeline." )
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRayTracingExtensionName = VK_NV_RAY_TRACING_EXTENSION_NAME;
-  VULKAN_HPP_CONSTEXPR_INLINE auto NVRayTracingSpecVersion   = VK_NV_RAY_TRACING_SPEC_VERSION;
+  VULKAN_HPP_DEPRECATED( "The VK_NV_ray_tracing extension has been deprecated by VK_KHR_ray_tracing_pipeline." )
+  VULKAN_HPP_CONSTEXPR_INLINE auto NVRayTracingSpecVersion = VK_NV_RAY_TRACING_SPEC_VERSION;
 
   //=== VK_NV_representative_fragment_test ===
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRepresentativeFragmentTestExtensionName = VK_NV_REPRESENTATIVE_FRAGMENT_TEST_EXTENSION_NAME;
@@ -8534,6 +8511,10 @@ namespace VULKAN_HPP_NAMESPACE
   VULKAN_HPP_CONSTEXPR_INLINE auto KHRMaintenance5ExtensionName = VK_KHR_MAINTENANCE_5_EXTENSION_NAME;
   VULKAN_HPP_CONSTEXPR_INLINE auto KHRMaintenance5SpecVersion   = VK_KHR_MAINTENANCE_5_SPEC_VERSION;
 
+  //=== VK_AMD_anti_lag ===
+  VULKAN_HPP_CONSTEXPR_INLINE auto AMDAntiLagExtensionName = VK_AMD_ANTI_LAG_EXTENSION_NAME;
+  VULKAN_HPP_CONSTEXPR_INLINE auto AMDAntiLagSpecVersion   = VK_AMD_ANTI_LAG_SPEC_VERSION;
+
   //=== VK_KHR_ray_tracing_position_fetch ===
   VULKAN_HPP_CONSTEXPR_INLINE auto KHRRayTracingPositionFetchExtensionName = VK_KHR_RAY_TRACING_POSITION_FETCH_EXTENSION_NAME;
   VULKAN_HPP_CONSTEXPR_INLINE auto KHRRayTracingPositionFetchSpecVersion   = VK_KHR_RAY_TRACING_POSITION_FETCH_SPEC_VERSION;
@@ -8680,13 +8661,29 @@ namespace VULKAN_HPP_NAMESPACE
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRawAccessChainsExtensionName = VK_NV_RAW_ACCESS_CHAINS_EXTENSION_NAME;
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRawAccessChainsSpecVersion   = VK_NV_RAW_ACCESS_CHAINS_SPEC_VERSION;
 
+  //=== VK_KHR_shader_relaxed_extended_instruction ===
+  VULKAN_HPP_CONSTEXPR_INLINE auto KHRShaderRelaxedExtendedInstructionExtensionName = VK_KHR_SHADER_RELAXED_EXTENDED_INSTRUCTION_EXTENSION_NAME;
+  VULKAN_HPP_CONSTEXPR_INLINE auto KHRShaderRelaxedExtendedInstructionSpecVersion   = VK_KHR_SHADER_RELAXED_EXTENDED_INSTRUCTION_SPEC_VERSION;
+
+  //=== VK_KHR_maintenance7 ===
+  VULKAN_HPP_CONSTEXPR_INLINE auto KHRMaintenance7ExtensionName = VK_KHR_MAINTENANCE_7_EXTENSION_NAME;
+  VULKAN_HPP_CONSTEXPR_INLINE auto KHRMaintenance7SpecVersion   = VK_KHR_MAINTENANCE_7_SPEC_VERSION;
+
   //=== VK_NV_shader_atomic_float16_vector ===
   VULKAN_HPP_CONSTEXPR_INLINE auto NVShaderAtomicFloat16VectorExtensionName = VK_NV_SHADER_ATOMIC_FLOAT16_VECTOR_EXTENSION_NAME;
   VULKAN_HPP_CONSTEXPR_INLINE auto NVShaderAtomicFloat16VectorSpecVersion   = VK_NV_SHADER_ATOMIC_FLOAT16_VECTOR_SPEC_VERSION;
 
+  //=== VK_EXT_shader_replicated_composites ===
+  VULKAN_HPP_CONSTEXPR_INLINE auto EXTShaderReplicatedCompositesExtensionName = VK_EXT_SHADER_REPLICATED_COMPOSITES_EXTENSION_NAME;
+  VULKAN_HPP_CONSTEXPR_INLINE auto EXTShaderReplicatedCompositesSpecVersion   = VK_EXT_SHADER_REPLICATED_COMPOSITES_SPEC_VERSION;
+
   //=== VK_NV_ray_tracing_validation ===
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRayTracingValidationExtensionName = VK_NV_RAY_TRACING_VALIDATION_EXTENSION_NAME;
   VULKAN_HPP_CONSTEXPR_INLINE auto NVRayTracingValidationSpecVersion   = VK_NV_RAY_TRACING_VALIDATION_SPEC_VERSION;
+
+  //=== VK_MESA_image_alignment_control ===
+  VULKAN_HPP_CONSTEXPR_INLINE auto MESAImageAlignmentControlExtensionName = VK_MESA_IMAGE_ALIGNMENT_CONTROL_EXTENSION_NAME;
+  VULKAN_HPP_CONSTEXPR_INLINE auto MESAImageAlignmentControlSpecVersion   = VK_MESA_IMAGE_ALIGNMENT_CONTROL_SPEC_VERSION;
 
 }  // namespace VULKAN_HPP_NAMESPACE
 
@@ -12553,6 +12550,24 @@ namespace VULKAN_HPP_NAMESPACE
     };
   };
 
+  template <>
+  struct StructExtends<ValidationFeaturesEXT, ShaderModuleCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<ValidationFeaturesEXT, ShaderCreateInfoEXT>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
   //=== VK_KHR_present_wait ===
   template <>
   struct StructExtends<PhysicalDevicePresentWaitFeaturesKHR, PhysicalDeviceFeatures2>
@@ -15721,6 +15736,25 @@ namespace VULKAN_HPP_NAMESPACE
     };
   };
 
+  //=== VK_AMD_anti_lag ===
+  template <>
+  struct StructExtends<PhysicalDeviceAntiLagFeaturesAMD, PhysicalDeviceFeatures2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceAntiLagFeaturesAMD, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
   //=== VK_KHR_ray_tracing_position_fetch ===
   template <>
   struct StructExtends<PhysicalDeviceRayTracingPositionFetchFeaturesKHR, PhysicalDeviceFeatures2>
@@ -16666,6 +16700,71 @@ namespace VULKAN_HPP_NAMESPACE
     };
   };
 
+  //=== VK_KHR_shader_relaxed_extended_instruction ===
+  template <>
+  struct StructExtends<PhysicalDeviceShaderRelaxedExtendedInstructionFeaturesKHR, PhysicalDeviceFeatures2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceShaderRelaxedExtendedInstructionFeaturesKHR, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  //=== VK_KHR_maintenance7 ===
+  template <>
+  struct StructExtends<PhysicalDeviceMaintenance7FeaturesKHR, PhysicalDeviceFeatures2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceMaintenance7FeaturesKHR, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceMaintenance7PropertiesKHR, PhysicalDeviceProperties2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceLayeredApiPropertiesListKHR, PhysicalDeviceProperties2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceLayeredApiVulkanPropertiesKHR, PhysicalDeviceLayeredApiPropertiesKHR>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
   //=== VK_NV_shader_atomic_float16_vector ===
   template <>
   struct StructExtends<PhysicalDeviceShaderAtomicFloat16VectorFeaturesNV, PhysicalDeviceFeatures2>
@@ -16685,6 +16784,25 @@ namespace VULKAN_HPP_NAMESPACE
     };
   };
 
+  //=== VK_EXT_shader_replicated_composites ===
+  template <>
+  struct StructExtends<PhysicalDeviceShaderReplicatedCompositesFeaturesEXT, PhysicalDeviceFeatures2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceShaderReplicatedCompositesFeaturesEXT, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
   //=== VK_NV_ray_tracing_validation ===
   template <>
   struct StructExtends<PhysicalDeviceRayTracingValidationFeaturesNV, PhysicalDeviceFeatures2>
@@ -16697,6 +16815,43 @@ namespace VULKAN_HPP_NAMESPACE
 
   template <>
   struct StructExtends<PhysicalDeviceRayTracingValidationFeaturesNV, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  //=== VK_MESA_image_alignment_control ===
+  template <>
+  struct StructExtends<PhysicalDeviceImageAlignmentControlFeaturesMESA, PhysicalDeviceFeatures2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceImageAlignmentControlFeaturesMESA, DeviceCreateInfo>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<PhysicalDeviceImageAlignmentControlPropertiesMESA, PhysicalDeviceProperties2>
+  {
+    enum
+    {
+      value = true
+    };
+  };
+
+  template <>
+  struct StructExtends<ImageAlignmentControlCreateInfoMESA, ImageCreateInfo>
   {
     enum
     {
@@ -17898,6 +18053,9 @@ namespace VULKAN_HPP_NAMESPACE
     PFN_vkGetRenderingAreaGranularityKHR     vkGetRenderingAreaGranularityKHR     = 0;
     PFN_vkGetDeviceImageSubresourceLayoutKHR vkGetDeviceImageSubresourceLayoutKHR = 0;
     PFN_vkGetImageSubresourceLayout2KHR      vkGetImageSubresourceLayout2KHR      = 0;
+
+    //=== VK_AMD_anti_lag ===
+    PFN_vkAntiLagUpdateAMD vkAntiLagUpdateAMD = 0;
 
     //=== VK_EXT_shader_object ===
     PFN_vkCreateShadersEXT       vkCreateShadersEXT       = 0;
@@ -19301,6 +19459,9 @@ namespace VULKAN_HPP_NAMESPACE
         PFN_vkGetDeviceImageSubresourceLayoutKHR( vkGetInstanceProcAddr( instance, "vkGetDeviceImageSubresourceLayoutKHR" ) );
       vkGetImageSubresourceLayout2KHR = PFN_vkGetImageSubresourceLayout2KHR( vkGetInstanceProcAddr( instance, "vkGetImageSubresourceLayout2KHR" ) );
 
+      //=== VK_AMD_anti_lag ===
+      vkAntiLagUpdateAMD = PFN_vkAntiLagUpdateAMD( vkGetInstanceProcAddr( instance, "vkAntiLagUpdateAMD" ) );
+
       //=== VK_EXT_shader_object ===
       vkCreateShadersEXT       = PFN_vkCreateShadersEXT( vkGetInstanceProcAddr( instance, "vkCreateShadersEXT" ) );
       vkDestroyShaderEXT       = PFN_vkDestroyShaderEXT( vkGetInstanceProcAddr( instance, "vkDestroyShaderEXT" ) );
@@ -20350,6 +20511,9 @@ namespace VULKAN_HPP_NAMESPACE
       vkGetRenderingAreaGranularityKHR     = PFN_vkGetRenderingAreaGranularityKHR( vkGetDeviceProcAddr( device, "vkGetRenderingAreaGranularityKHR" ) );
       vkGetDeviceImageSubresourceLayoutKHR = PFN_vkGetDeviceImageSubresourceLayoutKHR( vkGetDeviceProcAddr( device, "vkGetDeviceImageSubresourceLayoutKHR" ) );
       vkGetImageSubresourceLayout2KHR      = PFN_vkGetImageSubresourceLayout2KHR( vkGetDeviceProcAddr( device, "vkGetImageSubresourceLayout2KHR" ) );
+
+      //=== VK_AMD_anti_lag ===
+      vkAntiLagUpdateAMD = PFN_vkAntiLagUpdateAMD( vkGetDeviceProcAddr( device, "vkAntiLagUpdateAMD" ) );
 
       //=== VK_EXT_shader_object ===
       vkCreateShadersEXT       = PFN_vkCreateShadersEXT( vkGetDeviceProcAddr( device, "vkCreateShadersEXT" ) );

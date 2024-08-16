@@ -211,10 +211,22 @@ void xrsuxDumpInstanceInfo() {
 	Result = xrEnumerateInstanceExtensionProperties(NULL, ExtensionCount, &ExtensionCount, Properties);
 	if (!XR_SUCCEEDED(Result)) { VERRNF("OpenXR", "Failed openxr call"); return; }
 
-//    TODO(V): Implement !!!!!!!!!!
 	for (st v = 0; v < ExtensionCount; v++) {
-		//vsys_writeConsoleNullStr("    Found
 		VLOG("OpenXR", "    Extension {cstr} ver {xrver}", Properties[v].extensionName, Properties[v].extensionVersion);
+
+	}
+
+	u32 LayerCount = 0;
+	Result = xrEnumerateApiLayerProperties(0, &LayerCount, NULL);
+	if (!XR_SUCCEEDED(Result)) { VERRNF("OpenXR", "Failed openxr call"); return; }
+	VLOG("OpenXR", "Found {u32} OpenXR Layers", LayerCount);
+	XrApiLayerProperties Layers[LayerCount];
+	Result = xrEnumerateApiLayerProperties(LayerCount, &LayerCount, Layers);
+	VLOG("OpenXR", "Found {u32} OpenXR Layers", LayerCount);
+
+	for (st v = 0; v < LayerCount; v++) {
+		VLOG("OpenXR", "    Layer {cstr} spec ver {xrver} layer ver {u32} desc {cstr}",
+			 Layers[v].layerName, Layers[v].specVersion, Layers[v].layerVersion, Layers[v].description);
 
 	}
 

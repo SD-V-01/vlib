@@ -18,6 +18,7 @@
 #include "mdsch.h"
 #include "mdvk.h"
 #include "system.h"
+#include "vmath.h"
 
 #ifndef _V_H_
 #define _V_H_

@@ -1,0 +1,119 @@
+////////////////////////////////////////////////////////////////////////////
+//
+//  VLib Source File.
+//  Copyright (C) 2024 S/N: V-01
+// -------------------------------------------------------------------------
+//  File name:   xrmyth.h
+//  Version:     v1.00
+//  Created:     31/07/24 by V.
+//  Description: 
+// -------------------------------------------------------------------------
+//  This project is licensed under the MIT License
+//
+////////////////////////////////////////////////////////////////////////////
+
+#ifndef MTYH_XR_LOADER_H
+#define MTYH_XR_LOADER_H
+
+#include "../base_types.h"
+#include "../vulkan/vkmyth.h"
+
+#if defined(OPENXR_H_) && !defined(XR_NO_PROTOTYPES)
+#error Please define XR_NO_PROTOTYPES before including any openxr headers !!
+
+#endif
+
+#if !defined(OPENXR_H_) && defined(MYTH_XR_LOAD_OPENXR_H_CUSTOM_PATH)
+#include MYTH_XR_LOAD_OPENXR_H_CUSTOM_PATH
+
+
+#elif !defined(OPENXR_H_) && !defined(MYTH_XR_LOAD_OPENXR_H_CUSTOM_PATH)
+
+#ifndef XR_NO_PROTOTYPES
+#define XR_NO_PROTOTYPES
+#endif
+
+#ifndef MYTH_XR_NO_PLATFORM_DEFINES
+
+#if defined(VLIB_PLATFORM_NT)
+#define XR_USE_PLATFORM_WIN32
+
+#elif defined(VLIB_PLATFORM_LINUX)
+
+#else
+#error Implement platform
+
+#endif
+
+#define XR_USE_GRAPHICS_API_VULKAN
+
+#ifdef VLIB_ANDROID
+#define XR_USE_PLATFORM_ANDROID
+
+#endif
+
+#endif
+
+#include "openxr/openxr.h"
+#include "openxr/openxr_platform.h"
+
+#endif
+
+#ifdef VLIB_PLATFORM_NT
+#define MYTH_XR_LOAD_DLL "openxr_loader.dll"
+#define MYTH_XR_LOAD_DLL_BACKUP "openxr_loader.dll"
+
+#elif defined(VLIB_PLATFORM_LINUX) || defined(__unix__)
+#define MYTH_XR_LOAD_DLL "libopenxr_loader.so.1"
+#define MYTH_XR_LOAD_DLL_BACKUP "libopenxr_loader.so"
+
+#elif defined(__APPLE__)
+#error Why are you even trying this
+
+#else
+#error Impleemnt platform
+
+#endif
+
+#define MYTH_XR_LOAD_API
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+MYTH_XR_LOAD_API bool mythXrLoad();
+MYTH_XR_LOAD_API void mythXrExit();
+MYTH_XR_LOAD_API void mythXrLoadInstance(XrInstance Instance);
+
+typedef PFN_xrVoidFunction (*loadFuncPtr)(XrInstance Instance, const char* Name);
+
+MYTH_XR_LOAD_API void _mythXrLoadBasic(XrInstance Instance, loadFuncPtr LoadFunc);
+MYTH_XR_LOAD_API void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadFunc);
+
+#ifndef MYTH_XR_NO_TOSTR
+
+//SECTION(V): XRMYTH_SPECIAL_ENUM8_PROTO
+
+//SECTION(V): XRMYTH_SPECIAL_ENUM32_PROTO
+
+//SECTION(V): XRMYTH_TOSTR8_PROTO
+
+//SECTION(V): XRMYTH_TOSTR32_PROTO
+
+#endif
+
+#if defined(TEX_PARSER) || defined(IDE_PARSER)
+
+//SECTION(V): TEX_PARSER_XR_PROTOTYPES
+
+#else
+
+//SECTION(V): XR_PROTOTYPE_HEADER
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

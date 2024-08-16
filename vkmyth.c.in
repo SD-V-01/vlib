@@ -1,0 +1,185 @@
+////////////////////////////////////////////////////////////////////////////
+//
+//  VLib Source File.
+//  Copyright (C) 2024 S/N: V-01
+// -------------------------------------------------------------------------
+//  File name:   vkmyth.c
+//  Version:     v1.00
+//  Created:     29/07/24 by V.
+//  Description: 
+// -------------------------------------------------------------------------
+//  This project is licensed under the MIT License
+//
+////////////////////////////////////////////////////////////////////////////
+
+#include "vkmyth.h"
+#include "../mdos.h"
+
+#ifdef __APPLE__
+#error Dont even think about it, the apple vision pro is a misstake
+
+#endif
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+static mdsoHandle Libvk = mdsoNullHandle;
+static VkDevice MainDevice = VK_NULL_HANDLE;
+
+static PFN_vkVoidFunction mythVkNullifyInstanceFuncPtr(VkInstance Instance, const char* Name){
+	(void)Instance;
+	(void)Name;
+	return NULL;
+
+}
+
+static PFN_vkVoidFunction mythVkNullifyDeviceFuncPtr(VkDevice Device, const char* Name){
+	(void)Device;
+	(void)Name;
+	return NULL;
+
+}
+
+static PFN_vkVoidFunction mythVkLoad_loadFunc(VkInstance Instance, const char* Name){
+	PFN_vkVoidFunction Func = vkGetInstanceProcAddr(Instance, Name);
+	if(Func == NULL){
+		VWARN("VkLoader", "Could not load Loader function {cstr}", Name);
+
+	}
+
+	return Func;
+
+}
+
+VkResult mythVkLoad(){
+	mdsoHandle Handle = mdsoOpen(MYTH_VK_LOAD_DLL, mdsoFlags_localSymbols);
+	if(!Handle){
+		Handle = mdsoOpen(MYTH_VK_LOAD_DLL_BACKUP, mdsoFlags_localSymbols);
+
+	}
+
+	if(!Handle){
+		VERRNF("VkLoader", "Could not load Vulkan api");
+		return VK_ERROR_INITIALIZATION_FAILED;
+
+	}
+
+	vkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)mdsoGetFunc(Handle, "vkGetInstanceProcAddr");
+	Libvk = Handle;
+	_mythVkLoadBasic(NULL, &mythVkLoad_loadFunc);
+
+	return VK_SUCCESS;
+
+}
+
+void mythVkExit(){
+	if(Libvk){
+		mdsoClose(Libvk);
+
+	}
+
+	vkGetInstanceProcAddr = NULL;
+	_mythVkLoadBasic(NULL, &mythVkNullifyInstanceFuncPtr);
+	_mythVkLoadInstance(NULL, &mythVkNullifyInstanceFuncPtr);
+	_mythVkLoadDevice(NULL, &mythVkNullifyDeviceFuncPtr);
+	MainDevice = VK_NULL_HANDLE;
+
+}
+
+uint32_t mythVkGetInstanceVer(){
+	#if defined(VK_VERSION_1_1)
+	uint32_t Ver = 0;
+	if(vkEnumerateInstanceVersion && vkEnumerateInstanceVersion(&Ver) == VK_SUCCESS){
+		return Ver;
+
+	}
+	#endif
+
+	if(vkCreateInstance){
+		return VK_API_VERSION_1_0;
+
+	}
+
+	return 0;
+
+}
+
+static PFN_vkVoidFunction mythVkLoadInstance_loadFunc(VkInstance Instance, const char* Name) {
+	PFN_vkVoidFunction Func = vkGetInstanceProcAddr(Instance, Name);
+	if (Func == NULL) {
+		VWARN("VkLoad", "Could not load Instance function {cstr}", Name);
+
+	}
+	/*else{
+		//VERRNF("VkLoader", "#################################");
+		u64* MemChecker = (u64*)Func;
+		VVERBOSE("TESTING", "{u64} {ptr}", *MemChecker, Func);
+
+	}*/
+
+	return Func;
+
+}
+
+void mythVkLoadInstance(VkInstance Instance){
+	VLOG("VkLoad", "Loading instance {ptr} functions", Instance);
+	_mythVkLoadInstance(Instance, &mythVkLoadInstance_loadFunc);
+
+}
+
+static PFN_vkVoidFunction mythVkLoadDevice_laodFunc(VkDevice Device, const char* Name){
+	PFN_vkVoidFunction Func = vkGetDeviceProcAddr(Device, Name);
+	if(Func == NULL){
+		VWARN("VkLoad", "Could not load device function {cstr}", Name);
+
+	}
+
+	return Func;
+
+}
+
+void mythVkLoadDevice(VkDevice Device){
+	MainDevice = Device;
+	_mythVkLoadDevice(Device, &mythVkLoadDevice_laodFunc);
+
+}
+
+void mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device){
+	_mythVkLoadArrayDevice(FuncArray, Device, vkGetDeviceProcAddr);
+
+}
+
+//SECTION(V): VTOSTR8_IMPL
+
+//SECTION(V): VTOSTR32_IMPL
+
+void _mythVkLoadBasic(VkInstance Instance, PFN_vkGetInstanceProcAddr LoadFunc){
+
+//SECTION(V): VK_LOADER_BASIC_IMPL
+
+}
+
+MYTH_VK_LOAD_API void _mythVkLoadInstance(VkInstance Instance, PFN_vkGetInstanceProcAddr LoadFunc){
+
+//SECTION(V): VK_LOADER_INSTANCE_IMPL
+
+}
+
+void _mythVkLoadDevice(VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc){
+
+//SECTION(V): VK_LOADER_DEVICE_IMPL
+
+}
+
+void _mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device, PFN_vkGetDeviceProcAddr LoadFunc){
+
+//SECTION(V): VK_LOADER_DEVICE_ARRAY_IMPL
+
+}
+
+//SECTION(V): VK_PROTOTYPES_IMPL
+
+#ifdef __cplusplus
+}
+#endif

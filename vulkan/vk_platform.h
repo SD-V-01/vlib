@@ -7,7 +7,6 @@
 ** SPDX-License-Identifier: Apache-2.0
 */
 
-#include "../vk_headers_patch.h"
 
 #ifndef VK_PLATFORM_H_
 #define VK_PLATFORM_H_
@@ -37,6 +36,9 @@ extern "C"
  * Function declaration:  VKAPI_ATTR void VKAPI_CALL vkCommand(void);
  * Function pointer type: typedef void (VKAPI_PTR *PFN_vkCommand)(void);
  */
+
+	#include "../vk_headers_patch.h"
+
 #if defined(_WIN32)
     // On Windows, Vulkan commands use the stdcall convention
     #define VKAPI_ATTR

@@ -66,9 +66,6 @@ MDSCHEDULER_API void mdCallOnce(mdCallOnceGuard* Guard, mdCallOnceFunc Fn);
 
 VLIB_CABIEND
 
-//SECTION(V): Atomics
-//TODO(V): Implement
-
 //SECTION(V): Mutex
 
 VLIB_STRUCT(mdHostMutex)
@@ -220,4 +217,24 @@ MDSCHEDULER_API inline void mdYeildProc() {
 
 //SECTION(V): Scheduler
 
+#define MD_FIBER_SCHEDULER_MAX_THREAD_COUNT 64
+#define MD_FIBER_SCHEDULER_STACK_SIZE 2097152
+#define MD_FIBER_SCHEDULER_FIBER_COUNT 512
+#define MD_FIBER_SCHEDULER_FIBER_STACK 65536
+#define MD_FIBER_SCHEDULER_EXTENDED_FIBER_COUNT 16
+#define MD_FIBER_SCHEDULER_EXTENDED_FIBER_STACK 2097152
 
+enum mdschTaskProirity {
+	mdschTaskProirity_realtime = 0,
+	mdschTaskProirity_high,
+	mdschTaskProirity_normal,
+	mdschTaskProirity_low,
+
+	mdschTaskProirity_COUNT,
+
+};
+
+VLIB_STRUCT(mdschTaskQueue)
+
+
+VLIB_STRUCTEND(mdschTaskQueue)

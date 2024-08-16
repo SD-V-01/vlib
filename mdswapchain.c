@@ -12,6 +12,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#ifdef VLIB_EXPERIMENTAL
+
 #include "mdswapchain.h"
 #include "system.h"
 
@@ -29,3 +31,5 @@ MDSC_ERROR mdscGetBestSwapchainBackend(MDSC_BACKEND* Result){
 
 
 }
+
+#endif

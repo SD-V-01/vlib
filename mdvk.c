@@ -12,11 +12,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#define VK_NO_PROTOTYPES
+#include "vulkan/vulkan.h"
 #include "mdvk.h"
 #include "vmem.h"
-#include "volk.h"
 #include "system.h"
 #include "mdos.h"
+#include "vulkan/vkmyth.h"
 
 static mdvkState MdvkState;
 
@@ -122,7 +124,7 @@ MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysica
 		return MDVK_ERROR_PHYSICAL_DEVICE_ENUM_FAILED;
 
 	}
-
+	//vsys_writeConsoleNullStr("#########");
 	//    TODO(V): Use vram as a suplementary variable to check for best device
 
 	if(DeviceCount == 0){
@@ -176,6 +178,7 @@ MDVK_ERROR mdvkGetBestPhysicalDevice(u32 ApiVer, VkInstance* Instance, VkPhysica
 
 	}
 
+	(*Result) = VK_NULL_HANDLE;
 	VERR("Vulkan", "Could not find suetable physical device after searching thru {u32} Devices", DeviceCount);
 	return MDVK_ERROR_NO_SUETABLE_PHYSICAL_DEVICE;
 
@@ -250,6 +253,7 @@ MDVK_ERROR mdvkCreateInstance(const char** Extensions, st ExtensionCount, const 
 	}
 
 	mdvkLoaderLoadInstance(Result);
+	//VVERBOSE("TESTING", "{ptr}", vkGetPhysicalDeviceProperties);
 
 	return MDVK_ERROR_SUCCESS;
 
@@ -855,32 +859,32 @@ MDVK_ERROR mdvkDumpAllDeviceLayerToStdout(VkPhysicalDevice* Device) {
 
 }
 
-MDVK_ERROR mdvkXrCreateInstance(const char** Extensions, st ExtensionCount, const char** Layers, st LayerCount,
-								const char* AppName, u32 ApiVer, VkAllocationCallbacks* MemCb, VkInstance* Result) {
-
-
-}
-
 MDVK_ERROR mdvkInitLoader() {
-	volkInitialize();
-	return MDVK_ERROR_SUCCESS;
+	if (mythVkLoad() == VK_SUCCESS) {
+		return MDVK_ERROR_SUCCESS;
+
+	}
+	else {
+		return MDVK_ERROR_UNKNOWN;
+
+	}
 
 }
 
 MDVK_ERROR mdvkFreeLoader() {
-	volkFinalize();
+	mythVkExit();
 	return MDVK_ERROR_SUCCESS;
 
 }
 
 MDVK_ERROR mdvkLoaderLoadInstance(VkInstance* Instance) {
-	volkLoadInstanceOnly(*Instance);
+	mythVkLoadInstance(*Instance);
 	return MDVK_ERROR_SUCCESS;
 
 }
 
 MDVK_ERROR mdvkLoaderLoadDevice(VkDevice* Device) {
-	volkLoadDevice(*Device);
+	mythVkLoadDevice(*Device);
 	return MDVK_ERROR_SUCCESS;
 
 }

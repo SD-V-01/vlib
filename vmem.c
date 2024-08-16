@@ -22,6 +22,9 @@
 #elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 #include "vsystemalloc.h"
 
+#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+#include "mythalloc_api.h"
+
 #endif
 
 VLIB_CABI
@@ -32,6 +35,9 @@ void* vallocimpl(st Size){
 
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	return vsys_malloc(Size);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_malloc(Size);
 
 	#else
 	#error implement allocator
@@ -47,6 +53,9 @@ void* vaallocimpl(st Size, st Alignment) {
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	return vsys_aligned_malloc(Size, Alignment);
 
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_aalloc(Size, Alignment);
+
 	#else
 	#error implement allocator
 
@@ -60,6 +69,9 @@ void vfreeimpl(void* Size) {
 
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	vsys_free(Size);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	mytha_free(Size);
 
 	#else
 	#error implement allocator
@@ -75,6 +87,9 @@ void* vreallocimpl(void* Ptr, st NewSize) {
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	return vsys_realloc(Ptr, NewSize);
 
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_realloc(Ptr, NewSize);
+
 	#else
 	#error implement allocator
 
@@ -89,6 +104,9 @@ void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	return vsys_aligned_realloc(Ptr, NewSize, Alignment);
 
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_arealloc(Ptr, NewSize, Alignment);
+
 	#else
 	#error implement allocator
 
@@ -97,17 +115,88 @@ void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
 }
 
 void* vcallocimpl(st size, st count){
-	//    STUB(V): Implement
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_calloc(size, count);
 
 	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 	return vsys_calloc(size, count);
 
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_calloc(size, count);
+
 	#else
 	#error implement allocator
 
 	#endif
+}
+
+void* vzeroalloc(st NewSize) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	return mi_zalloc(NewSize);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+//    TODO(V): Implement
+	#error Implement
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_zeroalloc(NewSize);
+
+	#else
+	#error Implement
+
+	#endif
+
+}
+
+void* vzerocalloc(void* Ptr, st NewCount, st NewSize) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	return mi_recalloc(Ptr, NewCount, NewSize);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	//    TODO(V): Implement
+	#error Implement
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_zerocalloc(Ptr, NewCount, NewSize);
+
+	#else
+	#error Implement
+
+	#endif
+
+}
+
+void* vzerorealloc(void* Ptr, st NewSize) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	return mi_rezalloc(Ptr, NewSize);
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	//    TODO(V): Implement
+	#error Implement
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	return mytha_zerorealloc(Ptr, NewSize);
+
+	#else
+	#error Implement
+
+	#endif
+
+}
+
+void vzerofree(void* Ptr) {
+	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
+	mi_free(Ptr);
+	
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
+	//    TODO(V): Implement
+	#error Implement
+
+	#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MYTH
+	mytha_zerofree(Ptr);
+
+	#else
+	#error Implement
+
+	#endif
+
 }
 
 #ifndef VLIB_NO_CRT_REDEFINE

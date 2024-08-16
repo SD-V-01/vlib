@@ -22,7 +22,7 @@
 #define XRSUCKS_API
 
 #ifndef XRSUCKS_APP_NAME
-#define XRSUCKS_APP_NAME "vlib native app"
+#define XRSUCKS_APP_NAME "IHateOpenXR@MythOS.void"
 #endif
 
 VLIB_CABI

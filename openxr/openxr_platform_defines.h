@@ -4,8 +4,6 @@
 ** SPDX-License-Identifier: Apache-2.0 OR MIT
 */
 
-#include "../oxr_headers_patch.h"
-
 #ifndef OPENXR_PLATFORM_DEFINES_H_
 #define OPENXR_PLATFORM_DEFINES_H_ 1
 
