@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "vhash.h"
-#ifdef __X86_64
+#ifdef __SSE3__
 #include "vmeowhash.h"
 
 #elif __ARM_NEON
