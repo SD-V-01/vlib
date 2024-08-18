@@ -72,6 +72,8 @@ VSTR32_API long int vstrtol8(const char* Str, char** EndPtr, int Base);
 
 VSTR32_API u32 vdigitlen(u64 In);
 VSTR32_API u32 vdigitlensigned(i64 In);
+VSTR32_API bool visdigit8(const char In);
+VSTR32_API bool visdigit32(const vchar In);
 VSTR32_API void v32to8char(const vchar* Source, char* Target, u32 Size);
 VSTR32_API void v8to32char(const char* Source, vchar* Target, u32 Size);
 
@@ -93,6 +95,9 @@ VSTR32_API st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList
 VSTR32_API st vformat8(const char* Fmt, char* Buf, st BufSize, ...);
 VSTR32_API u64 vformathash(const char* In);
 VSTR32_API bool vformatisexactmatch8(const char* Buf, const char* Search);
+
+VSTR32_API st vgetfirstsubstr8(const char* In, const char StopAt, char* Buf, st BufSize);
+VSTR32_API bool vischarpresent8(const char* In, const char Char);
 
 VLIB_CABIEND
 

@@ -544,6 +544,198 @@ void mdConDumpToStdout() {
 
 }
 
+#define MDCON_RUN_DEBUG
+
+bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args){
+	if (!Var) {
+		VASSERT(0, "Bad ptr passed in");
+		return false;
+
+	}
+
+	if (!Args) {
+		VASSERT(0, "Bad ptr passed in");
+		return false;
+
+	}
+
+	if (Var->Type != mdConVarType_Command) {
+		VASSERT(0, "Trying to execute command on CVar of other type");
+		mdConStatePrint(Var->StatePtr, "Console", "Trying to execute command on CVar of other type", mdConSeverity_error);
+		return false;
+
+	}
+
+	Var->Flags |= mdConVarFlags_WAS_EXECUTED;
+
+	bool VarResult = false;
+	if (Var->Var.VarCmd != NULL) {
+		VarResult = Var->Var.VarCmd(Args, Var->StatePtr, Var);
+
+	}
+	else {
+		mdConStatePrint(Var->StatePtr, "Console", "Null ptr for function pointer inside CVar command", mdConSeverity_error);
+		return false;
+
+	}
+
+	if (VarResult == true) {
+		Var->Flags |= mdConVarFlags_LAST_RESULT;
+
+	}
+	else {
+		Var->Flags = Var->Flags & ~mdConVarFlags_LAST_RESULT;
+
+	}
+
+	return VarResult;
+
+}
+
+bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
+	if (!Var) {
+		VASSERT(0, "Bad ptr passed in");
+		return false;
+
+	}
+
+	if (!Args) {
+		VASSERT(0, "Bad ptr passed in");
+
+	}
+
+	if (Var->Type != mdConVarType_Str) {
+		VASSERT(0, "Trying to change string CVar of other type");
+		mdConStatePrint(Var->StatePtr, "Console", "Trying to change string CVar of other type", mdConSeverity_error);
+		return false;
+
+	}
+
+	if (mdConVarFlags_WRITE_PROTECTED == (Var->Flags & mdConVarFlags_WRITE_PROTECTED)) {
+		mdConStatePrint(Var->StatePtr, "Console", "Cannot change CVar, its write protected", mdConSeverity_error);
+		return false;
+
+	}
+
+	mdConVar OldState = *Var;
+
+	const st NewStrLen = vstrlen8(Args);
+	char* NewStr = (char*)valloc(NewStrLen + 1);
+	vset(NewStr, 0, NewStrLen);
+	vcpy(NewStr, Args, NewStrLen);
+	NewStr[NewStrLen] = 0;
+	Var->Var.VarStr = NewStr;
+
+	if (Var->CallbackPtr != NULL) {
+		mdConVarCallback Callback = Var->CallbackPtr;
+		Callback(Var, &OldState);
+
+	}
+
+	if (OldState.Var.VarStr != NULL) {
+		vfree((void*)OldState.Var.VarStr);
+
+	}
+
+	mdConStateFmt(Var->StatePtr, "Console", "{cstr} {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+	return true;
+
+}
+
+void mdConGetArgsFromStr(const char* In, char* Out) {
+	const st InLen = vstrlen8(In);
+	for (st v = 0; v < InLen; v++) {
+		if (*In == 0) {
+			break;
+
+		}
+
+		if (*In == ' ') {
+			In++;
+			break;
+
+		}
+
+		In++;
+
+	}
+
+	st OutSize = 0;
+	for (st v = 0; v < vstrlen8(In); v++) {
+		Out[v] = In[v];
+		OutSize++;
+
+	}
+
+	Out[OutSize] = 0;
+
+}
+
+#define MDCONSTATERUN_CHECK_BAD_CHAR(Char) { const char* Str = Char;  \
+if (vischarpresent8(Cmd, *Str)) { \
+mdConStatePrint(State, "Console", "Failed to parse command, found \"" Char "\" character in name", mdConSeverity_error); return false; } }
+
+
+bool mdConStateRunStr(mdConState* State, const char* InCmd) {
+	const st CmdSize = vstrlen8(InCmd);
+	char Cmd[CmdSize];
+	vgetfirstsubstr8(InCmd, ' ', Cmd, CmdSize);
+	//VVERBOSE("Testing", "Cmd {cstr}", Cmd);
+
+	MDCONSTATERUN_CHECK_BAD_CHAR(",");
+	MDCONSTATERUN_CHECK_BAD_CHAR("\"");
+	MDCONSTATERUN_CHECK_BAD_CHAR("$");
+	MDCONSTATERUN_CHECK_BAD_CHAR("(");
+	MDCONSTATERUN_CHECK_BAD_CHAR(")");
+	MDCONSTATERUN_CHECK_BAD_CHAR("\\");
+	MDCONSTATERUN_CHECK_BAD_CHAR("`");
+	MDCONSTATERUN_CHECK_BAD_CHAR("~");
+
+	mdConVar* Var = mdConStateSearchVar(State, Cmd);
+	if (Var == NULL) {
+		mdConStatePrint(State, "Console", "Could not find command", mdConSeverity_error);
+		return false;
+
+	}
+
+	if (Var->StatePtr != State) {
+		mdConStatePrint(State, "Console", "Corupted console state", mdConSeverity_error);
+		return false;
+
+	}
+
+	char OutArgs[CmdSize];
+	vset(OutArgs, 0, CmdSize);
+	mdConGetArgsFromStr(InCmd, OutArgs);
+	#ifdef MDCON_RUN_DEBUG
+	VVERBOSE("Console", "Executing command {cstr} with args \"{cstr}\"", Cmd, OutArgs);
+	#endif
+
+	switch (Var->Type) {
+		case(mdConVarType_none):
+			mdConStatePrint(State, "Console", "CVar has no type", mdConSeverity_error);
+			return false;
+
+		case(mdConVarType_Command):
+			return mdConVarRunCommandPtr(Var, OutArgs);
+
+		case(mdConVarType_Str):
+			return mdConVarSetStrPtr(Var, OutArgs);
+
+		case(mdConVarType_Double):
+			//return mdConVarSetDoublePtr(Var, OutArgs);
+
+		case(mdConVarType_Int):
+			//return mdConVarSetIntPtr(Var, OutArgs);
+
+		default:
+			mdConStateFmt(State, "Console", "Bad datatype on CVAR. Got {u64} for type enum", mdConSeverity_error, Var->Type);
+			return false;
+
+	}
+
+}
+
 void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize) {
 	if (Var->Name != NULL) {
 		vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type \"{mdConVarType}\" \"{u64}\" name \"{cstr}\" help \"{cstr}\" StatePtr {p} CallbackPtr {p}",

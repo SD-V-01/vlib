@@ -66,6 +66,8 @@ enum mdConVarFlags {
 	mdConVarFlags_WAS_IN_CONFIG MYTH_BIT(21),
 	mdConVarFlags_CREATED_THIS_INSTANCE MYTH_BIT(22),
 	mdConVarFlags_INVISIBLE MYTH_BIT(23),
+	mdConVarFlags_WAS_EXECUTED MYTH_BIT(24),
+	mdConVarFlags_LAST_RESULT MYTH_BIT(25),
 
 	mdConVarFlags_SERIALIZE_FLAGS = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5)
 	| (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (1 << 12) | (1 << 13)
@@ -74,7 +76,7 @@ enum mdConVarFlags {
 
 };
 
-typedef void(*mdConCmdFunc)(const char*);
+typedef bool(*mdConCmdFunc)(const char*, void*, void*);
 
 VLIB_STRUCT(mdConVar)
 
@@ -86,8 +88,8 @@ union {
 
 } Var;
 
-u64 Flags;
-u64 Type;
+u32 Flags;
+u32 Type;
 const char* Name;
 const char* Help;
 void* StatePtr;
@@ -95,7 +97,7 @@ void* CallbackPtr;
 
 VLIB_STRUCTEND(mdConVar)
 
-typedef void(*mdConVarCallback)(mdConVar*);
+typedef void(*mdConVarCallback)(mdConVar*, mdConVar*);
 #define MD_CON_STATE_DEFAULT_CAPACITY 64
 
 //NOTE(V): Larger will not make mdConEntry fit inside a cache line witch would be bad
@@ -109,10 +111,6 @@ VLIB_STRUCT(mdConState)
 mdConVar* HtPtr;
 st HtAlloc;
 st HtSize;
-
-//mdConEntry* EntryPtr;
-//st EntryAlloc;
-//st EntrySize;
 
 char* Out;
 st OutSize;
@@ -141,6 +139,7 @@ typedef enum mdConVarType {
 	mdConVarType_Str,
 	mdConVarType_Double,
 	mdConVarType_Int,
+	mdConVarType_Command,
 
 } mdConVarType;
 
@@ -158,6 +157,10 @@ vinl const char* vtostr_mdConVarType(mdConVarType In) {
 			break;
 		case mdConVarType_Int:
 			return "mdConVarType_Int";
+			break;
+
+		case mdConVarType_Command:
+			return "mdConVarType_Command";
 			break;
 
 		default:
@@ -193,6 +196,13 @@ MDCON_API void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* M
 MDCON_API void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity);
 MDCON_API void mdConDumpToStdout();
 
+MDCON_API bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args);
+MDCON_API bool mdConVarSetStrPtr(mdConVar* Var, const char* Args);
+MDCON_API bool mdConVarSetDoublePtr(mdConVar* Var, const char* Args);
+MDCON_API bool mdConVarSetIntPtr(mdConVar* Var, const char* Args);
+MDCON_API void mdConGetArgsFromStr(const char* In, char* Out);
+MDCON_API bool mdConStateRunStr(mdConState* State, const char* InCmd);
+
 //NOTE(V): Only the char* Name can be dealocated as we do a copy of it for serialization reasons
 //    but we count on the user to never nullify the char* Help pointer
 //    DO NOT INVALIDATE THE CONST CHAR* HELP POINTER PASSED OR HELP STRING WON'T APPEAR OR CRASH THE RUNTIME
@@ -209,10 +219,10 @@ MDCON_API void mdConVarSetStr(const char* Name, const char* Value);
 MDCON_API void mdConVarSetDouble(const char* Name, const double* Value);
 MDCON_API void mdConVarSetInt(const char* Name, const i64* Value);
 MDCON_API void mdConVarSet(const char* Name, const void* Value, mdConVarType Type);
-MDCON_API void mdConVarRegisterOrSetStr(const char* Name, const char* Value);
-MDCON_API void mdConVarRegisterOrSetDouble(const char* Name, const double* Value);
-MDCON_API void mdConVarRegisterOrSetInt(const char* Name, const i64* Value);
-MDCON_API void mdConVarRegisterOrSet(const char* Name, const void* Value, mdConVarType Type);
+MDCON_API void mdConVarRegisterOrSetStr(const char* Name, const char* Value, mdConVarCallback Cb);
+MDCON_API void mdConVarRegisterOrSetDouble(const char* Name, const double* Value, mdConVarCallback Cb);
+MDCON_API void mdConVarRegisterOrSetInt(const char* Name, const i64* Value, mdConVarCallback Cb);
+MDCON_API void mdConVarRegisterOrSet(const char* Name, const void* Value, mdConVarType Type, mdConVarCallback Cb);
 
 MDCON_API st mdConGetNumCmd();
 MDCON_API st mdConGetSortedCmd(char** Array, st ArraySize, st StringSize, const char* Prefix);

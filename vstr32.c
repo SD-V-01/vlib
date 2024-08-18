@@ -20,6 +20,7 @@
 #include "vulkan/vkmyth.h"
 #include "vmath.h"
 #include "vhash.h"
+#include "mderror.h"
 
 #ifdef VPP
 namespace VLIB_NAMESPACE{
@@ -324,6 +325,16 @@ u32 vdigitlensigned(i64 In) {
 	}
 
 	return vdigitlen(Significant);
+
+}
+
+bool visdigit8(const char In) {
+	return In - '0' < 10;
+
+}
+
+bool visdigit32(const vchar In) {
+	return In - '0' < 10;
 
 }
 
@@ -1460,6 +1471,64 @@ bool vformatisexactmatch8(const char* Buf, const char* Search) {
 	}
 
 	return true;
+
+}
+
+st vgetfirstsubstr8(const char* In, const char StopAt, char* Buf, st BufSize) {
+	VASSERT(In, "Invalid string passed into vgetfirstsubstr8");
+	VASSERT(Buf, "Invalid output buffer passed into vgetfirstsubstr8");
+	if (BufSize < 2) {
+		return 0;
+
+	}
+
+	if (vstrlen8(In) == 0) {
+		return 0;
+
+	}
+
+	st FinalSize = 0;
+	for (st v = 0; v < vstrlen8(In); v++) {
+		if ((FinalSize + 1) > BufSize) {
+//            NOTE(V): Ran out of buffer space, returning early
+			Buf[FinalSize] = In[FinalSize];
+			FinalSize++;
+			Buf[FinalSize] = 0;
+			FinalSize++;
+			return FinalSize;
+
+		}
+
+		if (In[v] == 0 || In[v] == StopAt) {
+			Buf[FinalSize] = 0;
+			FinalSize++;
+			return FinalSize;
+
+		}
+
+		Buf[FinalSize] = In[FinalSize];
+		FinalSize++;
+
+	}
+
+	Buf[FinalSize] = 0;
+	VASSERT(0, "Control flow should never go here");
+	return FinalSize;
+
+}
+
+bool vischarpresent8(const char* In, const char Char) {
+	VASSERT(In, "Invalid string passed to vischarpresent8");
+	const st InSize = vstrlen8(In);
+	for (st v = 0; v < InSize; v++) {
+		if (In[v] == Char) {
+			return true;
+
+		}
+
+	}
+
+	return false;
 
 }
 

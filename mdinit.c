@@ -266,8 +266,10 @@ void mdinitDumpStateToStdout(mdInitState* State) {
 		vsys_writeConsoleInteger(State->Jobs[v].IsInit);
 		vsys_writeConsoleNullStr("\"\n");
 		*/
+		if (State->Jobs[v].Hash != 0) {
+			mdinitDumpJobToStdout(State->Jobs + v);
 
-		mdinitDumpJobToStdout(State->Jobs + v);
+		}
 
 	}
 	//vsys_writeConsoleNullStr("End of mdinitState\n");
