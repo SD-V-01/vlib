@@ -561,7 +561,7 @@ bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args){
 
 	if (Var->Type != mdConVarType_Command) {
 		VASSERT(0, "Trying to execute command on CVar of other type");
-		mdConStatePrint(Var->StatePtr, "Console", "Trying to execute command on CVar of other type", mdConSeverity_error);
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Trying to execute command on CVar of other type", mdConSeverity_error);
 		return false;
 
 	}
@@ -574,7 +574,7 @@ bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args){
 
 	}
 	else {
-		mdConStatePrint(Var->StatePtr, "Console", "Null ptr for function pointer inside CVar command", mdConSeverity_error);
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Null ptr for function pointer inside CVar command", mdConSeverity_error);
 		return false;
 
 	}
@@ -606,13 +606,13 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 
 	if (Var->Type != mdConVarType_Str) {
 		VASSERT(0, "Trying to change string CVar of other type");
-		mdConStatePrint(Var->StatePtr, "Console", "Trying to change string CVar of other type", mdConSeverity_error);
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Trying to change string CVar of other type", mdConSeverity_error);
 		return false;
 
 	}
 
 	if (mdConVarFlags_WRITE_PROTECTED == (Var->Flags & mdConVarFlags_WRITE_PROTECTED)) {
-		mdConStatePrint(Var->StatePtr, "Console", "Cannot change CVar, its write protected", mdConSeverity_error);
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Cannot change CVar, its write protected", mdConSeverity_error);
 		return false;
 
 	}
@@ -627,7 +627,7 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 	Var->Var.VarStr = NewStr;
 
 	if (Var->CallbackPtr != NULL) {
-		mdConVarCallback Callback = Var->CallbackPtr;
+		mdConVarCallback Callback = (mdConVarCallback)Var->CallbackPtr;
 		Callback(Var, &OldState);
 
 	}
@@ -637,7 +637,7 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 
 	}
 
-	mdConStateFmt(Var->StatePtr, "Console", "{cstr} {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+	mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
 	return true;
 
 }
