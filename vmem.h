@@ -60,11 +60,45 @@ MEM_API void* vzerocalloc(void* Ptr, st NewCount, st NewSize);
 MEM_API void* vzerorealloc(void* Ptr, st NewSize);
 MEM_API void vzerofree(void* Ptr);
 
-MEM_API void* vcpy(void* Dest, const void* Source, size_t Size);
+vinl void* vcpy(void* Dest, const void* Source, size_t Size) {
+    size_t i;
+
+    if ((uintptr_t) Dest % sizeof(long) == 0 && (uintptr_t) Source % sizeof(long) == 0 && Size % sizeof(long) == 0) {
+        long* DIt = (long*)Dest;
+        const long* SIt = (const long*)Source;
+
+        for (i = 0; i < Size / sizeof(long); i++) {
+            DIt[i] = SIt[i];
+
+        }
+
+    }
+    else {
+        char* DIt = (char*)Dest;
+        const char* SIt = (const char*)Source;
+
+        for (i = 0; i < Size; i++) {
+            DIt[i] = SIt[i];
+
+        }
+
+    }
+
+    return Dest;
+
+}
+
+vinl void* vset(void* Target, u8 Value, size_t Size) {
+    unsigned char *ptr = (unsigned char*)Target;
+    while (Size-- > 0)
+	*ptr++ = Value;
+    return Target;
+
+}
+
 MEM_API void* vc(const void* Source, void* Dest, st Size);
 //MEM_API void* vmove(void* Dest, const void* Source, size_t Size);
 MEM_API void *vmove(void *dest, const void *src, size_t n);
-MEM_API void* vset(void* Target, u8 Value, size_t Size);
 
 MEM_API void* vmemrchr(const void* Array, int Char, st Size);
 MEM_API void* vmemchr(const void* Array, int Char, st Size);

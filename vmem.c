@@ -407,42 +407,6 @@ void* vc(const void* Source, void* Dest, st Size) {
 
 }
 
-void* vcpy(void* Dest, const void* Source, size_t Size) {
-    size_t i;
-
-    if ((uintptr_t) Dest % sizeof(long) == 0 && (uintptr_t) Source % sizeof(long) == 0 && Size % sizeof(long) == 0) {
-        long* DIt = (long*)Dest;
-        const long* SIt = (const long*)Source;
-
-        for (i = 0; i < Size / sizeof(long); i++) {
-            DIt[i] = SIt[i];
-
-        }
-
-    }
-    else {
-        char* DIt = (char*)Dest;
-        const char* SIt = (const char*)Source;
-
-        for (i = 0; i < Size; i++) {
-            DIt[i] = SIt[i];
-
-        }
-
-    }
-
-    return Dest;
-
-}
-
-void* vset(void* Target, u8 Value, size_t Size) {
-    unsigned char *ptr = (unsigned char*)Target;
-    while (Size-- > 0)
-	*ptr++ = Value;
-    return Target;
-
-}
-
 /*void* vmove(void* Dest, const void* Source, size_t Size) {
     char* DIt = (char*)Dest;
     const char* SIt = (const char*)Source;
@@ -483,7 +447,7 @@ void *vmove(void *dest, const void *src, size_t n)
 	#ifndef VPP
 	if ((uintptr_t)s-(uintptr_t)d-n <= -2*n) return (void*)vcpy(d, s, n);
 	#else
-	if ((uintptr_t)s-(uintptr_t)d-n <= -2*n) return memcpy(d, s, n);
+	if ((uintptr_t)s-(uintptr_t)d-n <= -2*n) return vcpy(d, s, n);
 	#endif
 
 	if (d<s) {
