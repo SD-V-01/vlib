@@ -28,10 +28,6 @@ MEM_API void* drealloc(void* p, size_t new_size);
 MEM_API void* darealloc(void* p, size_t new_size, size_t Alignment);
 MEM_API void dfree(void* p);
 
-MEM_API u32 dpow2(u32 In);
-
-MEM_API void* dcpy(void* Dest, const void* Source, size_t Size);
-
 #ifndef VLIB_NO_CRT_REDEFINE
 #ifdef VPP
 //NOTE(V): I have no clue what the c++ compiler is doing
@@ -96,7 +92,16 @@ vinl void* vset(void* Target, u8 Value, size_t Size) {
 
 }
 
-MEM_API void* vc(const void* Source, void* Dest, st Size);
+vinl void* dcpy(void* Dest, const void* Source, size_t Size) {
+	return vcpy(Dest, Source, Size);
+
+}
+
+vinl void* vc(const void* Source, void* Dest, st Size) {
+	return vcpy(Dest, Source, Size);
+
+}
+
 //MEM_API void* vmove(void* Dest, const void* Source, size_t Size);
 MEM_API void *vmove(void *dest, const void *src, size_t n);
 
@@ -115,7 +120,36 @@ MEM_API st vAlignUpPow2st(st In, i32 Alignment);
 MEM_API void* vAlignUpPow2Ptr(void* Ptr, i32 Alignment);
 MEM_API i32 vAlignDownPow2(i32 In, i32 Alignment);
 MEM_API void* vAlignDownPow2Ptr(void* Ptr, i32 Alignment);
-MEM_API u32 vPow2(u32 In);
+
+vinl u32 vPow2(u32 In) {
+    In--;
+    In |= In >> 1;
+    In |= In >> 2;
+    In |= In >> 4;
+    In |= In >> 8;
+    In |= In >> 16;
+    In++;
+    return In;
+
+}
+
+vinl u64 vPow264(u64 In) {
+    In--;
+    In |= In >> 1;
+    In |= In >> 2;
+    In |= In >> 4;
+    In |= In >> 8;
+    In |= In >> 16;
+    In |= In >> 32;
+    In++;
+    return In;
+
+}
+
+vinl u32 dpow2(u32 In) {
+	return vPow2(In);
+
+}
 
 MEM_API u64 vGetTotalRam();
 

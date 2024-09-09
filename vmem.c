@@ -332,17 +332,7 @@ void* vAlignDownPow2Ptr(void* Ptr, i32 Alignment) {
 
 }
 
-u32 vPow2(u32 In) {
-    In--;
-    In |= In >> 1;
-    In |= In >> 2;
-    In |= In >> 4;
-    In |= In >> 8;
-    In |= In >> 16;
-    In++;
-    return In;
 
-}
 
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "unistd.h"
@@ -397,15 +387,7 @@ extern "C" {
 #endif
 
 VLIB_CABI
-void* dcpy(void* Dest, const void* Source, size_t Size) {
-	return vcpy(Dest, Source, Size);
 
-}
-
-void* vc(const void* Source, void* Dest, st Size) {
-	return vcpy(Dest, Source, Size);
-
-}
 
 /*void* vmove(void* Dest, const void* Source, size_t Size) {
     char* DIt = (char*)Dest;
@@ -475,19 +457,6 @@ void *vmove(void *dest, const void *src, size_t n)
 	}
 
 	return dest;
-}
-
-
-u32 dpow2(u32 In) {
-    In--;
-    In |= In >> 1;
-    In |= In >> 2;
-    In |= In >> 4;
-    In |= In >> 8;
-    In |= In >> 16;
-    In++;
-    return In;
-
 }
 
 void* vmemrchr(const void* Array, int Char, st Size) {
