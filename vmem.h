@@ -52,8 +52,7 @@ MEM_API void* vareallocimpl(void* Ptr, st NewSize, st Alignment);
 MEM_API void* vcallocimpl(st size, st count);
 
 MEM_API void* vzeroalloc(st NewSize);
-MEM_API void* vzerocalloc(void* Ptr, st NewCount, st NewSize);
-MEM_API void* vzerorealloc(void* Ptr, st NewSize);
+MEM_API void* vzerocalloc(st NewCount, st NewSize);
 MEM_API void vzerofree(void* Ptr);
 
 vinl void* vcpy(void* Dest, const void* Source, size_t Size) {

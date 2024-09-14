@@ -49,6 +49,7 @@
 
 #ifdef VLIB_ANDROID
 #define XR_USE_PLATFORM_ANDROID
+#include "jni.h"
 
 #endif
 

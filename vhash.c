@@ -16,7 +16,7 @@
 #ifdef __SSE3__
 #include "vmeowhash.h"
 
-#elif VLIB_ARM
+#elif defined(VLIB_ARM)
 #include "vneonmeow.h"
 
 #else

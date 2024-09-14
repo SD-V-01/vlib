@@ -58,7 +58,7 @@ void* mytha_zeroalloc(st NewSize) {
 
 }
 
-void* mytha_zerocalloc(void* Ptr, st NewCount, st NewSize) {
+void* mytha_zerocalloc(st NewCount, st NewSize) {
 
 
 }

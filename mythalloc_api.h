@@ -28,7 +28,7 @@ MYTHALLOC_API void* mytha_arealloc(void* Ptr, st NewSize, st Alignment);
 MYTHALLOC_API void* mytha_calloc(st Size, st Count);
 
 MYTHALLOC_API void* mytha_zeroalloc(st NewSize);
-MYTHALLOC_API void* mytha_zerocalloc(void* Ptr, st NewCount, st NewSize);
+MYTHALLOC_API void* mytha_zerocalloc(st NewCount, st NewSize);
 MYTHALLOC_API void* mytha_zerorealloc(void* Ptr, st NewSize);
 MYTHALLOC_API void mytha_zerofree(void* Ptr);
 

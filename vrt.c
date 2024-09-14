@@ -148,6 +148,9 @@ extern "C" {
 #endif
 
 #elif defined(VLIB_NO_ENTRY)
+
+#include "system.h"
+
 void vrt_libInit() {
 	vrt_preInitUsr();
 	vsys_appRtInit();
