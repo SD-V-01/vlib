@@ -41,6 +41,8 @@ typedef long double double_t;
 
 #endif
 
+//TODO(V): Wrap the std lib implementation maybe ?
+
 static inline void fp_force_evall(long double X) {
 	volatile long double Y;
 	Y = X;
@@ -101,4 +103,20 @@ VLIB_CABIEND
 
 #endif
 
-#include "vvector.inl.h"
+#ifdef VLIB_ARM
+//TODO(V): Implement !!!!!!!!!!!!!!!!!!!!
+#include "vvector_IMPL_NEON.inl.h"
+
+#elif defined(__SSE4_1__) && defined(__AVX2__)
+#include "vvector_IMPL_SSE.inl.h"
+
+#elif defined(__SSE4_1__) && !defined(__AVX2__)
+#include "vvector_IMPL_SSE.inl.h"
+
+#else
+#warning Using scalar math witch is going to slow down the vector operations
+#error Implement
+
+#endif
+
+

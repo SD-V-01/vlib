@@ -13,9 +13,8 @@ terms of the MIT license. A copy of the license can be found in the file
 #include "mimalloc/atomic.h"
 #include "mimalloc/prim.h"   // _mi_prim_thread_id()
 
-#include "../system.h"
-#include "../mderror.h"
-#include "../vstr32.h"
+#include <string.h>      // memset, strlen (for mi_strdup)
+#include <stdlib.h>      // malloc, abort
 
 #define MI_IN_ALLOC_C
 #include "alloc-override.c"
@@ -62,7 +61,7 @@ extern inline void* _mi_page_malloc_zero(mi_heap_t* heap, mi_page_t* page, size_
     }
     else {
       _mi_memzero_aligned(block, page->block_size - MI_PADDING_SIZE);
-    }    
+    }
   }
 
   #if (MI_DEBUG>0) && !MI_TRACK_ENABLED && !MI_TSAN
@@ -75,7 +74,7 @@ extern inline void* _mi_page_malloc_zero(mi_heap_t* heap, mi_page_t* page, size_
 
   #if (MI_STAT>0)
   const size_t bsize = mi_page_usable_block_size(page);
-  if (bsize <= MI_LARGE_OBJ_SIZE_MAX) {
+  if (bsize <= MI_MEDIUM_OBJ_SIZE_MAX) {
     mi_heap_stat_increase(heap, normal, bsize);
     mi_heap_stat_counter_increase(heap, normal_count, 1);
     #if (MI_STAT>1)
@@ -124,7 +123,7 @@ static inline mi_decl_restrict void* mi_heap_malloc_small_zero(mi_heap_t* heap, 
   #if (MI_PADDING)
   if (size == 0) { size = sizeof(void*); }
   #endif
-  
+
   mi_page_t* page = _mi_heap_get_free_small_page(heap, size + MI_PADDING_SIZE);
   void* const p = _mi_page_malloc_zero(heap, page, size + MI_PADDING_SIZE, zero);  
   mi_track_malloc(p,size,zero);
@@ -369,10 +368,10 @@ mi_decl_nodiscard mi_decl_restrict char* mi_heap_realpath(mi_heap_t* heap, const
   char buf[PATH_MAX];
   DWORD res = GetFullPathNameA(fname, PATH_MAX, (resolved_name == NULL ? buf : resolved_name), NULL);
   if (res == 0) {
-    v_errno = GetLastError(); return NULL;
+    errno = GetLastError(); return NULL;
   }
   else if (res > PATH_MAX) {
-    v_errno = EINVAL; return NULL;
+    errno = EINVAL; return NULL;
   }
   else if (resolved_name != NULL) {
     return resolved_name;
@@ -397,10 +396,10 @@ static size_t mi_path_max(void) {
 */
 char* mi_heap_realpath(mi_heap_t* heap, const char* fname, char* resolved_name) mi_attr_noexcept {
   if (resolved_name != NULL) {
-	  return vLEGACYrealpath(fname,resolved_name);
+    return realpath(fname,resolved_name);
   }
   else {
-	  char* rname = vLEGACYrealpath(fname, NULL);
+    char* rname = realpath(fname, NULL);
     if (rname == NULL) return NULL;
     char* result = mi_heap_strdup(heap, rname);
     mi_cfree(rname);  // use checked free (which may be redirected to our free but that's ok)
@@ -411,7 +410,7 @@ char* mi_heap_realpath(mi_heap_t* heap, const char* fname, char* resolved_name) 
     const size_t n  = mi_path_max();
     char* buf = (char*)mi_malloc(n+1);
     if (buf == NULL) {
-      v_errno = ENOMEM;
+      errno = ENOMEM;
       return NULL;
     }
     char* rname  = realpath(fname,buf);
@@ -437,7 +436,7 @@ use a C compiler we cannot throw a `bad_alloc` exception
 but we call `exit` instead (i.e. not returning).
 -------------------------------------------------------*/
 
-#ifdef V_MIMALLOC_USE_CPP
+#ifdef __cplusplus
 #include <new>
 static bool mi_try_new_handler(bool nothrow) {
   #if defined(_MSC_VER) || (__cplusplus >= 201103L)
@@ -484,9 +483,7 @@ static bool mi_try_new_handler(bool nothrow) {
   if (h==NULL) {
     _mi_error_message(ENOMEM, "out of memory in 'new'");
     if (!nothrow) {
-      //abort();  // cannot throw in plain C, use abort.
-		vsys_killProcess(202);
-
+      abort();  // cannot throw in plain C, use abort
     }
     return false;
   }
@@ -594,7 +591,7 @@ void* _mi_externs[] = {
   (void*)&mi_zalloc_small,
   (void*)&mi_heap_malloc,
   (void*)&mi_heap_zalloc,
-  (void*)&mi_heap_malloc_small
+  (void*)&mi_heap_malloc_small,
   // (void*)&mi_heap_alloc_new,
   // (void*)&mi_heap_alloc_new_n
 };

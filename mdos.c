@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdos.cpp
-//  Version:     v1.00
-//  Created:     11/05/24 by Serial Designation V-X1.
+//  File name:   mdos.c v1.00
+//  Created:     11/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -19,6 +18,7 @@
 #include "vhash.h"
 #include "vmath.h"
 #include "system.h"
+#include "mdsch.h"
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "errno.h"
 #include "string.h"
@@ -26,91 +26,23 @@
 #include "time.h"
 
 #elif defined(VLIB_PLATFORM_NT)
-#include "mdsch.h"
 #include "mderror.h"
-#include <windows.h>
+#include "timeapi.h"
+#include "stdio.h"
 
 #else
 #error implement
 
 #endif
 
-VLIB_CABI
-
-static const char* MDOS_ART_01 =
-"__/\\\\\\________/\\\\\\________________/\\\\\\_______/\\\\\\______/\\\\\\_        \n"
-" _\\/\\\\\\_______\\/\\\\\\_______________\\///\\\\\\___/\\\\\\/___/\\\\\\\\\\\\\\_       \n"
-"  _\\//\\\\\\______/\\\\\\__________________\\///\\\\\\\\\\\\/____\\/////\\\\\\_      \n"
-"   __\\//\\\\\\____/\\\\\\____/\\\\\\\\\\\\\\\\\\\\\\_____\\//\\\\\\\\__________\\/\\\\\\_     \n"
-"    ___\\//\\\\\\__/\\\\\\____\\///////////_______\\/\\\\\\\\__________\\/\\\\\\_    \n"
-"     ____\\//\\\\\\/\\\\\\________________________/\\\\\\\\\\\\_________\\/\\\\\\_   \n"
-"      _____\\//\\\\\\\\\\_______________________/\\\\\\////\\\\\\_______\\/\\\\\\_  \n"
-"       ______\\//\\\\\\______________________/\\\\\\/___\\///\\\\\\_____\\/\\\\\\_ \n"
-"        _______\\///______________________\\///_______\\///______\\///_ \n";
-
-static const char* MDOS_ART_02 =
-"__/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\\\\\\\\\\_________________________________________        \n"
-" _\\/\\\\\\\\\\\\________/\\\\\\\\\\\\_\\/\\\\\\////////\\\\\\_______________________________________       \n"
-"  _\\/\\\\\\//\\\\\\____/\\\\\\//\\\\\\_\\/\\\\\\______\\//\\\\\\______________________________________      \n"
-"   _\\/\\\\\\\\///\\\\\\/\\\\\\/_\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_______________/\\\\\\\\\\_____/\\\\\\\\\\\\\\\\\\\\_     \n"
-"    _\\/\\\\\\__\\///\\\\\\/___\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_____________/\\\\\\///\\\\\\__\\/\\\\\\//////__    \n"
-"     _\\/\\\\\\____\\///_____\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\____________/\\\\\\__\\//\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\_   \n"
-"      _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\_______/\\\\\\____________\\//\\\\\\__/\\\\\\__\\////////\\\\\\_  \n"
-"       _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\\\\\/______________\\///\\\\\\\\\\/____/\\\\\\\\\\\\\\\\\\\\_ \n"
-"        _\\///______________\\///__\\////////////__________________\\/////_____\\//////////__\n";
-
-
-static const char* MDOS_ART_02_1 = "__/\\\\\\\\____________/\\\\\\\\__/\\\\\\\\\\\\\\\\\\\\\\\\_________________________________________        ";
-static const char* MDOS_ART_02_2 = " _\\/\\\\\\\\\\\\________/\\\\\\\\\\\\_\\/\\\\\\////////\\\\\\_______________________________________       ";
-static const char* MDOS_ART_02_3 = "  _\\/\\\\\\//\\\\\\____/\\\\\\//\\\\\\_\\/\\\\\\______\\//\\\\\\______________________________________      ";
-static const char* MDOS_ART_02_4 = "   _\\/\\\\\\\\///\\\\\\/\\\\\\/_\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_______________/\\\\\\\\\\_____/\\\\\\\\\\\\\\\\\\\\_     ";
-static const char* MDOS_ART_02_5 = "    _\\/\\\\\\__\\///\\\\\\/___\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_____________/\\\\\\///\\\\\\__\\/\\\\\\//////__    ";
-static const char* MDOS_ART_02_6 = "     _\\/\\\\\\____\\///_____\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\____________/\\\\\\__\\//\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\_   ";
-static const char* MDOS_ART_02_7 = "      _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\_______/\\\\\\____________\\//\\\\\\__/\\\\\\__\\////////\\\\\\_  ";
-static const char* MDOS_ART_02_8 = "       _\\/\\\\\\_____________\\/\\\\\\_\\/\\\\\\\\\\\\\\\\\\\\\\\\/______________\\///\\\\\\\\\\/____/\\\\\\\\\\\\\\\\\\\\_ ";
-static const char* MDOS_ART_02_9 = "        _\\///______________\\///__\\////////////__________________\\/////_____\\//////////__";
-
-const char* mdosGetArt(u32 Index) {
-	switch (Index) {
-
-		case 1:
-			return MDOS_ART_01;
-
-		case 2:
-			return MDOS_ART_02;
-
-	}
-
-	return "MDOS_ASCII_ART_ERROR";
-
-}
-
-void mdosPrintTermHeader() {
-	//vsys_writeConsoleNullStr(MDOS_ART_02);
-	//vsys_writeConsoleNullStr("\n   Booting Runtime OS .....\n\n\n");
-
-	//VLOG("mdOS", "\n\n{cstr}\n", MDOS_ART_02);
-	VLOGNF("mdOS", MDOS_ART_02_1);
-	VLOGNF("mdOS", MDOS_ART_02_2);
-	VLOGNF("mdOS", MDOS_ART_02_3);
-	VLOGNF("mdOS", MDOS_ART_02_4);
-	VLOGNF("mdOS", MDOS_ART_02_5);
-	VLOGNF("mdOS", MDOS_ART_02_6);
-	VLOGNF("mdOS", MDOS_ART_02_7);
-	VLOGNF("mdOS", MDOS_ART_02_8);
-	VLOGNF("mdOS", MDOS_ART_02_9);
-	VLOGNF("mdOS", "    Booting Runtime OS ......");
-
-	#ifdef VPP
-	VWARNNF("mdOS", "VLib has being compiled with a c++ compiler !!!");
-
-	#endif
-
-}
-
-VLIB_CABIEND
-
 //SECTION(V): console
+
+//#define MDCON_RUN_DEBUG
+
+//NOTE(V): I don't know if i want to implement the console with TLS because we are not logging *that mutch* and we can dissable it
+//TODO(V): Make atomic when we do proper multithreading on console
+internal bool DisruptCheat = false;
+
 VLIB_CABI
 const char* mdConSeverityGetUserStr(mdConSeverity In) {
 	switch (In) {
@@ -144,6 +76,9 @@ const char* mdConSeverityGetUserStr(mdConSeverity In) {
 		case mdConSeverity_bellwether:
 			return "Bellwether";
 
+		case mdConSeverity_assert:
+			return "Assert";
+
 	}
 	return "";
 
@@ -153,13 +88,15 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 	vset(State, 0, sizeof(mdConState));
 	State->HtAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
 	//State->HtSize = 0;
-	State->HtPtr = (mdConVar*)vcalloc(sizeof(mdConVar), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
+	State->HtPtr = (mdConVar*)dcalloc(sizeof(mdConVar), dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
 	if (State->HtPtr == NULL) {
 		VASSERT(0, "Failed to allocate memory for mdConState ConVar buffer creation");
 //        NOTE(V): Malloc failure
 		return;
 
 	}
+
+	//vset(State->HtPtr, 0, sizeof(mdConVar) * dpow2(MD_CON_STATE_DEFAULT_CAPACITY));
 
 	//State->EntryAlloc = dpow2(MD_CON_STATE_DEFAULT_CAPACITY);
 	//State->
@@ -172,7 +109,7 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 
 	State->OutAlloc = MD_CON_STATE_DEFAULT_OUT_LENGTH;
 	State->OutSize = 0;
-	State->Out = (char*)valloc(State->OutAlloc);
+	State->Out = (char*)dalloc(State->OutAlloc);
 	vset(State->Out, 0, State->OutAlloc);
 
 	st NameLength = vstrlen8(Name);
@@ -191,11 +128,11 @@ void mdConStateCreate(mdConState* State, const char* Name) {
 void mdConStateDestroy(mdConState* State) {
 	for (u64 v = 0; v < State->HtAlloc; v++) {
 		if (State->HtPtr[v].Name != NULL) {
-			vfree((void*)State->HtPtr[v].Name);
+			dfree((void*)State->HtPtr[v].Name);
 
 		}
 		if (State->HtPtr[v].Type == mdConVarType_Str) {
-			vfree((void*)State->HtPtr[v].Var.VarStr);
+			dfree((void*)State->HtPtr[v].Var.VarStr);
 
 		}
 
@@ -209,21 +146,33 @@ void mdConStateDestroy(mdConState* State) {
 
 	//}
 
-	vfree((void*)State->HtPtr);
+	dfree((void*)State->HtPtr);
 	//vfree((void*)State->EntryPtr);
-	vfree((void*)State->Out);
+	dfree((void*)State->Out);
 	vset(State, 0, sizeof(mdConState));
 
 }
 
+//#define MD_CON_SEARCH_DEBUG
+
 mdConVar* mdConStateSearchVar(mdConState* State, const char* Name) {
 	u64 Hash = vfnv64std(Name, vstrlen8(Name));
 	st Index = (st)(Hash & (u64)(State->HtAlloc - 1));
+
+	#ifdef MD_CON_SEARCH_DEBUG
+	st DebugIter = 0;
+	#endif
+
 	while (State->HtPtr[Index].Name != NULL) {
 		if (vLEGACYstrcmp(Name, State->HtPtr[Index].Name) == 0) {
 			return &(State->HtPtr[Index]);
 
 		}
+
+		#ifdef MD_CON_SEARCH_DEBUG
+		VVERBOSE("Console", "Could not find variable at try {st}, Moving to next index", DebugIter);
+		DebugIter++;
+		#endif
 
 		Index++;
 		if (Index >= State->HtAlloc) {
@@ -263,7 +212,7 @@ st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, 
 
 	char* NewNamePtr = NULL;
 	if (Length != NULL) {
-		NewNamePtr = (char*)vcalloc(vstrlen8(Entry->Name) + 1, sizeof(char));
+		NewNamePtr = (char*)dcalloc(vstrlen8(Entry->Name) + 1, sizeof(char));
 		if (NewNamePtr == NULL) {
 			return 0;
 
@@ -275,6 +224,7 @@ st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, 
 
 	}
 	else {
+//        TODO(V): Dump con state to selfe here to make debugging easyer if dumping state dose not change state
 		VASSERT(0, "The con state is probabelly corupted");
 
 	}
@@ -283,6 +233,11 @@ st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, 
 	Entries[Index].Var = Entry->Var;
 	Entries[Index].Flags = Entry->Flags;
 	Entries[Index].Type = Entry->Type;
+	char DebugToStr[2048] = "\0";
+	//mdConVarToStr(&(Entries[Index]), DebugToStr, 2048);
+	#ifdef MDCON_RUN_DEBUG
+	VVERBOSE("Console", "Type flags for setting cvar {u32} and db {u32} index {st} state {cstr} int {i64} {i64}", Entry->Type, Entries[Index].Type, Index, DebugToStr, Entries[Index].Var.VarInt, Entry->Var.VarInt);
+	#endif
 	Entries[Index].Help = Entry->Help;
 	Entries[Index].StatePtr = StatePtr;
 	Entries[Index].CallbackPtr = Entry->CallbackPtr;
@@ -292,6 +247,11 @@ st mdConStateSetEntry(mdConVar* Entries, st Alloc, mdConVar* Entry, st* Length, 
 }
 
 void mdConStateResize(mdConState* State) {
+	if ((State->HtAlloc / 2) > State->HtSize) {
+		return;
+
+	}
+
 	const st OldSize = State->HtAlloc;
 	st NewSize = dpow2(State->HtAlloc + 1);
 	if (NewSize < State->HtAlloc) {
@@ -299,11 +259,17 @@ void mdConStateResize(mdConState* State) {
 
 	}
 
-	mdConVar* NewVars = (mdConVar*)vcalloc(sizeof(mdConVar), NewSize);
+	#ifdef MDCON_RUN_DEBUG
+	VVERBOSE("Console", "Resizing console with state {p} size old {st} new {st}", State, State->HtAlloc, NewSize);
+	#endif
+
+	mdConVar* NewVars = (mdConVar*)dcalloc(sizeof(mdConVar), NewSize);
 	if (NewVars == NULL) {
 		return;
 
 	}
+	//vset(NewVars, 0, sizeof(mdConVar) * NewSize);
+
 	st NewLength = 0;
 	for (st v = 0; v < OldSize; v++) {
 		mdConVar OldVar = State->HtPtr[v];
@@ -314,7 +280,7 @@ void mdConStateResize(mdConState* State) {
 
 	}
 
-	vfree((void*)State->HtPtr);
+	dfree((void*)State->HtPtr);
 	State->HtPtr = NewVars;
 	State->HtAlloc = NewSize;
 	State->HtSize = NewLength;
@@ -332,11 +298,10 @@ void mdConStateSet(mdConState* State, mdConVar* Var) {
 
 	}
 
-	if (State->HtAlloc <= State->HtSize) {
+	//if (State->HtAlloc <= State->HtSize) {
+	mdConStateResize(State);
 
-		mdConStateResize(State);
-
-	}
+	//}
 
 	mdConStateSetEntry(State->HtPtr, State->HtAlloc, Var, &State->HtSize, State);
 
@@ -365,9 +330,15 @@ void mdConStateDumpDbToSelfe(mdConState* State) {
 
 	for (st v = 0; v < State->HtAlloc; v++) {
 		if (State->HtPtr[v].Name != NULL) {
+			#ifdef MDCON_RUN_DEBUG
+			VVERBOSE("Console", "Printing state {st}", v);
+			#endif
 			char Buff[2048] = { 0 };
 			mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
-			mdConStatePrint(State, "Dunia", Buff, mdConSeverity_info);
+			if (Buff [0] != NULL) {
+				mdConStatePrint(State, "Dunia", Buff, mdConSeverity_info);
+
+			}
 
 			Count++;
 
@@ -389,7 +360,7 @@ void mdConStateOut(mdConState* State, const char* Str, st Size) {
 	char SystemFmt[Size + 256];
 	//    TODO(V): Make it so we input the size of the string with something
 	//     like {cstr:sizearg} where we pass another arg to be the size
-	vformat8("DUNIA Console [{cstr}] {cstr}", SystemFmt, Size + 256, State->Name, Str);
+	vformat8("[{cstr}] {cstr}", SystemFmt, Size + 256, State->Name, Str);
 	vsys_writeConsoleNullStr(SystemFmt);
 
 	#endif
@@ -411,7 +382,7 @@ void mdConCheckSizeOut(mdConState* State, st NewSize) {
 	}
 
 	NewSize = dpow2(NewSize);
-	char* NewPtr = (char*)valloc(NewSize);
+	char* NewPtr = (char*)dalloc(NewSize);
 	if (NewPtr == NULL) {
 		return;
 
@@ -420,7 +391,7 @@ void mdConCheckSizeOut(mdConState* State, st NewSize) {
 	vset(NewPtr, 0, NewSize);
 	vcpy(NewPtr, State->Out, State->OutSize);
 
-	vfree((void*)State->Out);
+	dfree((void*)State->Out);
 	State->Out = NewPtr;
 	State->OutAlloc = NewSize;
 
@@ -442,16 +413,23 @@ void mdConStateOutHeader(mdConState* State) {
 	mdConStateOutNullStr(State, "]\n\n");
 	*/
 
-	char UTC[32];
-	mdTimeToStr(mdTimeGetMicroSystemTime(), UTC);
-	char LOCAL[32];
-	mdTimeToStr(mdTimeGetMicroSystemTime(), LOCAL);
+	char UTC[64];
+	//mdTimeToStr(mdTimeGetMicroSystemTime(), UTC);
+	mdCurrentSystemTimeStr(UTC, 64);
+	char LOCAL[64];
+	mdCurrentSystemTimeStr(LOCAL, 64);
+	//mdTimeToStr(mdTimeGetMicroSystemTime(), LOCAL);
 	//    TODO(V): Make it so we handle timezones for this
 
 	char Buffer[1024];
-	vformat8("Dunia log start\nUTC Time: [{cstr}Z] LocalTime: [{cstr}]\n\n", Buffer, 1024, UTC, LOCAL);
+	vformat8("DISRUPT log start\nUTC Time: [{cstr}Z] LocalTime: [{cstr}]\n\n", Buffer, 1024, UTC, LOCAL);
 	mdConStateOutNullStr(State, Buffer);
 
+}
+
+u32 mdConSanitizeInFlags(u32 InFlags) {
+//    TODO(V): Implement !!!!!!!!!!!!!!!!
+	return 0;
 }
 
 static mdConState DuniaConsole;
@@ -477,6 +455,17 @@ void mdConLog(const char* Str) {
 
 }
 
+#ifdef _WIN32
+
+void mdConLateStdoutInit() {
+	mdConStart();
+	vsys_writeConsoleNullStr(DuniaConsole.Out);
+	VDLOG("Console", "Copy'd {st} characters from DISRUPT Console's back buffer to STDOUT", DuniaConsole.OutSize);
+
+}
+
+#endif
+
 mdConState* mdConGetDisruptConsole() {
 	return &DuniaConsole;
 
@@ -485,7 +474,8 @@ mdConState* mdConGetDisruptConsole() {
 void mdConStatePrint(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity) {
 	char OutStr[vstrlen8(Message) + vstrlen8(Subsystem) + 512];
 	char OutTime[32];
-	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	//mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	mdCurrentSystemTimeStr(OutTime, 32);
 	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(Message) + vstrlen8(Subsystem) + 512, OutTime, Subsystem,
 			 mdConSeverityGetUserStr(Severity), Message);
 	//mdConLog(OutStr);
@@ -499,7 +489,8 @@ void mdConStateFmtImpl(mdConState* State, const char* Subsystem, const char* Mes
 
 	char OutStr[vstrlen8(UsrFmt) + 512];
 	char OutTime[32];
-	mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	//mdTimeToStr(mdTimeGetMicroSystemTime(), OutTime);
+	mdCurrentSystemTimeStr(OutTime, 32);
 	
 	vformat8("{cstr}Z [{cstr}, {cstr}] {cstr}\n", OutStr, vstrlen8(UsrFmt) + 512,
 			 OutTime , Subsystem, mdConSeverityGetUserStr(Severity), UsrFmt);
@@ -510,7 +501,11 @@ void mdConStateFmtImpl(mdConState* State, const char* Subsystem, const char* Mes
 
 void mdConStateFmt(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
 	v_varargList Args;
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wvarargs"
 	v_varargStart(Args, Severity);
+	#pragma clang diagnostic pop
+
 	mdConStateFmtImpl(State, Subsystem, Message, Severity, Args);
 	v_varargEnd(Args);
 
@@ -519,7 +514,11 @@ void mdConStateFmt(mdConState* State, const char* Subsystem, const char* Message
 void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
 	mdConStart();
 	v_varargList Args;
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wvarargs"
 	v_varargStart(Args, Severity);
+	#pragma clang diagnostic pop
+
 	mdConStateFmtImpl(&DuniaConsole, Subsystem, Message, Severity, Args);
 	
 	v_varargEnd(Args);
@@ -529,6 +528,26 @@ void mdConLogInternFmt_DO_NOT_USE(const char* Subsystem, const char* Message, md
 void mdConLogIntern_DO_NOT_USE(const char* Subsystem, const char* Message, mdConSeverity Severity) {
 	mdConStart();
 	mdConStatePrint(&DuniaConsole, Subsystem, Message, Severity);
+
+}
+
+void mdConStateLogInternFmt_DO_NOT_USE(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity, ...) {
+	mdConStart();
+	v_varargList Args;
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wvarargs"
+	v_varargStart(Args, Severity);
+	#pragma clang diagnostic pop
+
+	mdConStateFmtImpl(State, Subsystem, Message, Severity, Args);
+	
+	v_varargEnd(Args);
+
+}
+
+void mdConStateLogIntern_DO_NOT_USE(mdConState* State, const char* Subsystem, const char* Message, mdConSeverity Severity) {
+	mdConStart();
+	mdConStatePrint(State, Subsystem, Message, Severity);
 
 }
 
@@ -543,8 +562,6 @@ void mdConDumpToStdout() {
 	vsys_writeConsoleNullStr("################# END OF CONSOLE BUFFER #################\n");
 
 }
-
-#define MDCON_RUN_DEBUG
 
 bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args){
 	if (!Var) {
@@ -592,6 +609,34 @@ bool mdConVarRunCommandPtr(mdConVar* Var, const char* Args){
 
 }
 
+bool mdConVarSetStrParsed(mdConVar* Var, const char* Args) {
+	if (vstrlen8(Args) != 0) {
+		if (Args[0] == '?' || Args[1] == '?') {
+			mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} : {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+			return true;
+
+		}
+
+	}
+
+	if ((Var->Flags & mdConVarFlags_WRITE_PROTECTED) == mdConVarFlags_WRITE_PROTECTED) {
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Cannot change value of write protected CVar", mdConSeverity_error);
+		mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} : {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+		return false;
+
+	}
+
+	bool Result = mdConVarSetStrPtr(Var, Args);
+
+	if (Result == true) {
+		mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} = {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+
+	}
+
+	return Result;
+
+}
+
 bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 	if (!Var) {
 		VASSERT(0, "Bad ptr passed in");
@@ -601,6 +646,7 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 
 	if (!Args) {
 		VASSERT(0, "Bad ptr passed in");
+		return false;
 
 	}
 
@@ -611,16 +657,17 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 
 	}
 
-	if (mdConVarFlags_WRITE_PROTECTED == (Var->Flags & mdConVarFlags_WRITE_PROTECTED)) {
+//    NOTE(V): This has being moved somewhere else inside the parse functions because we don't want to prevent code from writing to it
+	/*if (mdConVarFlags_WRITE_PROTECTED == (Var->Flags & mdConVarFlags_WRITE_PROTECTED)) {
 		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Cannot change CVar, its write protected", mdConSeverity_error);
 		return false;
 
-	}
+	}*/
 
 	mdConVar OldState = *Var;
 
 	const st NewStrLen = vstrlen8(Args);
-	char* NewStr = (char*)valloc(NewStrLen + 1);
+	char* NewStr = (char*)dalloc(NewStrLen + 1);
 	vset(NewStr, 0, NewStrLen);
 	vcpy(NewStr, Args, NewStrLen);
 	NewStr[NewStrLen] = 0;
@@ -628,16 +675,113 @@ bool mdConVarSetStrPtr(mdConVar* Var, const char* Args) {
 
 	if (Var->CallbackPtr != NULL) {
 		mdConVarCallback Callback = (mdConVarCallback)Var->CallbackPtr;
-		Callback(Var, &OldState);
+		bool CallbackResult = Callback(Var, &OldState);
+		if(CallbackResult == true){
+			Var->Flags |= mdConVarFlags_LAST_RESULT;
+
+		}
+		else {
+			Var->Flags = Var->Flags & ~mdConVarFlags_LAST_RESULT;
+
+		}
+
+	}
+	else {
+		Var->Flags |= mdConVarFlags_LAST_RESULT;
 
 	}
 
 	if (OldState.Var.VarStr != NULL) {
-		vfree((void*)OldState.Var.VarStr);
+		dfree((void*)OldState.Var.VarStr);
+		//VASSERT(OldState.Var.VarStr == NULL, "Could not free old string from heap");
 
 	}
 
-	mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} {cstr}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarStr);
+	return true;
+
+}
+
+bool mdConVarSetIntParsed(mdConVar* Var, const char* Args) {
+	if (vstrlen8(Args) != 0) {
+		if (Args[0] == '?' || Args[1] == '?') {
+			mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} : {i64}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarInt);
+			return true;
+
+		}
+
+	}
+
+	if ((Var->Flags & mdConVarFlags_WRITE_PROTECTED) == mdConVarFlags_WRITE_PROTECTED) {
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Cannot change value of write protected CVar", mdConSeverity_error);
+		mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} : {i64}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarInt);
+		return false;
+
+	}
+
+	i64 ParserResult = 0;
+	bool ParseSuccedded = vconargtoi64(Args, vstrlen8(Args), &ParserResult);
+	if (ParseSuccedded == false) {
+		VSERR((mdConState*)Var->StatePtr, "Console", "Could not parse integer expression trying to set \"{cstr}\"", Var->Name);
+		return false;
+
+	}
+
+	bool Result = mdConVarSetIntPtr(Var, ParserResult);
+	if (Result == true) {
+		mdConStateFmt((mdConState*)Var->StatePtr, "Console", "{cstr} = {i64}", mdConSeverity_dataInfo, Var->Name, Var->Var.VarInt);
+
+	}
+
+	return Result;
+
+}
+
+bool mdConVarSetIntPtr(mdConVar* Var, const i64 WantedValue) {
+	if (!Var) {
+		VASSERT(0, "Bad ptr passed in");
+		return false;
+
+	}
+
+	if (Var->Type != mdConVarType_Int) {
+		VASSERT(0, "Trying to change int cvar to other type");
+		mdConStatePrint((mdConState*)Var->StatePtr, "Console", "Trying to change int CVar of other type", mdConSeverity_error);
+		return false;
+
+	}
+
+	mdConVar OldState = *Var;
+
+	/*
+	i64 ParseResult = 0;
+	bool ParseSucceded = vconargtoi64(Args, vstrlen8(Args), &ParseResult);
+	if (ParseSucceded == false) {
+		VSERR((mdConState*)Var->StatePtr, "Console", "Could not parse integer expression trying to set \"{cstr}\"", Var->Name);
+		return false;
+
+	}*/
+
+	Var->Var.VarInt = WantedValue;
+
+	if (Var->CallbackPtr != NULL) {
+		mdConVarCallback Callback = (mdConVarCallback)Var->CallbackPtr;
+		bool CallbackResult = Callback(Var, &OldState);
+		if(CallbackResult == true){
+			Var->Flags |= mdConVarFlags_LAST_RESULT;
+
+		}
+		else {
+			Var->Flags = Var->Flags & ~mdConVarFlags_LAST_RESULT;
+
+		}
+
+	}
+	else {
+		Var->Flags |= mdConVarFlags_LAST_RESULT;
+
+	}
+
+
 	return true;
 
 }
@@ -676,7 +820,12 @@ if (vischarpresent8(Cmd, *Str)) { \
 mdConStatePrint(State, "Console", "Failed to parse command, found \"" Char "\" character in name", mdConSeverity_error); return false; } }
 
 
-bool mdConStateRunStr(mdConState* State, const char* InCmd) {
+bool mdConStateRunStr(mdConState* State, const char* InCmd, bool BypassCheat) {
+	if (BypassCheat == false) {
+		mdConStatePrint(State, "Console", InCmd, mdConSeverity_info);
+
+	}
+
 	const st CmdSize = vstrlen8(InCmd);
 	char Cmd[CmdSize];
 	vgetfirstsubstr8(InCmd, ' ', Cmd, CmdSize);
@@ -704,12 +853,26 @@ bool mdConStateRunStr(mdConState* State, const char* InCmd) {
 
 	}
 
+	if ((Var->Flags & mdConVarFlags_CHEAT) == mdConVarFlags_CHEAT) {
+		if (!BypassCheat) {
+			if (DisruptCheat == false) {
+				mdConStateFmt(State, "Console", "Cannot execute cheat command \"{cstr}\" with cheats dissabled", mdConSeverity_error, Cmd);
+				return false;
+
+			}
+
+		}
+
+	}
+
 	char OutArgs[CmdSize];
 	vset(OutArgs, 0, CmdSize);
 	mdConGetArgsFromStr(InCmd, OutArgs);
 	#ifdef MDCON_RUN_DEBUG
 	VVERBOSE("Console", "Executing command {cstr} with args \"{cstr}\"", Cmd, OutArgs);
 	#endif
+
+	//    TODO(V): Implement flags like mdConVarFlags_WRITE_PROTECTED !!!!
 
 	switch (Var->Type) {
 		case(mdConVarType_none):
@@ -720,13 +883,13 @@ bool mdConStateRunStr(mdConState* State, const char* InCmd) {
 			return mdConVarRunCommandPtr(Var, OutArgs);
 
 		case(mdConVarType_Str):
-			return mdConVarSetStrPtr(Var, OutArgs);
+			return mdConVarSetStrParsed(Var, OutArgs);
 
 		case(mdConVarType_Double):
 			//return mdConVarSetDoublePtr(Var, OutArgs);
 
 		case(mdConVarType_Int):
-			//return mdConVarSetIntPtr(Var, OutArgs);
+			return mdConVarSetIntParsed(Var, OutArgs);
 
 		default:
 			mdConStateFmt(State, "Console", "Bad datatype on CVAR. Got {u64} for type enum", mdConSeverity_error, Var->Type);
@@ -736,12 +899,224 @@ bool mdConStateRunStr(mdConState* State, const char* InCmd) {
 
 }
 
+internal bool mdConCheckIfPresent(mdConState* State, const char* Name) {
+	mdConVar* OldVar = mdConStateSearchVar(State, Name);
+	if (OldVar != NULL) {
+		mdConStateFmt(State, "Console", "Cannot register console command/CVar \"{cstr}\" that allready exists",
+					  mdConSeverity_dataError, Name);
+		VASSERTNF(0);
+		return true;
+
+	}
+
+	return false;
+
+}
+
+void mdConStateCmdRegister(mdConState* State, const char* Name, mdConCmdFunc Func, u32 Flags, const char* Help) {
+
+	#ifdef MDCON_RUN_DEBUG
+	VVERBOSE("Console", "Registering console command {cstr}", Name);
+	#endif
+
+	if (!State) {
+		VASSERT(0, "Bad ptr");
+		return;
+
+	}
+
+	if (!Name) {
+		VASSERT(0, "Bad ptr");
+		return;
+
+	}
+
+
+	st NameLength = vstrlen8(Name);
+	//mdConStateFmt(State, "Console", "Name is {cstr} length {st}", mdConSeverity_verbose, Name, NameLength);
+	if (NameLength != 0) {
+		/*
+		mdConVar* PossibleOldVar = mdConStateSearchVar(State, Name);
+		if (PossibleOldVar != NULL) {
+			mdConStatePrint(State, "Console", "Cannot register console command that allready exist", mdConSeverity_dataError);
+			VASSERTNF(0);
+			return;
+
+		}*/
+
+		if (mdConCheckIfPresent(State, Name)) {
+			return;
+
+		}
+
+		Flags = mdConSanitizeInFlags(Flags);
+
+		mdConVar NewVar;
+		NewVar.Var.VarCmd = Func;
+		NewVar.Flags = Flags;
+		NewVar.Type = mdConVarType_Command;
+		NewVar.Name = Name;
+		NewVar.Help = Help;
+		NewVar.StatePtr = State;
+		NewVar.CallbackPtr = NULL;
+
+		mdConStateSet(State, &NewVar);
+
+		return;
+
+	}
+	else {
+		mdConStatePrint(State, "Console", "Cannot register console command with empty name", mdConSeverity_dataError);
+		VASSERTNF(0);
+		return;
+
+	}
+
+}
+
+void mdConStateStrRegister(mdConState* State, const char* Name, const char* Value, u32 Flags, const char* Help, mdConVarCallback Callback) {
+	if (!State) {
+		VASSERT(0, "Bad ptr");
+		return;
+
+	}
+
+	if (!Name) {
+		VASSERT(0, "Bad ptr");
+
+	}
+
+	if (vstrlen8(Name) != 0) {
+		if (mdConCheckIfPresent(State, Name)) {
+			return;
+
+		}
+
+		Flags = mdConSanitizeInFlags(Flags);
+
+		const st ValueLength = vstrlen8(Value);
+		mdConVar NewVar;
+		NewVar.Var.VarStr = (char*)dalloc(ValueLength);
+		vset(NewVar.Var.VarStr, 0, ValueLength);
+		vcpy(NewVar.Var.VarStr, Value, ValueLength);
+		NewVar.Flags = Flags;
+		NewVar.Type = mdConVarType_Str;
+		NewVar.Name = Name;
+		NewVar.Help = Help;
+		NewVar.StatePtr = State;
+		NewVar.CallbackPtr = (void*)Callback;
+
+		mdConStateSet(State, &NewVar);
+		return;
+
+	}
+	else {
+		mdConStatePrint(State, "Console", "Cannot register CVar with empty name", mdConSeverity_dataError);
+		VASSERTNF(0);
+		return;
+
+	}
+
+}
+
+void mdConStateIntRegister(mdConState* State, const char* Name, i64 Value, u32 Flags, const char* Help, mdConVarCallback Callback) {
+	if (!State) {
+		VASSERT(0, "Bad ptr");
+		return;
+
+	}
+
+	if (!Name) {
+		VASSERT(0, "Bad ptr");
+		return;
+
+	}
+
+	if (vstrlen8(Name) != 0) {
+		if (mdConCheckIfPresent(State, Name)) {
+			return;
+
+		}
+
+		Flags = mdConSanitizeInFlags(Flags);
+
+		mdConVar NewVar;
+		NewVar.Var.VarInt = Value;
+		NewVar.Flags = Flags;
+		NewVar.Type = mdConVarType_Int;
+		NewVar.Name = Name;
+		NewVar.Help = Help;
+		NewVar.StatePtr = State;
+		NewVar.CallbackPtr = (void*)Callback;
+
+		if (Callback == NULL) {
+			NewVar.Flags |= mdConVarFlags_LAST_RESULT;
+
+		}
+
+		mdConStateSet(State, &NewVar);
+
+		return;
+
+	}
+	else {
+		mdConStatePrint(State, "Console", "Cannot register CVar with emtpy name", mdConSeverity_dataError);
+		VASSERTNF(0);
+		return;
+
+	}
+
+}
+
+//TODO(V): I found a bug when crating 10000 CVars and then deleteng all of them sometimes it would fail ?? and mdConStateSearchVar is fine two ??
+void mdConStateDeleteVar(mdConState* State, const char* Name) {
+	mdConVar* ConVar = mdConStateSearchVar(State, Name);
+	if (ConVar == NULL) {
+		VSWARN(State, "Console", "Failed to delete console variable with name \"{cstr}\"", Name);
+		return;
+
+	}
+	else {
+		//VSVERBOSE(State, "Testing", "Found {cstr}", Name);
+
+	}
+
+	if ((ConVar->Flags & mdConVarFlags_DO_NOT_DELETE) == mdConVarFlags_DO_NOT_DELETE) {
+		VSWARN(State, "Console", "Tried to delete console variable \"{cstr}\" because it was marked not for delete", Name);
+		return;
+
+	}
+
+	if (ConVar->Type == mdConVarType_Str) {
+		dsafefree((void*)ConVar->Var.VarStr);
+		//dfree((char*)ConVar->Var.VarStr);
+
+	}
+	dsafefree((void*)ConVar->Name);
+
+	vset(ConVar, 0, sizeof(mdConVar));
+
+}
+
 void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize) {
 	if (Var->Name != NULL) {
-		vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type \"{mdConVarType}\" \"{u64}\" name \"{cstr}\" help \"{cstr}\" StatePtr {p} CallbackPtr {p}",
+		//vformat8("mdConVar VarInt \"{i64}\" Var raw \"{p}\" Flags \"{u64:hex}\" type mdConVarType \"{u32}\" \"{u64}\" name \"#cstr}\" help \"#cstr}\" StatePtr {p} CallbackPtr {p}",
+				 //Buffer, BufferSize,
+				 //Var->Var.VarInt, Var->Var.VarDouble, Var->Flags, Var->Flags,
+				 //Var->Type, Var->Type,
+				 //Var->Name, Var->Help,
+				 //Var->StatePtr, Var->CallbackPtr);
+
+		#if 0
+		if (Var->Help == NULL) {
+			return;
+
+		}
+		#endif
+
+		vformat8("	mdConVar raw {p} Flags {u32:hex} Type {u32} Name \"{cstr}\" Help \"{cstr}\"",
 				 Buffer, BufferSize,
-				 Var->Var.VarInt, Var->Var.VarDouble, Var->Flags, Var->Flags,
-				 Var->Type, Var->Type, Var->Name, Var->Help, Var->StatePtr, Var->CallbackPtr);
+				 Var->Var, Var->Flags, Var->Type, Var->Name, Var->Help);
 
 	}
 
@@ -751,6 +1126,148 @@ void mdConVarToStr(mdConVar* Var, char* Buffer, st BufferSize) {
 				 //Var->Var.VarInt);
 
 	//}
+
+}
+
+void mdConVarRegisterStr(const char* Name, const char* Value, const u32 Flags, const char* Help, mdConVarCallback Cb) {
+	mdConStart();
+	mdConStateStrRegister(&DuniaConsole, Name, Value, Flags, Help, Cb);
+
+}
+
+void mdConVarRegisterInt(const char* Name, i64 Value, const u32 Flags, const char* Help, mdConVarCallback Cb) {
+	mdConStart();
+	mdConStateIntRegister(&DuniaConsole, Name, Value, Flags, Help, Cb);
+
+}
+
+void mdConVarDelete(const char* Name) {
+	mdConStateDeleteVar(&DuniaConsole, Name);
+
+}
+
+void mdConVarSetInt(const char* Name, const i64 Value) {
+	mdConVar* VarPtr = mdConStateSearchVar(&DuniaConsole, Name);
+	if (VarPtr == NULL) {
+		VERR("Console", "Failed to find console variable {cstr}", Name);
+		VASSERTNF(0);
+		return;
+
+	}
+
+	mdConVarSetIntPtr(VarPtr, Value);
+
+}
+
+void mdConFlush() {
+//    TODO(V): Implement
+
+}
+
+void mdConCmdRegister(const char* Name, mdConCmdFunc Func, const u32 Flags, const char* Help) {
+	mdConStart();
+	mdConStateCmdRegister(&DuniaConsole, Name, Func, Flags, Help);
+
+}
+
+void mdConCmdReg(const char* Name, mdConCmdTypedFunc Func, const u32 Flags, const char* Help) {
+	mdConStart();
+	mdConStateCmdRegister(&DuniaConsole, Name, (mdConCmdFunc)Func, Flags, Help);
+
+}
+
+#ifdef VLIB_PLATFORM_NT
+#define CON_WIN_API_CALL(WindowsCallFunc) {\
+BOOL ResultOfApi = WindowsCallFunc;\
+if (ResultOfApi == 0) {\
+VDERR("Console", "Failed call \"{cstr}\" to WIN32 api with error \"{werr}\"", #WindowsCallFunc);\
+return;\
+}\
+}
+
+void mdConWin32Console(st Vertical, st Horizontal) {
+	VDLOG("Console", "Atempting to create a WIN32 terminal to dump engine log to with size {st}v {st}h", Vertical, Horizontal);
+	BOOL AllocResult = AllocConsole();
+
+	if (AllocResult == 0) {
+		VDERR("Console", "Failed to create WIN32 terminal with error {werr} size {st}v {st}h", Vertical, Horizontal);
+		return;
+
+	}
+
+	//    NOTE(V): Adjust size
+	{
+		CONSOLE_SCREEN_BUFFER_INFO BufInfo;
+		CON_WIN_API_CALL(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &BufInfo));
+		if (BufInfo.dwSize.X < Horizontal) {
+			BufInfo.dwSize.X = Horizontal;
+
+		}
+
+		if (BufInfo.dwSize.Y < Vertical) {
+			BufInfo.dwSize.Y = Vertical;
+
+		}
+
+		CON_WIN_API_CALL(SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), BufInfo.dwSize));
+
+	}
+
+	//    NOTE(V): Redirect STDOUT to it
+	{
+		FILE* FileHandle = NULL;
+		if (GetStdHandle(STD_OUTPUT_HANDLE) != INVALID_HANDLE_VALUE) {
+			if (freopen_s(&FileHandle, "CONOUT$", "w", stdout) != 0) {
+				VDERRNF("Console", "Failed to redirect the stdout to newly created console");
+				return;
+
+			}
+			else {
+				setvbuf(stdout, NULL, _IONBF, 0);
+
+			}
+
+		}
+		else {
+			VDERRNF("Console", "Failed to get stdout windows handle");
+
+		}
+
+		if (GetStdHandle(STD_ERROR_HANDLE) != INVALID_HANDLE_VALUE) {
+			if (freopen_s(&FileHandle, "CONOUT$", "w", stderr) != 0) {
+				return;
+
+			}
+			else {
+				setvbuf(stderr, NULL, _IONBF, 0);
+
+			}
+
+		}
+		else {
+			VDERRNF("Console", "Failed to get stderr windows handle");
+
+		}
+
+	}
+
+	//printf("Testing logging\n");
+	//fprintf(stderr, "Testing stderr\n");
+	//vsys_writeConsoleNullStr("Testing logging with kernel functions\n");
+	mdConLateStdoutInit();
+	VDLOG("Console", "Sucessfully initialized WIN32 terminal for engine logging");
+
+}
+
+#endif
+
+void mdConExecuteCmd(const char* Cmd) {
+	mdConStateRunStr(&DuniaConsole, Cmd, true);
+
+}
+
+void DO_NOT_USE_mdConUSERExecuteCmd(const char* Cmd) {
+	mdConStateRunStr(&DuniaConsole, Cmd, false);
 
 }
 
@@ -845,12 +1362,12 @@ void mdTimeResetPresicewatch(mdTimePrecisewatch* Watch) {
 	Watch->StartTime = mdTimeGetMicroSystemTime();
 
 }
-
+/*
 void mdTimeToStr(i64 Time, char* Buffer) {
 //    TODO(V): Implement
 	vinttostr8(Time, Buffer, 24);
 
-}
+}*/
 
 #ifdef VPP
 void mdTimePrecisewatch::create() {
@@ -977,7 +1494,7 @@ static void mdTimeInitIngernal() {
 }
 
 static void mdTimeInit() {
-	mdCallOnce(CallOnceTime, mdTimeInitIngernal);
+	mdCallOnce(&CallOnceTime, mdTimeInitIngernal);
 
 }
 
@@ -1010,6 +1527,20 @@ i64 mdTimeGetTimerFreq() {
 
 }
 
+void mdCurrentSystemTimeStr(char* Buffer, st Size) {
+	if (Size < 32) {
+		return;
+
+	}
+
+	SYSTEMTIME WinTime;
+	GetSystemTime(&WinTime);
+	vformat8("{u16}-{u16}-{u16}T{u16}:{u16}:{u16}.{u16}", Buffer, Size,
+			 WinTime.wYear, WinTime.wMonth, WinTime.wDay,
+			 WinTime.wHour, WinTime.wMinute, WinTime.wSecond, WinTime.wMilliseconds);
+
+}
+
 #else
 #error Implement platform
 
@@ -1037,6 +1568,7 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
 	}
 
 	if ((Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
+		VDWARN("SharedObject", "Using mdsoFlags_dontLoad is deprecated, please use DISRUPT core to see if module is loaded or not !!!");
 		GnuFlags |= RTLD_NOLOAD;
 
 	}
@@ -1066,12 +1598,13 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
 }
 
 void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol) {
-	void* Result;
+	void* Result = NULL;
 	Result = dlsym((void*)Handle, Symbol);
 	if (Result == NULL) {
 		char* ErrorStr = dlerror();
 //        TODO(V): Add code to get the name of the library that is failing and report it
 		VDERR("SharedObject", "Failed to load function from library with error \"{cstr\"", ErrorStr);
+		return NULL;
 
 	}
 
@@ -1081,6 +1614,66 @@ void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol) {
 
 void mdsoClose(mdsoHandle Handle) {
 	dlclose((void*)Handle);
+
+}
+
+#elif defined(VLIB_PLATFORM_NT)
+mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
+	if (Flags != 0) {
+		VDWARN("SharedObject", "Flags for mdsoOpen do nothing on windows");
+
+	}
+
+	HMODULE Result;
+	Result = LoadLibraryA(Name);
+
+	if (Result == NULL) {
+		DWORD Error = GetLastError();
+		LPSTR ErrorStr = NULL;
+		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+									 NULL, Error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&ErrorStr, 0, NULL);
+		VDERR("SharedObject", "Failed to load library {cstr} flags {u32:hex} with error \"{cstr}\"", Name, Flags, ErrorStr);
+		LocalFree(ErrorStr);
+		return NULL;
+
+	}
+	else {
+		VDLOG("SharedObject", "Loaded library {cstr} with flags {u32:hex} sucessfully", Name, Flags);
+		return (mdsoHandle)Result;
+
+	}
+
+}
+
+void* mdsoGetFunc(mdsoHandle Handle, const char* Symbol) {
+	void* Result = NULL;
+	Result = (void*)GetProcAddress((HMODULE)Handle, Symbol);
+	if (Result == NULL) {
+		DWORD Error = GetLastError();
+		LPSTR ErrorStr = NULL;
+		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+									 NULL, Error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&ErrorStr, 0, NULL);
+		VDERR("SharedObject", "Failed to load function \"{cstr}\" from library with error \"{cstr}\"", Symbol, ErrorStr);
+		LocalFree(ErrorStr);
+		return NULL;
+
+	}
+
+	return Result;
+
+}
+
+void mdsoClose(mdsoHandle Handle) {
+	BOOL Result = FreeLibrary((HMODULE)Handle);
+	if (Result == 0) {
+		DWORD Error = GetLastError();
+		LPSTR ErrorStr = NULL;
+		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+									 NULL, Error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&ErrorStr, 0, NULL);
+		VDERR("SharedObject", "Failed to unload shared object with err \"{cstr}\"", ErrorStr);
+		LocalFree(ErrorStr);
+
+	}
 
 }
 
@@ -1222,6 +1815,9 @@ u64 mdsysUptime() {
 
 }
 
+#elif defined(VLIB_PLATFORM_NT)
+//TODO(V): Implement
+
 #else
 #error Implement platform
 
@@ -1231,7 +1827,6 @@ u64 mdsysUptime() {
 
 void mdosInit() {
 	mdConStart();
-	mdosPrintTermHeader();
 
 }
 

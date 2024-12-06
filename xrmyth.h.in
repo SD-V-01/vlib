@@ -36,7 +36,12 @@
 #ifndef MYTH_XR_NO_PLATFORM_DEFINES
 
 #if defined(VLIB_PLATFORM_NT)
+//NOTE(V): Openxr uses some windows types inside the headers when you enable XR_USE_PLATFORM_WIN32 :(
+#ifdef _INC_WINDOWS
+#include "unknwn.h"
 #define XR_USE_PLATFORM_WIN32
+
+#endif
 
 #elif defined(VLIB_PLATFORM_LINUX)
 

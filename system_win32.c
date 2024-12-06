@@ -18,6 +18,11 @@
 #include "windows.h"
 #include "winbase.h"
 
+#ifdef _WIN32
+#include "stdio.h"
+
+#endif
+
 #ifdef __cplusplus
 extern "C"{
 	#endif
@@ -28,7 +33,8 @@ extern "C"{
 
 
 
-#ifdef __cplusplus
+#if !defined(VLIB_ON_CRT)
+#if defined(__cplusplus)
 extern "C" {
 	#endif
 	int _fltused=0; // it should be a single underscore since the double one is the mangled name
@@ -41,6 +47,7 @@ extern "C" {
 	#ifdef __cplusplus
 }
 #endif
+#endif
 
 #ifdef __cplusplus
 extern "C"{
@@ -49,19 +56,30 @@ extern "C"{
 	static HANDLE StdConsoleHandle;
 
 	void vsys_initConsole() {
+		#ifndef VLIB_ON_CRT
 		StdConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (StdConsoleHandle != INVALID_HANDLE_VALUE) {
 			vsys_writeConsoleNullStr("Initalized STD out console sucesfully, standard out logging now avalable\n");
 
 		}
+		#endif
 
 	}
 
 	void vsys_writeConsole(const char* InText, int Length) {
+		#ifdef VLIB_ON_CRT
+		char Str[Length + 1];
+		vsys_copy(Str, InText, Length);
+		Str[Length] = 0;
+		fputs(Str, stdout);
+
+		#else
 		if (StdConsoleHandle != INVALID_HANDLE_VALUE) {
 			WriteConsoleA(StdConsoleHandle, InText, (DWORD)Length, NULL, NULL);
 
 		}
+
+		#endif
 
 	}
 
@@ -69,6 +87,8 @@ extern "C"{
 		vsys_writeConsoleNullStr("Starting V Runtime enviroment for Windows NT 7 !!!\n");
 
 	}
+
+	#if 0
 
 	static vsys_coreMemoryProfile SystemMemProfile ;
 
@@ -204,6 +224,8 @@ extern "C"{
 
 	}
 
+	#endif
+
 	void vsys_killProcess(int ReturnCode) {
 		ExitProcess(ReturnCode);
 
@@ -213,6 +235,8 @@ extern "C"{
 		__debugbreak();
 
 	}
+
+	#if !defined(VLIB_ON_CRT)
 
 	#define _VLIB_WIN32_MAX_ENVIROMENT_VAR_LENGTH_DO_NOT_USE_LEGACY 16384
 
@@ -293,6 +317,8 @@ extern "C"{
 		//vsys_uintptr StackLimit = reinterpret_cast<PNT_TIB>(NtCurrentTeb())->StackLimit;
 
 	}
+
+	#endif
 
 	#ifdef __cplusplus
 }

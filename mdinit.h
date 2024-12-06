@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdinit.h
-//  Version:     v1.00
+//  File name:   mdinit.h v1.00
 //  Created:     17/07/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -20,8 +19,29 @@
 
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #define VPREINIT(Name) \
-static void Name() __attribute__((constructor));\
-static void Name()
+internal void Name() __attribute__((constructor));\
+internal void Name()
+
+#define VINITARRT __attribute__((constructor))
+
+#elif defined(VLIB_PLATFORM_NT) && defined(VLIB_ON_CRT)
+
+#define VPREINIT(Name) \
+void Name() __attribute__((constructor));\
+void Name()
+
+#define VINITARRT __attribute__((constructor))
+
+
+//#define VPREINIT(Name)\
+//void vpreinit_userfunc_##Name (); \
+//class vpreinit_class_##Name { \
+//public:\
+//vpreinit_class_##Name () {\
+	//vpreinit_userfunc_##Name(); }\
+//}; \
+//vpreinit_class_##Name vpreinit_class_instance_##Name ; \
+//void vpreinit_userfunc_##Name ()
 
 #else
 #error Implement for platform

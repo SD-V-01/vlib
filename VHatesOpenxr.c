@@ -1,16 +1,16 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   VHatesOpenxr.c
-//  Version:     v1.00
+//  File name:   VHatesOpenxr.c v1.00
 //  Created:     09/07/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
+
 
 #include "cpp_compiler.h"
 
@@ -22,7 +22,8 @@
 #include "system.h"
 #include "mdos.h"
 
-#include "vulkan/vulkan_core.h"
+//#include "vulkan/vulkan_core.h"
+#include "vulkan/vkmyth.h"
 #define XR_USE_GRAPHICS_API_VULKAN
 #ifdef VLIB_ANDROID
 #define XR_USE_PLATFORM_ANDROID

@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   VHatesOpenxr.cpp
-//  Version:     v1.00
-//  Created:     09/07/24 by V.
+//  File name:   VHatesOpenxr.cpp v1.00
+//  Created:     27/11/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 

@@ -55,22 +55,22 @@
 // We use the CacheInfo struct to store information about cache levels. The
 // maximum number of levels is hardcoded but can be increased if needed. We have
 // full support of cache identification for the following processors:
-// • Intel:
-//    ◦ modern processors:
+// â€¢ Intel:
+//    â—¦ modern processors:
 //        we use `ParseCacheInfo` function with `leaf_id` 0x00000004.
-//    ◦ old processors:
+//    â—¦ old processors:
 //        we parse descriptors via `GetCacheLevelInfo`, see Application Note
 //        485: Intel Processor Identification and CPUID Instruction.
-// • AMD:
-//    ◦ modern processors:
+// â€¢ AMD:
+//    â—¦ modern processors:
 //        we use `ParseCacheInfo` function with `leaf_id` 0x8000001D.
-//    ◦ old processors:
+//    â—¦ old processors:
 //        we parse cache info using Fn8000_0005_E[A,B,C,D]X and
 //        Fn8000_0006_E[A,B,C,D]X. See AMD CPUID Specification:
 //        https://www.amd.com/system/files/TechDocs/25481.pdf.
-// • Hygon:
+// â€¢ Hygon:
 //    we reuse AMD cache detection implementation.
-// • Zhaoxin:
+// â€¢ Zhaoxin:
 //    we reuse Intel cache detection implementation.
 //
 // Internal structures

@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   base_types.h
-//  Version:     v1.00
-//  Created:     30/04/24 by Serial Designation V-X1.
+//  File name:   base_types.h v1.00
+//  Created:     30/04/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -183,7 +182,17 @@ typedef u8 byte;
 
 typedef size_t sizeType;
 typedef size_t st;
+#ifdef VLIB_PLATFORM_LINUX
 typedef ssize_t sst;
+
+#elif defined VLIB_PLATFORM_NT
+typedef int64_t sst;
+
+#else
+#error Implement platform
+
+#endif
+
 typedef void* pvoid;
 typedef const void* cpvoid;
 #ifdef VPP
@@ -201,7 +210,8 @@ typedef const void* cpvoid;
 
 
 //NOTE(V): 32bit char
-#ifdef __clang__
+//#ifdef __clang__
+#if 0
 typedef u32 dchar;
 typedef u32 vchar;
 typedef u32 wchar;
@@ -215,15 +225,34 @@ typedef char16_t char16;
 
 #endif
 
+#ifndef INT8_C
 #define INT8_C(c)  c
+#endif
+
+#ifndef INT16_C
 #define INT16_C(c) c
+#endif
+
+#ifndef INT32_C
 #define INT32_C(c) c
+#endif
+
+#ifndef UINT8_C
 #define UINT8_C(c)  c
+#endif
+
+#ifndef UINT16_C
 #define UINT16_C(c) c
+#endif
+
+#ifndef UINT32_C
 #define UINT32_C(c) c ## U
-#ifdef INT64_C
+#endif
+
+#ifndef INT64_C
 #define INT64_C(c) c ## L
 #endif
+
 #ifndef UINT64_C
 #define UINT64_C(c) c ## UL
 #endif

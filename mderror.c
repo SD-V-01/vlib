@@ -1,25 +1,29 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mderror.cpp
-//  Version:     v1.00
-//  Created:     10/05/24 by Serial Designation V-X1.
+//  File name:   mderror.c v1.00
+//  Created:     10/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
 #include "mderror.h"
 #include "system.h"
+#include "mdos.h"
 
 VLIB_CABI
+void mderrorDebugTrap(const char* Message, const char* Position, st Line){
+	mdConLogInternFmt_DO_NOT_USE("Engine", "Failed \"{cstr}\" at line {st} file \"{cstr}\"", mdConSeverity_assert, Message, Line, Position);
+	mdConFlush();
+	vsys_breakpoint();
 
-//TODO(V): Use TLS for errno legacy implementation !!!!!!!!!!!
-int v_errno = 0;
+}
 
 VLIB_CABIEND
 
 //TODO(V): Implement stack backtracing
+//NOTE(V): I don't know if its possible on windows, is it ??

@@ -12,8 +12,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "vstr32.h"
 #include "system.h"
+#include "vstr32.h"
 #include "vmem.h"
 #include "mdos.h"
 #include "openxr/xrmyth.h"
@@ -356,6 +356,62 @@ void v8to32char(const char* Source, vchar* Target, u32 Size) {
 
 }
 
+bool vconargtoi64(const char* Source, const st InSize, i64* Result) {
+	if (!Result) {
+		VASSERT(0, "Null pointer");
+		return false;
+
+	}
+
+	if (InSize == 0) {
+		*Result = 0;
+		return true;
+
+	}
+
+	if (!Source) {
+		VASSERT(0, "Null pointer");
+		return false;
+
+	}
+
+	{
+		i64 ParseResult = 0;
+		bool HasEncounteredNumber = false;
+
+		for (st v = 0; v < InSize; v++) {
+			if ((Source[v] < '0') || (Source[v] > '9')) {
+				if (HasEncounteredNumber == true) {
+					break;
+
+				}
+
+			}
+			else {
+				HasEncounteredNumber = true;
+				ParseResult *= 10;
+				ParseResult += Source[v] - '0';
+
+				//VVERBOSE("Testing", "Got char {char}", Source[v]);
+
+			}
+
+		}
+
+		if (HasEncounteredNumber == false) {
+			return false;
+
+		}
+
+		*Result = ParseResult;
+
+	}
+
+
+	return true;
+
+}
+
 int vLEGACYstrcmp(const char* s1, const char* s2) {
 	if (s1 == NULL) {
 		return -70;
@@ -407,7 +463,7 @@ char* vLEGACYgcvt(double In, int NumDigits, char* Buf) {
 } //        STUB(V): Implement legacy gcvt c library function
 
 void dstrcreate32(const st Size, dstr32* This) {
-	This->DataPtr = (vchar *)valloc(Size * sizeof(vchar));
+	This->DataPtr = (vchar *)dalloc(Size * sizeof(vchar));
 	vset(This->DataPtr, 0, Size * sizeof(vchar));
 	This->Size = 0;
 	This->Alloc = Size;
@@ -415,7 +471,7 @@ void dstrcreate32(const st Size, dstr32* This) {
 }
 
 void dstrdestroy32(dstr32* This) {
-	vfree(This->DataPtr);
+	dfree(This->DataPtr);
 	This->Size = 0;
 	This->Alloc = 0;
 
@@ -588,7 +644,7 @@ st vinttohex8(u64 Var, char* Result, st MaxSize) {
 
 		}
 
-		Result[0] = '0';
+		Result[0] = 'V';
 		Result[1] = 'x';
 		Result[2] = '0';
 		Result[3] = '0';
@@ -633,7 +689,7 @@ st vinttohex8(u64 Var, char* Result, st MaxSize) {
 
 	}
 
-	Result[0] = '0';
+	Result[0] = 'V';
 	Result[1] = 'x';
 	Result[18] = 0;
 	return 18;
@@ -651,7 +707,7 @@ st vinttohex8b32(u32 Var, char* Result, st MaxSize) {
 
 		}
 
-		Result[0] = '0';
+		Result[0] = 'V';
 		Result[1] = 'x';
 		Result[2] = '0';
 		Result[3] = '0';
@@ -696,14 +752,14 @@ st vinttohex8b32(u32 Var, char* Result, st MaxSize) {
 
 	}
 
-	Result[0] = '0';
+	Result[0] = 'V';
 	Result[1] = 'x';
 	Result[10] = 0;
 	return 10;
 
 }
 
-static void vstr32_splitFloatInternal(double Val, u64* IntegerPart, u64* DecimalPart, i32* Exponent) {
+internal void vstr32_splitFloatInternal(double Val, u64* IntegerPart, u64* DecimalPart, i32* Exponent) {
 	(*IntegerPart) = (u64)Val;
 	double Remainder = Val - (*IntegerPart);
 
@@ -728,7 +784,7 @@ static void vstr32_splitFloatInternal(double Val, u64* IntegerPart, u64* Decimal
 
 }
 
-static i32 vstr32_normalizeFloatInternal(double Val) {
+internal i32 vstr32_normalizeFloatInternal(double Val) {
 	const double PositiveExpThreshold = 1e7;
 	const double NegativeExpThreshold = 1e-5;
 	int exponent = 0;
@@ -831,6 +887,23 @@ st vdoubletostr8(double Val, char* Result, st MaxSize) {
 		}
 
 	}
+
+//    NOTE(V): We need to do that after the sign check because you can have negative infinite
+	/*if (vmathisinf(Val)) {
+		if (MaxSize >= 4) {
+			Result[0] = 'I';
+			Result[1] = 'N';
+			Result[2] = 'F';
+			Result[3] = 0;
+			return 3;
+
+		}
+		else {
+			return 0;
+
+		}
+
+	}*/
 
 	st ResPos = 0;
 
@@ -1216,7 +1289,9 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 						if (InStr) {
 							st InSize = vstrlen8(InStr);
 							if (InSize < (BufSize - BufPosition)) {
-								vcpy(Buf + BufPosition, InStr, BufSize - BufPosition);
+//                                NOTE(V): This is how it was before, as you can tell i am a FUCKING MORON
+								//vcpy(Buf + BufPosition, InStr, BufSize - BufPosition);
+								vcpy(Buf + BufPosition, InStr, vstrlen8(InStr));
 								BufPosition += InSize;
 
 							}
@@ -1233,12 +1308,33 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 
 					break;
 
+				case 0x1ccef67ef118d13d: // char
+				case 0x0c7e16b3ad2b8a9f: // char8
+					if (vstrlen8(FormatParameter) == 0) {
+						int Var = v_vararg(Args, int);
+						if ((BufSize - BufPosition) > 1) {
+							char CharVar = (char)Var;
+							Buf[BufPosition] = CharVar;
+							BufPosition++;
+
+						}
+
+					}
+					else {
+						vformaterror("Unknown format specifier for char/char8");
+						int Dud = v_vararg(Args, int);
+						VUNDEF(Dud);
+
+					}
+
+					break;
+
 				//            NOTE(V): Tostr enum functions
 
 				case 0xbffd56fdac81e005: // mdConVarType
 					if (vstrlen8(FormatParameter) == 0) {
-						u64 Var = v_vararg(Args, u64);
-						const char* Str = vtostr_mdConVarType((mdConVarType)Var);
+						u32 Var = v_vararg(Args, u32);
+						const char* Str = vtostr_mdConVarType(Var);
 						const st StrLen = vstrlen8(Str);
 						if ((BufSize - BufPosition) > StrLen) {
 							vcpy(Buf + BufPosition, Str, StrLen);
@@ -1249,7 +1345,7 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknwon format specifier for mdConVarType");
-						u64 Dud = v_vararg(Args, u64);
+						u32 Dud = v_vararg(Args, u32);
 						VUNDEF(Dud);
 
 					}
@@ -1378,6 +1474,36 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 					}
 
 					break;
+
+				//                NOTE(V): Error reporting
+				//                TODO(V): Do errno two !!!
+
+				#ifdef _WIN32
+				case 0x6f86b57e8eef7f7d: // werr
+					if (vstrlen8(FormatParameter) == 0) {
+						DWORD Error = GetLastError();
+						LPSTR ErrorStr = NULL;
+						size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+													 NULL, Error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&ErrorStr, 0, NULL);
+						st ErrStringSize = vstrlen8(ErrorStr);
+						if ((BufSize - BufPosition) > (ErrStringSize + 1)) {
+							vcpy(Buf + BufPosition, ErrorStr, ErrStringSize);
+							BufPosition += ErrStringSize;
+
+						}
+
+						LocalFree(ErrorStr);
+
+					}
+					else {
+						vformaterror("Unknown format specifier for werr");
+
+					}
+
+				#else
+				#error Implement
+
+				#endif
 
 				case 0xbe851a7ebbf8a646: // null
 					if (vstrlen8(FormatParameter) == 0) {
@@ -1512,7 +1638,7 @@ st vgetfirstsubstr8(const char* In, const char StopAt, char* Buf, st BufSize) {
 	}
 
 	Buf[FinalSize] = 0;
-	VASSERT(0, "Control flow should never go here");
+	//VASSERT(0, "Control flow should never go here");
 	return FinalSize;
 
 }

@@ -151,6 +151,7 @@ extern "C" {
 
 #include "system.h"
 
+/*
 void vrt_libInit() {
 	vrt_preInitUsr();
 	vsys_appRtInit();
@@ -158,7 +159,7 @@ void vrt_libInit() {
 	mdosInit();
 	vrt_usrCode();
 	mdosExit();
-}
+}*/
 
 #else
 #error Implement platform

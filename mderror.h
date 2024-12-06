@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mderror.h
-//  Version:     v1.00
-//  Created:     10/05/24 by Serial Designation V-X1.
+//  File name:   mderror.h v1.00
+//  Created:     10/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -17,18 +16,21 @@
 #ifndef _MDERROR_H_
 #define _MDERROR_H_
 
-#define MDASSERT(Condition, Message)
+#define VASSERT(Condition, Message) { \
+if (!(Condition)) { \
+mderrorDebugTrap(Message, __FILE__, __LINE__); }}
 
-#define MDASSERT_FATAL(Condition, Message)
+#define VASSERTNF(Condition) { \
+if (!(Condition)) { \
+mderrorDebugTrap("Unknown error", __FILE__, __LINE__); }}
 
-#define VASSERT(Condition, Message)
-
-#define VASSERT_FATAL(Condition, Message)
+#define VASSERT_FATAL(Condition, Message) { \
+if (!(Condition)) { \
+mderrorDebugTrap(Message, __FILE__, __LINE__); }}
 
 
 VLIB_CABI
-
-extern int v_errno;
+void mderrorDebugTrap(const char* Message, const char* Position, st Line);
 
 VLIB_CABIEND
 

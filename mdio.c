@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdio.cpp
-//  Version:     v1.00
+//  File name:   mdio.c v1.00
 //  Created:     22/06/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -448,27 +447,16 @@ bool mdioSeparatorFilter(char Char, char Separator) {
 
 }
 
-//SECTION(V): System
-
-#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
-#include <errno.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include "system.h"
-
 //#define VLIB_IO_ERROR_BREAKPOINT
 
 void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode) {
-//    TODO(V): Make this use a better api for error reporting
+	//    TODO(V): Make this use a better api for error reporting
 
 	//vsys_writeConsoleNullStr("mdIO Error \"");
 	//vsys_writeConsoleNullStr(Error);
 	//vsys_writeConsoleNullStr("\" with code \"");
 	//if (ErrorCode < 0) {
-		//vsys_writeConsoleNullStr("-");
+	//vsys_writeConsoleNullStr("-");
 
 	//}
 	//vsys_writeConsoleInteger(ErrorCode);
@@ -485,12 +473,24 @@ void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode) {
 
 }
 
+//SECTION(V): System
+
+#if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+#include <errno.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "system.h"
+
 bool mdioDeleteFile(const char* Filename) {
 	return !remove(Filename);
 
 }
 
 bool mdioRenameFile(const char* Filename, const char* NewFilename) {
+//    TODO(V): Error logging
 	return !rename(Filename, NewFilename);
 
 }
@@ -910,9 +910,13 @@ char mdioGetSystemSeparator() {
 }
 
 #elif defined(VLIB_PLATFORM_NT)
+#include "system.h"
+#include "stdio.h"
+#include <sys/stat.h>
+
 bool mdioDeleteFile(const char* Filename) {
 	st FilePathLen = vstrlen8(Filename);
-	wchar_t* PathStr = (wchar_t*)alloca((FilePathLen + 1) * sizeof(wchar_t));
+	wchar_t* PathStr = (wchar_t*)((FilePathLen + 1) * sizeof(wchar_t));
 	st PathStrlength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLen, PathStr, (int)FilePathLen);
 	PathStr[PathStrlength] = 0;
 
@@ -921,12 +925,13 @@ bool mdioDeleteFile(const char* Filename) {
 }
 
 bool mdioRenameFile(const char* Filename, const char* NewFilename) {
+	#if 0
 	wchar_t PathStr = NULL;
 	wchar_t NewPathStr = NULL;
 
 	{
 		st FilePathLen = vstrlen8(Filename);
-		PathStr = (wchar_t*)alloca((FilePathLen + 1) * sizeof(wchar_t));
+		PathStr = (wchar_t*)vstackalloc((FilePathLen + 1) * sizeof(wchar_t));
 		st PathStrLength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLen, PathStr, (int)FilePathLen);
 		PathStr[PathStrLength] = 0;
 
@@ -934,19 +939,30 @@ bool mdioRenameFile(const char* Filename, const char* NewFilename) {
 
 	{
 		st NewFilePathLen = vstrlen8(NewFilename);
-		NewPathStr = (wchar_t*)alloca((NewFilePathLen + 1) * sizeof(wchar_t));
+		NewPathStr = (wchar_t*)vstackalloc((NewFilePathLen + 1) * sizeof(wchar_t));
 		st NewPathStrLength = MultiByteToWideChar(CP_UTF8, 0, NewFilename, (int)NewFilePathLen, NewPathStr, (int)NewFilePathLen);
 		NewPathStr[NewPathStrLength] = 0;
 
 	}
 
 	return !_wrename(PathStr, NewPathStr);
+	#else
+	int Result = rename(Filename, NewFilename);
+	if (Result == 0) {
+		return true;
+
+	}
+
+	VDERR("IO", "Failed to rename file \"{cstr}\" to \"{cstr}\" with error \"{cstr}\"", Filename, NewFilename, strerror(errno));
+	return false;
+
+	#endif
 
 }
 
 bool mdioFileExist(const char* Filename) {
 	st FilePathLength = vstrlen8(Filename);
-	wchar_t* PathStr = (wchar_t*)alloca((FilePathLength + 1) * sizeof(wchar_t));
+	wchar_t* PathStr = (wchar_t*)vstackalloc((FilePathLength + 1) * sizeof(wchar_t));
 	st PathStrLength = MultiByteToWideChar(CP_UTF8, 0, Filename, (int)FilePathLength, PathStr, (int)FilePathLength);
 	PathStr[PathStrLength] = 0;
 
@@ -959,6 +975,26 @@ bool mdioFileExist(const char* Filename) {
 	return true;
 
 }
+
+bool mdioMoveFile(const char* Filename, const char* NewFilename) {
+	BOOL Result = MoveFileA(Filename, NewFilename);
+	if (Result != 0) {
+		return true;
+
+	}
+
+	DWORD Error = GetLastError();
+	LPSTR ErrorStr = NULL;
+	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+								 NULL, Error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&ErrorStr, 0, NULL);
+	VDERR("IO", "Failed to rename file \"{cstr}\" to \"{cstr}\" with error \"{cstr}\"", Filename, NewFilename, ErrorStr);
+	LocalFree(ErrorStr);
+
+	return false;
+
+}
+
+//TODO(V): Implement when i need to actually use the file system (aka soon)
 
 #else
 #error Implement for platform

@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdinit.c
-//  Version:     v1.00
+//  File name:   mdinit.c v1.00
 //  Created:     17/07/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -35,9 +34,9 @@ void mdinitCreateJob(mdinitJob* Job, const char* Name, mdinitJobFunc Func) {
 	Job->Name = Name;
 	Job->Hash = mdinitHash(Name);
 	Job->Func = Func;
-	Job->DepNames = (const char**)valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
+	Job->DepNames = (const char**)dalloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
 	vset(Job->DepNames, 0, MDINIT_DEFAULT_DEP_SIZE * sizeof(const char*));
-	Job->Dependencies = (u64*)valloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
+	Job->Dependencies = (u64*)dalloc(MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
 	vset(Job->Dependencies, 0, MDINIT_DEFAULT_DEP_SIZE * sizeof(u64));
 	Job->DepAlloc = MDINIT_DEFAULT_DEP_SIZE;
 
@@ -50,7 +49,7 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 	}
 
 	NewSize = dpow2(NewSize);
-	const char** NewCharPtr = (const char**)valloc(NewSize * sizeof(const char*));
+	const char** NewCharPtr = (const char**)dalloc(NewSize * sizeof(const char*));
 	if (NewCharPtr == NULL) {
 		return;
 
@@ -59,7 +58,7 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 	vset(NewCharPtr, 0, NewSize);
 	vcpy(NewCharPtr, Job->DepNames, Job->DepSize);
 
-	u64* NewHashPtr = (u64*)valloc(NewSize * sizeof(u64));
+	u64* NewHashPtr = (u64*)dalloc(NewSize * sizeof(u64));
 	if (NewHashPtr == NULL) {
 		return;
 
@@ -71,6 +70,9 @@ void mdinitJobCheckSize(mdinitJob* Job, st NewSize) {
 	Job->DepAlloc = NewSize;
 
 }
+
+//IMPORTANT(V): THIS NEEDS TO BE DONE BEFORE WE SHIP
+//TODO(V): There is a memory leak on mdinitJob !!!!!!!
 
 void mdinitDumpJobToStdout(mdinitJob* Job) {
 	/*
@@ -235,7 +237,7 @@ st mdinitSearchJob(u64 InHash, mdInitState* State) {
 
 void mdinitCreateState(mdInitState* State) {
 	vset(State, 0, sizeof(*State));
-	State->Jobs = (mdinitJob*)valloc(MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
+	State->Jobs = (mdinitJob*)dalloc(MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
 	vset(State->Jobs, 0, MDINIT_DEFAULT_JOB_NUMBER * sizeof(mdinitJob));
 	State->JobAlloc = MDINIT_DEFAULT_JOB_NUMBER;
 
@@ -284,7 +286,7 @@ void mdinitStateCheckSize(mdInitState* State, st NewSize) {
 	}
 
 	NewSize = dpow2(NewSize);
-	mdinitJob* NewPtr = (mdinitJob*)valloc(NewSize * sizeof(mdinitJob));
+	mdinitJob* NewPtr = (mdinitJob*)dalloc(NewSize * sizeof(mdinitJob));
 	if (NewPtr == NULL) {
 		return;
 

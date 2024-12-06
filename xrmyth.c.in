@@ -36,11 +36,21 @@ static PFN_xrVoidFunction mythXrLoad_loadFunc(XrInstance Instance, const char* N
 }
 
 bool mythXrLoad(){
+	#ifdef _WIN32
+	mdsoHandle Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_none);
+	if(!Handle){
+		Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_none);
+
+	}
+
+	#else
 	mdsoHandle Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_localSymbols);
 	if(!Handle){
 		Handle = mdsoOpen(MYTH_XR_LOAD_DLL, mdsoFlags_localSymbols);
 
 	}
+
+	#endif
 
 	//TODO(V): Add better search for openxr_loader.so, like search if steam vr is installed and use that copy
 

@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdhud.c
-//  Version:     v1.00
+//  File name:   mdhud.c v1.00
 //  Created:     02/07/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +32,7 @@ void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize){
 
 	vset(Cmd, 0, sizeof(mdHudCommandBuffer));
 	const st Size = dpow2(DefaultSize);
-	Cmd->Commands = valloc(Size);
+	Cmd->Commands = dalloc(Size);
 	VASSERT(Cmd->Commands, "Valloc failed to allocate new command buffer");
 	Cmd->Size = 0;
 	Cmd->Alloc = Size;
@@ -46,7 +45,7 @@ void mdHudCreateCommandBuffer(mdHudCommandBuffer* Cmd, st DefaultSize){
 void mdHudDestroyCommandBuffer(mdHudCommandBuffer* Cmd) {
 	VASSERT(Cmd, "Cmd pointer passed to mdHudDestroyCommandBuffer is invalid");
 	if (Cmd->Commands) {
-		vfree(Cmd->Commands);
+		dfree(Cmd->Commands);
 
 	}
 	vset(Cmd, 0, sizeof(mdHudCommandBuffer));
@@ -57,7 +56,7 @@ void mdHudCheckSizeCommandBuffer(mdHudCommandBuffer* Cmd, st NewSize) {
 	VASSERT(Cmd, "Cmd pointer passed to mdHudCheckSizeCommandBuffer is invalid");
 	if (Cmd->Size < NewSize) {
 		NewSize = dpow2(NewSize);
-		void* NewPtr = valloc(NewSize);
+		void* NewPtr = dalloc(NewSize);
 		VASSERT(NewPtr, "Failed to allocate memory for command buffer resize");
 		vset(NewPtr, 0, NewSize);
 		vcpy(NewPtr, Cmd->Commands, Cmd->Size);

@@ -276,9 +276,9 @@ def generate():
                 continue
                 
             if Enums.get(Enum) != None:
-                EnumBlocks["VSTR8_PROTO"] += "char* vtostr8_" + Enum + "(" + Enum + " In);\n"
-                EnumBlocks["VSTR32_PROTO"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
-                EnumBlocks["VSTR8_IMPL"] += "char* vtostr8_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR8_PROTO"] += "const char* vtostr8_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR32_PROTO"] += "const vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR8_IMPL"] += "const char* vtostr8_" + Enum + "(" + Enum + " In){\n"
                 EnumBlocks["VSTR8_IMPL"] += "    switch(In){\n\n"
 
                 for Case in Enums[Enum].findall("enum"):
@@ -290,7 +290,7 @@ def generate():
 
                 EnumBlocks["VSTR8_IMPL"] += "\n}\n\n"
 
-                EnumBlocks["VSTR32_IMPL"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR32_IMPL"] += "const vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
                 EnumBlocks["VSTR32_IMPL"] += "    switch(In){\n\n"
 
                 for Case in Enums[Enum].findall("enum"):
@@ -320,8 +320,8 @@ def generate():
             SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
             SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
 
-        SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
-        SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
+        SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "const char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
+        SpecialEnumBlocks["VSTR32_SPEC_PROTO"] += "const vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In);\n"
 
         if SpecEnumGlobalDefine.get(SpecialEnum) != None:
             SpecialEnumBlocks["VSTR8_SPEC_PROTO"] += "#endif\n"
@@ -330,7 +330,7 @@ def generate():
         if SpecEnumGlobalDefine.get(SpecialEnum) != None:
             SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
 
-        SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
+        SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "const char* vtostr8_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
         SpecialEnumBlocks["VSTR8_SPEC_IMPL"] += "    switch(In){\n"
 
         #print(Spec.find('enums[name="' + SpecialEnum + '"]'))
@@ -364,7 +364,7 @@ def generate():
         if SpecEnumGlobalDefine.get(SpecialEnum) != None:
             SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "#if " + SpecEnumGlobalDefine.get(SpecialEnum) + "\n"
 
-        SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
+        SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "const vchar* vtostr32_" + SpecialEnum + "(" + SpecialEnum + " In){\n"
         SpecialEnumBlocks["VSTR32_SPEC_IMPL"] += "    switch(In){\n"
 
         #print(Spec.find('enums[name="' + SpecialEnum + '"]'))

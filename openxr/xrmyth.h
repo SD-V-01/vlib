@@ -36,7 +36,12 @@
 #ifndef MYTH_XR_NO_PLATFORM_DEFINES
 
 #if defined(VLIB_PLATFORM_NT)
+//NOTE(V): Openxr uses some windows types inside the headers when you enable XR_USE_PLATFORM_WIN32 :(
+#ifdef _INC_WINDOWS
+#include "unknwn.h"
 #define XR_USE_PLATFORM_WIN32
+
+#endif
 
 #elif defined(VLIB_PLATFORM_LINUX)
 
@@ -95,344 +100,380 @@ MYTH_XR_LOAD_API void _mythXrLoadInstance(XrInstance Instance, loadFuncPtr LoadF
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM8_PROTO
 #if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
+const char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
 #endif
-#if defined(XR_FB_spatial_entity)
-char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
-#endif
+const char* vtostr8_XrStructureType(XrStructureType In);
 #if defined(XR_EXT_hand_tracking)
-char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In);
+const char* vtostr8_XrHandJointSetEXT(XrHandJointSetEXT In);
 #endif
-char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In);
-char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
-char* vtostr8_XrStructureType(XrStructureType In);
-char* vtostr8_XrResult(XrResult In);
+const char* vtostr8_XrViewConfigurationType(XrViewConfigurationType In);
+const char* vtostr8_XrResult(XrResult In);
+const char* vtostr8_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
+const char* vtostr8_XrReferenceSpaceType(XrReferenceSpaceType In);
+#if defined(XR_FB_spatial_entity)
+const char* vtostr8_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
+#endif
 #if defined(XR_VERSION_1_0)
-char* vtostr8_XrObjectType(XrObjectType In);
+const char* vtostr8_XrObjectType(XrObjectType In);
 #endif
-char* vtostr8_XrReferenceSpaceType(XrReferenceSpaceType In);
 #if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
+const char* vtostr8_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
 #endif
 
 //SECTION(V): XRMYTH_SPECIAL_ENUM32_PROTO
 #if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
+const vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
 #endif
-#if defined(XR_FB_spatial_entity)
-vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
-#endif
+const vchar* vtostr32_XrStructureType(XrStructureType In);
 #if defined(XR_EXT_hand_tracking)
-vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In);
+const vchar* vtostr32_XrHandJointSetEXT(XrHandJointSetEXT In);
 #endif
-vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In);
-vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
-vchar* vtostr32_XrStructureType(XrStructureType In);
-vchar* vtostr32_XrResult(XrResult In);
+const vchar* vtostr32_XrViewConfigurationType(XrViewConfigurationType In);
+const vchar* vtostr32_XrResult(XrResult In);
+const vchar* vtostr32_XrPassthroughLayerPurposeFB(XrPassthroughLayerPurposeFB In);
+const vchar* vtostr32_XrReferenceSpaceType(XrReferenceSpaceType In);
+#if defined(XR_FB_spatial_entity)
+const vchar* vtostr32_XrSpaceComponentTypeFB(XrSpaceComponentTypeFB In);
+#endif
 #if defined(XR_VERSION_1_0)
-vchar* vtostr32_XrObjectType(XrObjectType In);
+const vchar* vtostr32_XrObjectType(XrObjectType In);
 #endif
-vchar* vtostr32_XrReferenceSpaceType(XrReferenceSpaceType In);
 #if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneComponentTypeMSFT(XrSceneComponentTypeMSFT In);
+const vchar* vtostr32_XrSceneComputeFeatureMSFT(XrSceneComputeFeatureMSFT In);
 #endif
 
 //SECTION(V): XRMYTH_TOSTR8_PROTO
 #if defined(XR_EXT_future)
-char* vtostr8_XrFutureStateEXT(XrFutureStateEXT In);
+const char* vtostr8_XrFutureStateEXT(XrFutureStateEXT In);
 #endif /*  defined(XR_EXT_future)  */
 #if defined(XR_EXT_hand_joints_motion_range)
-char* vtostr8_XrHandJointsMotionRangeEXT(XrHandJointsMotionRangeEXT In);
+const char* vtostr8_XrHandJointsMotionRangeEXT(XrHandJointsMotionRangeEXT In);
 #endif /*  defined(XR_EXT_hand_joints_motion_range)  */
 #if defined(XR_EXT_hand_tracking)
-char* vtostr8_XrHandEXT(XrHandEXT In);
-char* vtostr8_XrHandJointEXT(XrHandJointEXT In);
+const char* vtostr8_XrHandEXT(XrHandEXT In);
+const char* vtostr8_XrHandJointEXT(XrHandJointEXT In);
 #endif /*  defined(XR_EXT_hand_tracking)  */
 #if defined(XR_EXT_hand_tracking_data_source)
-char* vtostr8_XrHandTrackingDataSourceEXT(XrHandTrackingDataSourceEXT In);
+const char* vtostr8_XrHandTrackingDataSourceEXT(XrHandTrackingDataSourceEXT In);
 #endif /*  defined(XR_EXT_hand_tracking_data_source)  */
 #if defined(XR_EXT_performance_settings)
-char* vtostr8_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
-char* vtostr8_XrPerfSettingsSubDomainEXT(XrPerfSettingsSubDomainEXT In);
-char* vtostr8_XrPerfSettingsLevelEXT(XrPerfSettingsLevelEXT In);
-char* vtostr8_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
+const char* vtostr8_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
+const char* vtostr8_XrPerfSettingsSubDomainEXT(XrPerfSettingsSubDomainEXT In);
+const char* vtostr8_XrPerfSettingsLevelEXT(XrPerfSettingsLevelEXT In);
+const char* vtostr8_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
 #endif /*  defined(XR_EXT_performance_settings)  */
 #if defined(XR_EXT_plane_detection)
-char* vtostr8_XrPlaneDetectionStateEXT(XrPlaneDetectionStateEXT In);
-char* vtostr8_XrPlaneDetectorSemanticTypeEXT(XrPlaneDetectorSemanticTypeEXT In);
-char* vtostr8_XrPlaneDetectorOrientationEXT(XrPlaneDetectorOrientationEXT In);
+const char* vtostr8_XrPlaneDetectionStateEXT(XrPlaneDetectionStateEXT In);
+const char* vtostr8_XrPlaneDetectorSemanticTypeEXT(XrPlaneDetectorSemanticTypeEXT In);
+const char* vtostr8_XrPlaneDetectorOrientationEXT(XrPlaneDetectorOrientationEXT In);
 #endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_EXT_thermal_query)
+const char* vtostr8_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
+const char* vtostr8_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
+#endif /*  defined(XR_EXT_thermal_query)  */
 #if defined(XR_FB_body_tracking)
-char* vtostr8_XrBodyJointFB(XrBodyJointFB In);
-char* vtostr8_XrBodyJointSetFB(XrBodyJointSetFB In);
+const char* vtostr8_XrBodyJointFB(XrBodyJointFB In);
+const char* vtostr8_XrBodyJointSetFB(XrBodyJointSetFB In);
+const char* vtostr8_XrBodyJointFB(XrBodyJointFB In);
 #endif /*  defined(XR_FB_body_tracking)  */
 #if defined(XR_FB_color_space)
-char* vtostr8_XrColorSpaceFB(XrColorSpaceFB In);
+const char* vtostr8_XrColorSpaceFB(XrColorSpaceFB In);
 #endif /*  defined(XR_FB_color_space)  */
 #if defined(XR_FB_composition_layer_alpha_blend)
-char* vtostr8_XrBlendFactorFB(XrBlendFactorFB In);
+const char* vtostr8_XrBlendFactorFB(XrBlendFactorFB In);
 #endif /*  defined(XR_FB_composition_layer_alpha_blend)  */
 #if defined(XR_FB_composition_layer_depth_test)
-char* vtostr8_XrCompareOpFB(XrCompareOpFB In);
+const char* vtostr8_XrCompareOpFB(XrCompareOpFB In);
 #endif /*  defined(XR_FB_composition_layer_depth_test)  */
 #if defined(XR_FB_eye_tracking_social)
-char* vtostr8_XrEyePositionFB(XrEyePositionFB In);
+const char* vtostr8_XrEyePositionFB(XrEyePositionFB In);
 #endif /*  defined(XR_FB_eye_tracking_social)  */
 #if defined(XR_FB_face_tracking)
-char* vtostr8_XrFaceExpressionFB(XrFaceExpressionFB In);
-char* vtostr8_XrFaceExpressionSetFB(XrFaceExpressionSetFB In);
-char* vtostr8_XrFaceConfidenceFB(XrFaceConfidenceFB In);
+const char* vtostr8_XrFaceExpressionFB(XrFaceExpressionFB In);
+const char* vtostr8_XrFaceExpressionSetFB(XrFaceExpressionSetFB In);
+const char* vtostr8_XrFaceConfidenceFB(XrFaceConfidenceFB In);
 #endif /*  defined(XR_FB_face_tracking)  */
 #if defined(XR_FB_face_tracking2)
-char* vtostr8_XrFaceExpression2FB(XrFaceExpression2FB In);
-char* vtostr8_XrFaceExpressionSet2FB(XrFaceExpressionSet2FB In);
-char* vtostr8_XrFaceTrackingDataSource2FB(XrFaceTrackingDataSource2FB In);
-char* vtostr8_XrFaceConfidence2FB(XrFaceConfidence2FB In);
+const char* vtostr8_XrFaceExpression2FB(XrFaceExpression2FB In);
+const char* vtostr8_XrFaceExpressionSet2FB(XrFaceExpressionSet2FB In);
+const char* vtostr8_XrFaceTrackingDataSource2FB(XrFaceTrackingDataSource2FB In);
+const char* vtostr8_XrFaceConfidence2FB(XrFaceConfidence2FB In);
 #endif /*  defined(XR_FB_face_tracking2)  */
 #if defined(XR_FB_foveation_configuration)
-char* vtostr8_XrFoveationLevelFB(XrFoveationLevelFB In);
-char* vtostr8_XrFoveationDynamicFB(XrFoveationDynamicFB In);
+const char* vtostr8_XrFoveationLevelFB(XrFoveationLevelFB In);
+const char* vtostr8_XrFoveationDynamicFB(XrFoveationDynamicFB In);
 #endif /*  defined(XR_FB_foveation_configuration)  */
 #if defined(XR_FB_spatial_entity_query)
-char* vtostr8_XrSpaceQueryActionFB(XrSpaceQueryActionFB In);
+const char* vtostr8_XrSpaceQueryActionFB(XrSpaceQueryActionFB In);
 #endif /*  defined(XR_FB_spatial_entity_query)  */
 #if defined(XR_FB_spatial_entity_storage)
-char* vtostr8_XrSpaceStorageLocationFB(XrSpaceStorageLocationFB In);
-char* vtostr8_XrSpacePersistenceModeFB(XrSpacePersistenceModeFB In);
+const char* vtostr8_XrSpaceStorageLocationFB(XrSpaceStorageLocationFB In);
+const char* vtostr8_XrSpacePersistenceModeFB(XrSpacePersistenceModeFB In);
 #endif /*  defined(XR_FB_spatial_entity_storage)  */
 #if defined(XR_FB_triangle_mesh)
-char* vtostr8_XrWindingOrderFB(XrWindingOrderFB In);
+const char* vtostr8_XrWindingOrderFB(XrWindingOrderFB In);
 #endif /*  defined(XR_FB_triangle_mesh)  */
+#if defined(XR_HTC_body_tracking)
+const char* vtostr8_XrBodyJointHTC(XrBodyJointHTC In);
+const char* vtostr8_XrBodyJointSetHTC(XrBodyJointSetHTC In);
+const char* vtostr8_XrBodyJointConfidenceHTC(XrBodyJointConfidenceHTC In);
+#endif /*  defined(XR_HTC_body_tracking)  */
 #if defined(XR_HTC_facial_tracking)
-char* vtostr8_XrEyeExpressionHTC(XrEyeExpressionHTC In);
-char* vtostr8_XrLipExpressionHTC(XrLipExpressionHTC In);
-char* vtostr8_XrFacialTrackingTypeHTC(XrFacialTrackingTypeHTC In);
+const char* vtostr8_XrEyeExpressionHTC(XrEyeExpressionHTC In);
+const char* vtostr8_XrLipExpressionHTC(XrLipExpressionHTC In);
+const char* vtostr8_XrFacialTrackingTypeHTC(XrFacialTrackingTypeHTC In);
 #endif /*  defined(XR_HTC_facial_tracking)  */
 #if defined(XR_HTC_foveation)
-char* vtostr8_XrFoveationModeHTC(XrFoveationModeHTC In);
-char* vtostr8_XrFoveationLevelHTC(XrFoveationLevelHTC In);
+const char* vtostr8_XrFoveationModeHTC(XrFoveationModeHTC In);
+const char* vtostr8_XrFoveationLevelHTC(XrFoveationLevelHTC In);
 #endif /*  defined(XR_HTC_foveation)  */
 #if defined(XR_HTC_passthrough)
-char* vtostr8_XrPassthroughFormHTC(XrPassthroughFormHTC In);
+const char* vtostr8_XrPassthroughFormHTC(XrPassthroughFormHTC In);
 #endif /*  defined(XR_HTC_passthrough)  */
 #if defined(XR_KHR_android_thread_settings)
-char* vtostr8_XrAndroidThreadTypeKHR(XrAndroidThreadTypeKHR In);
+const char* vtostr8_XrAndroidThreadTypeKHR(XrAndroidThreadTypeKHR In);
 #endif /*  defined(XR_KHR_android_thread_settings)  */
 #if defined(XR_KHR_visibility_mask)
-char* vtostr8_XrVisibilityMaskTypeKHR(XrVisibilityMaskTypeKHR In);
+const char* vtostr8_XrVisibilityMaskTypeKHR(XrVisibilityMaskTypeKHR In);
 #endif /*  defined(XR_KHR_visibility_mask)  */
 #if defined(XR_META_local_dimming)
-char* vtostr8_XrLocalDimmingModeMETA(XrLocalDimmingModeMETA In);
+const char* vtostr8_XrLocalDimmingModeMETA(XrLocalDimmingModeMETA In);
 #endif /*  defined(XR_META_local_dimming)  */
 #if defined(XR_META_performance_metrics)
-char* vtostr8_XrPerformanceMetricsCounterUnitMETA(XrPerformanceMetricsCounterUnitMETA In);
+const char* vtostr8_XrPerformanceMetricsCounterUnitMETA(XrPerformanceMetricsCounterUnitMETA In);
 #endif /*  defined(XR_META_performance_metrics)  */
 #if defined(XR_META_virtual_keyboard)
-char* vtostr8_XrVirtualKeyboardLocationTypeMETA(XrVirtualKeyboardLocationTypeMETA In);
-char* vtostr8_XrVirtualKeyboardInputSourceMETA(XrVirtualKeyboardInputSourceMETA In);
+const char* vtostr8_XrVirtualKeyboardLocationTypeMETA(XrVirtualKeyboardLocationTypeMETA In);
+const char* vtostr8_XrVirtualKeyboardInputSourceMETA(XrVirtualKeyboardInputSourceMETA In);
 #endif /*  defined(XR_META_virtual_keyboard)  */
 #if defined(XR_ML_localization_map)
-char* vtostr8_XrLocalizationMapStateML(XrLocalizationMapStateML In);
-char* vtostr8_XrLocalizationMapTypeML(XrLocalizationMapTypeML In);
-char* vtostr8_XrLocalizationMapConfidenceML(XrLocalizationMapConfidenceML In);
+const char* vtostr8_XrLocalizationMapStateML(XrLocalizationMapStateML In);
+const char* vtostr8_XrLocalizationMapTypeML(XrLocalizationMapTypeML In);
+const char* vtostr8_XrLocalizationMapConfidenceML(XrLocalizationMapConfidenceML In);
 #endif /*  defined(XR_ML_localization_map)  */
 #if defined(XR_ML_marker_understanding)
-char* vtostr8_XrMarkerDetectorProfileML(XrMarkerDetectorProfileML In);
-char* vtostr8_XrMarkerTypeML(XrMarkerTypeML In);
-char* vtostr8_XrMarkerArucoDictML(XrMarkerArucoDictML In);
-char* vtostr8_XrMarkerAprilTagDictML(XrMarkerAprilTagDictML In);
-char* vtostr8_XrMarkerDetectorFpsML(XrMarkerDetectorFpsML In);
-char* vtostr8_XrMarkerDetectorResolutionML(XrMarkerDetectorResolutionML In);
-char* vtostr8_XrMarkerDetectorCameraML(XrMarkerDetectorCameraML In);
-char* vtostr8_XrMarkerDetectorCornerRefineMethodML(XrMarkerDetectorCornerRefineMethodML In);
-char* vtostr8_XrMarkerDetectorFullAnalysisIntervalML(XrMarkerDetectorFullAnalysisIntervalML In);
-char* vtostr8_XrMarkerDetectorStatusML(XrMarkerDetectorStatusML In);
+const char* vtostr8_XrMarkerDetectorProfileML(XrMarkerDetectorProfileML In);
+const char* vtostr8_XrMarkerTypeML(XrMarkerTypeML In);
+const char* vtostr8_XrMarkerArucoDictML(XrMarkerArucoDictML In);
+const char* vtostr8_XrMarkerAprilTagDictML(XrMarkerAprilTagDictML In);
+const char* vtostr8_XrMarkerDetectorFpsML(XrMarkerDetectorFpsML In);
+const char* vtostr8_XrMarkerDetectorResolutionML(XrMarkerDetectorResolutionML In);
+const char* vtostr8_XrMarkerDetectorCameraML(XrMarkerDetectorCameraML In);
+const char* vtostr8_XrMarkerDetectorCornerRefineMethodML(XrMarkerDetectorCornerRefineMethodML In);
+const char* vtostr8_XrMarkerDetectorFullAnalysisIntervalML(XrMarkerDetectorFullAnalysisIntervalML In);
+const char* vtostr8_XrMarkerDetectorStatusML(XrMarkerDetectorStatusML In);
 #endif /*  defined(XR_ML_marker_understanding)  */
+#if defined(XR_ML_spatial_anchors)
+const char* vtostr8_XrSpatialAnchorConfidenceML(XrSpatialAnchorConfidenceML In);
+#endif /*  defined(XR_ML_spatial_anchors)  */
 #if defined(XR_ML_user_calibration)
-char* vtostr8_XrHeadsetFitStatusML(XrHeadsetFitStatusML In);
-char* vtostr8_XrEyeCalibrationStatusML(XrEyeCalibrationStatusML In);
+const char* vtostr8_XrHeadsetFitStatusML(XrHeadsetFitStatusML In);
+const char* vtostr8_XrEyeCalibrationStatusML(XrEyeCalibrationStatusML In);
 #endif /*  defined(XR_ML_user_calibration)  */
+#if defined(XR_ML_world_mesh_detection)
+const char* vtostr8_XrWorldMeshDetectorLodML(XrWorldMeshDetectorLodML In);
+const char* vtostr8_XrWorldMeshBlockStatusML(XrWorldMeshBlockStatusML In);
+const char* vtostr8_XrWorldMeshBlockResultML(XrWorldMeshBlockResultML In);
+#endif /*  defined(XR_ML_world_mesh_detection)  */
 #if defined(XR_MNDX_force_feedback_curl)
-char* vtostr8_XrForceFeedbackCurlLocationMNDX(XrForceFeedbackCurlLocationMNDX In);
+const char* vtostr8_XrForceFeedbackCurlLocationMNDX(XrForceFeedbackCurlLocationMNDX In);
 #endif /*  defined(XR_MNDX_force_feedback_curl)  */
 #if defined(XR_MSFT_composition_layer_reprojection)
-char* vtostr8_XrReprojectionModeMSFT(XrReprojectionModeMSFT In);
+const char* vtostr8_XrReprojectionModeMSFT(XrReprojectionModeMSFT In);
 #endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
 #if defined(XR_MSFT_hand_tracking_mesh)
-char* vtostr8_XrHandPoseTypeMSFT(XrHandPoseTypeMSFT In);
+const char* vtostr8_XrHandPoseTypeMSFT(XrHandPoseTypeMSFT In);
 #endif /*  defined(XR_MSFT_hand_tracking_mesh)  */
 #if defined(XR_MSFT_scene_marker)
-char* vtostr8_XrSceneMarkerTypeMSFT(XrSceneMarkerTypeMSFT In);
-char* vtostr8_XrSceneMarkerQRCodeSymbolTypeMSFT(XrSceneMarkerQRCodeSymbolTypeMSFT In);
+const char* vtostr8_XrSceneMarkerTypeMSFT(XrSceneMarkerTypeMSFT In);
+const char* vtostr8_XrSceneMarkerQRCodeSymbolTypeMSFT(XrSceneMarkerQRCodeSymbolTypeMSFT In);
 #endif /*  defined(XR_MSFT_scene_marker)  */
 #if defined(XR_MSFT_scene_understanding)
-char* vtostr8_XrSceneObjectTypeMSFT(XrSceneObjectTypeMSFT In);
-char* vtostr8_XrScenePlaneAlignmentTypeMSFT(XrScenePlaneAlignmentTypeMSFT In);
-char* vtostr8_XrSceneComputeStateMSFT(XrSceneComputeStateMSFT In);
-char* vtostr8_XrSceneComputeConsistencyMSFT(XrSceneComputeConsistencyMSFT In);
-char* vtostr8_XrMeshComputeLodMSFT(XrMeshComputeLodMSFT In);
+const char* vtostr8_XrSceneObjectTypeMSFT(XrSceneObjectTypeMSFT In);
+const char* vtostr8_XrScenePlaneAlignmentTypeMSFT(XrScenePlaneAlignmentTypeMSFT In);
+const char* vtostr8_XrSceneComputeStateMSFT(XrSceneComputeStateMSFT In);
+const char* vtostr8_XrSceneComputeConsistencyMSFT(XrSceneComputeConsistencyMSFT In);
+const char* vtostr8_XrMeshComputeLodMSFT(XrMeshComputeLodMSFT In);
 #endif /*  defined(XR_MSFT_scene_understanding)  */
 #if defined(XR_MSFT_spatial_graph_bridge)
-char* vtostr8_XrSpatialGraphNodeTypeMSFT(XrSpatialGraphNodeTypeMSFT In);
+const char* vtostr8_XrSpatialGraphNodeTypeMSFT(XrSpatialGraphNodeTypeMSFT In);
 #endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
 #if defined(XR_OCULUS_external_camera)
-char* vtostr8_XrExternalCameraAttachedToDeviceOCULUS(XrExternalCameraAttachedToDeviceOCULUS In);
+const char* vtostr8_XrExternalCameraAttachedToDeviceOCULUS(XrExternalCameraAttachedToDeviceOCULUS In);
 #endif /*  defined(XR_OCULUS_external_camera)  */
 #if defined(XR_QCOM_tracking_optimization_settings)
-char* vtostr8_XrTrackingOptimizationSettingsDomainQCOM(XrTrackingOptimizationSettingsDomainQCOM In);
-char* vtostr8_XrTrackingOptimizationSettingsHintQCOM(XrTrackingOptimizationSettingsHintQCOM In);
+const char* vtostr8_XrTrackingOptimizationSettingsDomainQCOM(XrTrackingOptimizationSettingsDomainQCOM In);
+const char* vtostr8_XrTrackingOptimizationSettingsHintQCOM(XrTrackingOptimizationSettingsHintQCOM In);
 #endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
 #if defined(XR_ULTRALEAP_hand_tracking_forearm)
-char* vtostr8_XrHandForearmJointULTRALEAP(XrHandForearmJointULTRALEAP In);
+const char* vtostr8_XrHandForearmJointULTRALEAP(XrHandForearmJointULTRALEAP In);
 #endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
 
 //SECTION(V): XRMYTH_TOSTR32_PROTO
 #if defined(XR_EXT_future)
-vchar* vtostr32_XrFutureStateEXT(XrFutureStateEXT In);
+const vchar* vtostr32_XrFutureStateEXT(XrFutureStateEXT In);
 #endif /*  defined(XR_EXT_future)  */
 #if defined(XR_EXT_hand_joints_motion_range)
-vchar* vtostr32_XrHandJointsMotionRangeEXT(XrHandJointsMotionRangeEXT In);
+const vchar* vtostr32_XrHandJointsMotionRangeEXT(XrHandJointsMotionRangeEXT In);
 #endif /*  defined(XR_EXT_hand_joints_motion_range)  */
 #if defined(XR_EXT_hand_tracking)
-vchar* vtostr32_XrHandEXT(XrHandEXT In);
-vchar* vtostr32_XrHandJointEXT(XrHandJointEXT In);
+const vchar* vtostr32_XrHandEXT(XrHandEXT In);
+const vchar* vtostr32_XrHandJointEXT(XrHandJointEXT In);
 #endif /*  defined(XR_EXT_hand_tracking)  */
 #if defined(XR_EXT_hand_tracking_data_source)
-vchar* vtostr32_XrHandTrackingDataSourceEXT(XrHandTrackingDataSourceEXT In);
+const vchar* vtostr32_XrHandTrackingDataSourceEXT(XrHandTrackingDataSourceEXT In);
 #endif /*  defined(XR_EXT_hand_tracking_data_source)  */
 #if defined(XR_EXT_performance_settings)
-vchar* vtostr32_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
-vchar* vtostr32_XrPerfSettingsSubDomainEXT(XrPerfSettingsSubDomainEXT In);
-vchar* vtostr32_XrPerfSettingsLevelEXT(XrPerfSettingsLevelEXT In);
-vchar* vtostr32_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
+const vchar* vtostr32_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
+const vchar* vtostr32_XrPerfSettingsSubDomainEXT(XrPerfSettingsSubDomainEXT In);
+const vchar* vtostr32_XrPerfSettingsLevelEXT(XrPerfSettingsLevelEXT In);
+const vchar* vtostr32_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
 #endif /*  defined(XR_EXT_performance_settings)  */
 #if defined(XR_EXT_plane_detection)
-vchar* vtostr32_XrPlaneDetectionStateEXT(XrPlaneDetectionStateEXT In);
-vchar* vtostr32_XrPlaneDetectorSemanticTypeEXT(XrPlaneDetectorSemanticTypeEXT In);
-vchar* vtostr32_XrPlaneDetectorOrientationEXT(XrPlaneDetectorOrientationEXT In);
+const vchar* vtostr32_XrPlaneDetectionStateEXT(XrPlaneDetectionStateEXT In);
+const vchar* vtostr32_XrPlaneDetectorSemanticTypeEXT(XrPlaneDetectorSemanticTypeEXT In);
+const vchar* vtostr32_XrPlaneDetectorOrientationEXT(XrPlaneDetectorOrientationEXT In);
 #endif /*  defined(XR_EXT_plane_detection)  */
+#if defined(XR_EXT_thermal_query)
+const vchar* vtostr32_XrPerfSettingsDomainEXT(XrPerfSettingsDomainEXT In);
+const vchar* vtostr32_XrPerfSettingsNotificationLevelEXT(XrPerfSettingsNotificationLevelEXT In);
+#endif /*  defined(XR_EXT_thermal_query)  */
 #if defined(XR_FB_body_tracking)
-vchar* vtostr32_XrBodyJointFB(XrBodyJointFB In);
-vchar* vtostr32_XrBodyJointSetFB(XrBodyJointSetFB In);
+const vchar* vtostr32_XrBodyJointFB(XrBodyJointFB In);
+const vchar* vtostr32_XrBodyJointSetFB(XrBodyJointSetFB In);
+const vchar* vtostr32_XrBodyJointFB(XrBodyJointFB In);
 #endif /*  defined(XR_FB_body_tracking)  */
 #if defined(XR_FB_color_space)
-vchar* vtostr32_XrColorSpaceFB(XrColorSpaceFB In);
+const vchar* vtostr32_XrColorSpaceFB(XrColorSpaceFB In);
 #endif /*  defined(XR_FB_color_space)  */
 #if defined(XR_FB_composition_layer_alpha_blend)
-vchar* vtostr32_XrBlendFactorFB(XrBlendFactorFB In);
+const vchar* vtostr32_XrBlendFactorFB(XrBlendFactorFB In);
 #endif /*  defined(XR_FB_composition_layer_alpha_blend)  */
 #if defined(XR_FB_composition_layer_depth_test)
-vchar* vtostr32_XrCompareOpFB(XrCompareOpFB In);
+const vchar* vtostr32_XrCompareOpFB(XrCompareOpFB In);
 #endif /*  defined(XR_FB_composition_layer_depth_test)  */
 #if defined(XR_FB_eye_tracking_social)
-vchar* vtostr32_XrEyePositionFB(XrEyePositionFB In);
+const vchar* vtostr32_XrEyePositionFB(XrEyePositionFB In);
 #endif /*  defined(XR_FB_eye_tracking_social)  */
 #if defined(XR_FB_face_tracking)
-vchar* vtostr32_XrFaceExpressionFB(XrFaceExpressionFB In);
-vchar* vtostr32_XrFaceExpressionSetFB(XrFaceExpressionSetFB In);
-vchar* vtostr32_XrFaceConfidenceFB(XrFaceConfidenceFB In);
+const vchar* vtostr32_XrFaceExpressionFB(XrFaceExpressionFB In);
+const vchar* vtostr32_XrFaceExpressionSetFB(XrFaceExpressionSetFB In);
+const vchar* vtostr32_XrFaceConfidenceFB(XrFaceConfidenceFB In);
 #endif /*  defined(XR_FB_face_tracking)  */
 #if defined(XR_FB_face_tracking2)
-vchar* vtostr32_XrFaceExpression2FB(XrFaceExpression2FB In);
-vchar* vtostr32_XrFaceExpressionSet2FB(XrFaceExpressionSet2FB In);
-vchar* vtostr32_XrFaceTrackingDataSource2FB(XrFaceTrackingDataSource2FB In);
-vchar* vtostr32_XrFaceConfidence2FB(XrFaceConfidence2FB In);
+const vchar* vtostr32_XrFaceExpression2FB(XrFaceExpression2FB In);
+const vchar* vtostr32_XrFaceExpressionSet2FB(XrFaceExpressionSet2FB In);
+const vchar* vtostr32_XrFaceTrackingDataSource2FB(XrFaceTrackingDataSource2FB In);
+const vchar* vtostr32_XrFaceConfidence2FB(XrFaceConfidence2FB In);
 #endif /*  defined(XR_FB_face_tracking2)  */
 #if defined(XR_FB_foveation_configuration)
-vchar* vtostr32_XrFoveationLevelFB(XrFoveationLevelFB In);
-vchar* vtostr32_XrFoveationDynamicFB(XrFoveationDynamicFB In);
+const vchar* vtostr32_XrFoveationLevelFB(XrFoveationLevelFB In);
+const vchar* vtostr32_XrFoveationDynamicFB(XrFoveationDynamicFB In);
 #endif /*  defined(XR_FB_foveation_configuration)  */
 #if defined(XR_FB_spatial_entity_query)
-vchar* vtostr32_XrSpaceQueryActionFB(XrSpaceQueryActionFB In);
+const vchar* vtostr32_XrSpaceQueryActionFB(XrSpaceQueryActionFB In);
 #endif /*  defined(XR_FB_spatial_entity_query)  */
 #if defined(XR_FB_spatial_entity_storage)
-vchar* vtostr32_XrSpaceStorageLocationFB(XrSpaceStorageLocationFB In);
-vchar* vtostr32_XrSpacePersistenceModeFB(XrSpacePersistenceModeFB In);
+const vchar* vtostr32_XrSpaceStorageLocationFB(XrSpaceStorageLocationFB In);
+const vchar* vtostr32_XrSpacePersistenceModeFB(XrSpacePersistenceModeFB In);
 #endif /*  defined(XR_FB_spatial_entity_storage)  */
 #if defined(XR_FB_triangle_mesh)
-vchar* vtostr32_XrWindingOrderFB(XrWindingOrderFB In);
+const vchar* vtostr32_XrWindingOrderFB(XrWindingOrderFB In);
 #endif /*  defined(XR_FB_triangle_mesh)  */
+#if defined(XR_HTC_body_tracking)
+const vchar* vtostr32_XrBodyJointHTC(XrBodyJointHTC In);
+const vchar* vtostr32_XrBodyJointSetHTC(XrBodyJointSetHTC In);
+const vchar* vtostr32_XrBodyJointConfidenceHTC(XrBodyJointConfidenceHTC In);
+#endif /*  defined(XR_HTC_body_tracking)  */
 #if defined(XR_HTC_facial_tracking)
-vchar* vtostr32_XrEyeExpressionHTC(XrEyeExpressionHTC In);
-vchar* vtostr32_XrLipExpressionHTC(XrLipExpressionHTC In);
-vchar* vtostr32_XrFacialTrackingTypeHTC(XrFacialTrackingTypeHTC In);
+const vchar* vtostr32_XrEyeExpressionHTC(XrEyeExpressionHTC In);
+const vchar* vtostr32_XrLipExpressionHTC(XrLipExpressionHTC In);
+const vchar* vtostr32_XrFacialTrackingTypeHTC(XrFacialTrackingTypeHTC In);
 #endif /*  defined(XR_HTC_facial_tracking)  */
 #if defined(XR_HTC_foveation)
-vchar* vtostr32_XrFoveationModeHTC(XrFoveationModeHTC In);
-vchar* vtostr32_XrFoveationLevelHTC(XrFoveationLevelHTC In);
+const vchar* vtostr32_XrFoveationModeHTC(XrFoveationModeHTC In);
+const vchar* vtostr32_XrFoveationLevelHTC(XrFoveationLevelHTC In);
 #endif /*  defined(XR_HTC_foveation)  */
 #if defined(XR_HTC_passthrough)
-vchar* vtostr32_XrPassthroughFormHTC(XrPassthroughFormHTC In);
+const vchar* vtostr32_XrPassthroughFormHTC(XrPassthroughFormHTC In);
 #endif /*  defined(XR_HTC_passthrough)  */
 #if defined(XR_KHR_android_thread_settings)
-vchar* vtostr32_XrAndroidThreadTypeKHR(XrAndroidThreadTypeKHR In);
+const vchar* vtostr32_XrAndroidThreadTypeKHR(XrAndroidThreadTypeKHR In);
 #endif /*  defined(XR_KHR_android_thread_settings)  */
 #if defined(XR_KHR_visibility_mask)
-vchar* vtostr32_XrVisibilityMaskTypeKHR(XrVisibilityMaskTypeKHR In);
+const vchar* vtostr32_XrVisibilityMaskTypeKHR(XrVisibilityMaskTypeKHR In);
 #endif /*  defined(XR_KHR_visibility_mask)  */
 #if defined(XR_META_local_dimming)
-vchar* vtostr32_XrLocalDimmingModeMETA(XrLocalDimmingModeMETA In);
+const vchar* vtostr32_XrLocalDimmingModeMETA(XrLocalDimmingModeMETA In);
 #endif /*  defined(XR_META_local_dimming)  */
 #if defined(XR_META_performance_metrics)
-vchar* vtostr32_XrPerformanceMetricsCounterUnitMETA(XrPerformanceMetricsCounterUnitMETA In);
+const vchar* vtostr32_XrPerformanceMetricsCounterUnitMETA(XrPerformanceMetricsCounterUnitMETA In);
 #endif /*  defined(XR_META_performance_metrics)  */
 #if defined(XR_META_virtual_keyboard)
-vchar* vtostr32_XrVirtualKeyboardLocationTypeMETA(XrVirtualKeyboardLocationTypeMETA In);
-vchar* vtostr32_XrVirtualKeyboardInputSourceMETA(XrVirtualKeyboardInputSourceMETA In);
+const vchar* vtostr32_XrVirtualKeyboardLocationTypeMETA(XrVirtualKeyboardLocationTypeMETA In);
+const vchar* vtostr32_XrVirtualKeyboardInputSourceMETA(XrVirtualKeyboardInputSourceMETA In);
 #endif /*  defined(XR_META_virtual_keyboard)  */
 #if defined(XR_ML_localization_map)
-vchar* vtostr32_XrLocalizationMapStateML(XrLocalizationMapStateML In);
-vchar* vtostr32_XrLocalizationMapTypeML(XrLocalizationMapTypeML In);
-vchar* vtostr32_XrLocalizationMapConfidenceML(XrLocalizationMapConfidenceML In);
+const vchar* vtostr32_XrLocalizationMapStateML(XrLocalizationMapStateML In);
+const vchar* vtostr32_XrLocalizationMapTypeML(XrLocalizationMapTypeML In);
+const vchar* vtostr32_XrLocalizationMapConfidenceML(XrLocalizationMapConfidenceML In);
 #endif /*  defined(XR_ML_localization_map)  */
 #if defined(XR_ML_marker_understanding)
-vchar* vtostr32_XrMarkerDetectorProfileML(XrMarkerDetectorProfileML In);
-vchar* vtostr32_XrMarkerTypeML(XrMarkerTypeML In);
-vchar* vtostr32_XrMarkerArucoDictML(XrMarkerArucoDictML In);
-vchar* vtostr32_XrMarkerAprilTagDictML(XrMarkerAprilTagDictML In);
-vchar* vtostr32_XrMarkerDetectorFpsML(XrMarkerDetectorFpsML In);
-vchar* vtostr32_XrMarkerDetectorResolutionML(XrMarkerDetectorResolutionML In);
-vchar* vtostr32_XrMarkerDetectorCameraML(XrMarkerDetectorCameraML In);
-vchar* vtostr32_XrMarkerDetectorCornerRefineMethodML(XrMarkerDetectorCornerRefineMethodML In);
-vchar* vtostr32_XrMarkerDetectorFullAnalysisIntervalML(XrMarkerDetectorFullAnalysisIntervalML In);
-vchar* vtostr32_XrMarkerDetectorStatusML(XrMarkerDetectorStatusML In);
+const vchar* vtostr32_XrMarkerDetectorProfileML(XrMarkerDetectorProfileML In);
+const vchar* vtostr32_XrMarkerTypeML(XrMarkerTypeML In);
+const vchar* vtostr32_XrMarkerArucoDictML(XrMarkerArucoDictML In);
+const vchar* vtostr32_XrMarkerAprilTagDictML(XrMarkerAprilTagDictML In);
+const vchar* vtostr32_XrMarkerDetectorFpsML(XrMarkerDetectorFpsML In);
+const vchar* vtostr32_XrMarkerDetectorResolutionML(XrMarkerDetectorResolutionML In);
+const vchar* vtostr32_XrMarkerDetectorCameraML(XrMarkerDetectorCameraML In);
+const vchar* vtostr32_XrMarkerDetectorCornerRefineMethodML(XrMarkerDetectorCornerRefineMethodML In);
+const vchar* vtostr32_XrMarkerDetectorFullAnalysisIntervalML(XrMarkerDetectorFullAnalysisIntervalML In);
+const vchar* vtostr32_XrMarkerDetectorStatusML(XrMarkerDetectorStatusML In);
 #endif /*  defined(XR_ML_marker_understanding)  */
+#if defined(XR_ML_spatial_anchors)
+const vchar* vtostr32_XrSpatialAnchorConfidenceML(XrSpatialAnchorConfidenceML In);
+#endif /*  defined(XR_ML_spatial_anchors)  */
 #if defined(XR_ML_user_calibration)
-vchar* vtostr32_XrHeadsetFitStatusML(XrHeadsetFitStatusML In);
-vchar* vtostr32_XrEyeCalibrationStatusML(XrEyeCalibrationStatusML In);
+const vchar* vtostr32_XrHeadsetFitStatusML(XrHeadsetFitStatusML In);
+const vchar* vtostr32_XrEyeCalibrationStatusML(XrEyeCalibrationStatusML In);
 #endif /*  defined(XR_ML_user_calibration)  */
+#if defined(XR_ML_world_mesh_detection)
+const vchar* vtostr32_XrWorldMeshDetectorLodML(XrWorldMeshDetectorLodML In);
+const vchar* vtostr32_XrWorldMeshBlockStatusML(XrWorldMeshBlockStatusML In);
+const vchar* vtostr32_XrWorldMeshBlockResultML(XrWorldMeshBlockResultML In);
+#endif /*  defined(XR_ML_world_mesh_detection)  */
 #if defined(XR_MNDX_force_feedback_curl)
-vchar* vtostr32_XrForceFeedbackCurlLocationMNDX(XrForceFeedbackCurlLocationMNDX In);
+const vchar* vtostr32_XrForceFeedbackCurlLocationMNDX(XrForceFeedbackCurlLocationMNDX In);
 #endif /*  defined(XR_MNDX_force_feedback_curl)  */
 #if defined(XR_MSFT_composition_layer_reprojection)
-vchar* vtostr32_XrReprojectionModeMSFT(XrReprojectionModeMSFT In);
+const vchar* vtostr32_XrReprojectionModeMSFT(XrReprojectionModeMSFT In);
 #endif /*  defined(XR_MSFT_composition_layer_reprojection)  */
 #if defined(XR_MSFT_hand_tracking_mesh)
-vchar* vtostr32_XrHandPoseTypeMSFT(XrHandPoseTypeMSFT In);
+const vchar* vtostr32_XrHandPoseTypeMSFT(XrHandPoseTypeMSFT In);
 #endif /*  defined(XR_MSFT_hand_tracking_mesh)  */
 #if defined(XR_MSFT_scene_marker)
-vchar* vtostr32_XrSceneMarkerTypeMSFT(XrSceneMarkerTypeMSFT In);
-vchar* vtostr32_XrSceneMarkerQRCodeSymbolTypeMSFT(XrSceneMarkerQRCodeSymbolTypeMSFT In);
+const vchar* vtostr32_XrSceneMarkerTypeMSFT(XrSceneMarkerTypeMSFT In);
+const vchar* vtostr32_XrSceneMarkerQRCodeSymbolTypeMSFT(XrSceneMarkerQRCodeSymbolTypeMSFT In);
 #endif /*  defined(XR_MSFT_scene_marker)  */
 #if defined(XR_MSFT_scene_understanding)
-vchar* vtostr32_XrSceneObjectTypeMSFT(XrSceneObjectTypeMSFT In);
-vchar* vtostr32_XrScenePlaneAlignmentTypeMSFT(XrScenePlaneAlignmentTypeMSFT In);
-vchar* vtostr32_XrSceneComputeStateMSFT(XrSceneComputeStateMSFT In);
-vchar* vtostr32_XrSceneComputeConsistencyMSFT(XrSceneComputeConsistencyMSFT In);
-vchar* vtostr32_XrMeshComputeLodMSFT(XrMeshComputeLodMSFT In);
+const vchar* vtostr32_XrSceneObjectTypeMSFT(XrSceneObjectTypeMSFT In);
+const vchar* vtostr32_XrScenePlaneAlignmentTypeMSFT(XrScenePlaneAlignmentTypeMSFT In);
+const vchar* vtostr32_XrSceneComputeStateMSFT(XrSceneComputeStateMSFT In);
+const vchar* vtostr32_XrSceneComputeConsistencyMSFT(XrSceneComputeConsistencyMSFT In);
+const vchar* vtostr32_XrMeshComputeLodMSFT(XrMeshComputeLodMSFT In);
 #endif /*  defined(XR_MSFT_scene_understanding)  */
 #if defined(XR_MSFT_spatial_graph_bridge)
-vchar* vtostr32_XrSpatialGraphNodeTypeMSFT(XrSpatialGraphNodeTypeMSFT In);
+const vchar* vtostr32_XrSpatialGraphNodeTypeMSFT(XrSpatialGraphNodeTypeMSFT In);
 #endif /*  defined(XR_MSFT_spatial_graph_bridge)  */
 #if defined(XR_OCULUS_external_camera)
-vchar* vtostr32_XrExternalCameraAttachedToDeviceOCULUS(XrExternalCameraAttachedToDeviceOCULUS In);
+const vchar* vtostr32_XrExternalCameraAttachedToDeviceOCULUS(XrExternalCameraAttachedToDeviceOCULUS In);
 #endif /*  defined(XR_OCULUS_external_camera)  */
 #if defined(XR_QCOM_tracking_optimization_settings)
-vchar* vtostr32_XrTrackingOptimizationSettingsDomainQCOM(XrTrackingOptimizationSettingsDomainQCOM In);
-vchar* vtostr32_XrTrackingOptimizationSettingsHintQCOM(XrTrackingOptimizationSettingsHintQCOM In);
+const vchar* vtostr32_XrTrackingOptimizationSettingsDomainQCOM(XrTrackingOptimizationSettingsDomainQCOM In);
+const vchar* vtostr32_XrTrackingOptimizationSettingsHintQCOM(XrTrackingOptimizationSettingsHintQCOM In);
 #endif /*  defined(XR_QCOM_tracking_optimization_settings)  */
 #if defined(XR_ULTRALEAP_hand_tracking_forearm)
-vchar* vtostr32_XrHandForearmJointULTRALEAP(XrHandForearmJointULTRALEAP In);
+const vchar* vtostr32_XrHandForearmJointULTRALEAP(XrHandForearmJointULTRALEAP In);
 #endif /*  defined(XR_ULTRALEAP_hand_tracking_forearm)  */
 
 #endif
@@ -673,6 +714,12 @@ extern PFN_xrEnumerateViveTrackerPathsHTCX xrEnumerateViveTrackerPathsHTCX;
 extern PFN_xrCreateSpatialAnchorHTC xrCreateSpatialAnchorHTC;
 extern PFN_xrGetSpatialAnchorNameHTC xrGetSpatialAnchorNameHTC;
 #endif /*  defined(XR_HTC_anchor)   */
+#if defined(XR_HTC_body_tracking)
+extern PFN_xrCreateBodyTrackerHTC xrCreateBodyTrackerHTC;
+extern PFN_xrDestroyBodyTrackerHTC xrDestroyBodyTrackerHTC;
+extern PFN_xrGetBodySkeletonHTC xrGetBodySkeletonHTC;
+extern PFN_xrLocateBodyJointsHTC xrLocateBodyJointsHTC;
+#endif /*  defined(XR_HTC_body_tracking)   */
 #if defined(XR_HTC_facial_tracking)
 extern PFN_xrCreateFacialTrackerHTC xrCreateFacialTrackerHTC;
 extern PFN_xrDestroyFacialTrackerHTC xrDestroyFacialTrackerHTC;
@@ -707,6 +754,9 @@ extern PFN_xrInitializeLoaderKHR xrInitializeLoaderKHR;
 #if defined(XR_KHR_locate_spaces)
 extern PFN_xrLocateSpacesKHR xrLocateSpacesKHR;
 #endif /*  defined(XR_KHR_locate_spaces)   */
+#if defined(XR_KHR_metal_enable)
+extern PFN_xrGetMetalGraphicsRequirementsKHR xrGetMetalGraphicsRequirementsKHR;
+#endif /*  defined(XR_KHR_metal_enable)   */
 #if defined(XR_KHR_opengl_enable)
 extern PFN_xrGetOpenGLGraphicsRequirementsKHR xrGetOpenGLGraphicsRequirementsKHR;
 #endif /*  defined(XR_KHR_opengl_enable)   */
@@ -804,9 +854,40 @@ extern PFN_xrGetMarkerStringML xrGetMarkerStringML;
 extern PFN_xrGetMarkersML xrGetMarkersML;
 extern PFN_xrSnapshotMarkerDetectorML xrSnapshotMarkerDetectorML;
 #endif /*  defined(XR_ML_marker_understanding)   */
+#if defined(XR_ML_spatial_anchors)
+extern PFN_xrCreateSpatialAnchorsAsyncML xrCreateSpatialAnchorsAsyncML;
+extern PFN_xrCreateSpatialAnchorsCompleteML xrCreateSpatialAnchorsCompleteML;
+extern PFN_xrGetSpatialAnchorStateML xrGetSpatialAnchorStateML;
+#endif /*  defined(XR_ML_spatial_anchors)   */
+#if defined(XR_ML_spatial_anchors_storage)
+extern PFN_xrCreateSpatialAnchorsStorageML xrCreateSpatialAnchorsStorageML;
+extern PFN_xrDeleteSpatialAnchorsAsyncML xrDeleteSpatialAnchorsAsyncML;
+extern PFN_xrDeleteSpatialAnchorsCompleteML xrDeleteSpatialAnchorsCompleteML;
+extern PFN_xrDestroySpatialAnchorsStorageML xrDestroySpatialAnchorsStorageML;
+extern PFN_xrPublishSpatialAnchorsAsyncML xrPublishSpatialAnchorsAsyncML;
+extern PFN_xrPublishSpatialAnchorsCompleteML xrPublishSpatialAnchorsCompleteML;
+extern PFN_xrQuerySpatialAnchorsAsyncML xrQuerySpatialAnchorsAsyncML;
+extern PFN_xrQuerySpatialAnchorsCompleteML xrQuerySpatialAnchorsCompleteML;
+extern PFN_xrUpdateSpatialAnchorsExpirationAsyncML xrUpdateSpatialAnchorsExpirationAsyncML;
+extern PFN_xrUpdateSpatialAnchorsExpirationCompleteML xrUpdateSpatialAnchorsExpirationCompleteML;
+#endif /*  defined(XR_ML_spatial_anchors_storage)   */
+#if defined(XR_ML_system_notifications)
+extern PFN_xrSetSystemNotificationsML xrSetSystemNotificationsML;
+#endif /*  defined(XR_ML_system_notifications)   */
 #if defined(XR_ML_user_calibration)
 extern PFN_xrEnableUserCalibrationEventsML xrEnableUserCalibrationEventsML;
 #endif /*  defined(XR_ML_user_calibration)   */
+#if defined(XR_ML_world_mesh_detection)
+extern PFN_xrAllocateWorldMeshBufferML xrAllocateWorldMeshBufferML;
+extern PFN_xrCreateWorldMeshDetectorML xrCreateWorldMeshDetectorML;
+extern PFN_xrDestroyWorldMeshDetectorML xrDestroyWorldMeshDetectorML;
+extern PFN_xrFreeWorldMeshBufferML xrFreeWorldMeshBufferML;
+extern PFN_xrGetWorldMeshBufferRecommendSizeML xrGetWorldMeshBufferRecommendSizeML;
+extern PFN_xrRequestWorldMeshAsyncML xrRequestWorldMeshAsyncML;
+extern PFN_xrRequestWorldMeshCompleteML xrRequestWorldMeshCompleteML;
+extern PFN_xrRequestWorldMeshStateAsyncML xrRequestWorldMeshStateAsyncML;
+extern PFN_xrRequestWorldMeshStateCompleteML xrRequestWorldMeshStateCompleteML;
+#endif /*  defined(XR_ML_world_mesh_detection)   */
 #if defined(XR_MNDX_force_feedback_curl)
 extern PFN_xrApplyForceFeedbackCurlMNDX xrApplyForceFeedbackCurlMNDX;
 #endif /*  defined(XR_MNDX_force_feedback_curl)   */
@@ -1127,6 +1208,12 @@ extern PFN_xrEnumerateViveTrackerPathsHTCX xrEnumerateViveTrackerPathsHTCX;
 extern PFN_xrCreateSpatialAnchorHTC xrCreateSpatialAnchorHTC;
 extern PFN_xrGetSpatialAnchorNameHTC xrGetSpatialAnchorNameHTC;
 #endif /*  defined(XR_HTC_anchor)   */
+#if defined(XR_HTC_body_tracking)
+extern PFN_xrCreateBodyTrackerHTC xrCreateBodyTrackerHTC;
+extern PFN_xrDestroyBodyTrackerHTC xrDestroyBodyTrackerHTC;
+extern PFN_xrGetBodySkeletonHTC xrGetBodySkeletonHTC;
+extern PFN_xrLocateBodyJointsHTC xrLocateBodyJointsHTC;
+#endif /*  defined(XR_HTC_body_tracking)   */
 #if defined(XR_HTC_facial_tracking)
 extern PFN_xrCreateFacialTrackerHTC xrCreateFacialTrackerHTC;
 extern PFN_xrDestroyFacialTrackerHTC xrDestroyFacialTrackerHTC;
@@ -1161,6 +1248,9 @@ extern PFN_xrInitializeLoaderKHR xrInitializeLoaderKHR;
 #if defined(XR_KHR_locate_spaces)
 extern PFN_xrLocateSpacesKHR xrLocateSpacesKHR;
 #endif /*  defined(XR_KHR_locate_spaces)   */
+#if defined(XR_KHR_metal_enable)
+extern PFN_xrGetMetalGraphicsRequirementsKHR xrGetMetalGraphicsRequirementsKHR;
+#endif /*  defined(XR_KHR_metal_enable)   */
 #if defined(XR_KHR_opengl_enable)
 extern PFN_xrGetOpenGLGraphicsRequirementsKHR xrGetOpenGLGraphicsRequirementsKHR;
 #endif /*  defined(XR_KHR_opengl_enable)   */
@@ -1258,9 +1348,40 @@ extern PFN_xrGetMarkerStringML xrGetMarkerStringML;
 extern PFN_xrGetMarkersML xrGetMarkersML;
 extern PFN_xrSnapshotMarkerDetectorML xrSnapshotMarkerDetectorML;
 #endif /*  defined(XR_ML_marker_understanding)   */
+#if defined(XR_ML_spatial_anchors)
+extern PFN_xrCreateSpatialAnchorsAsyncML xrCreateSpatialAnchorsAsyncML;
+extern PFN_xrCreateSpatialAnchorsCompleteML xrCreateSpatialAnchorsCompleteML;
+extern PFN_xrGetSpatialAnchorStateML xrGetSpatialAnchorStateML;
+#endif /*  defined(XR_ML_spatial_anchors)   */
+#if defined(XR_ML_spatial_anchors_storage)
+extern PFN_xrCreateSpatialAnchorsStorageML xrCreateSpatialAnchorsStorageML;
+extern PFN_xrDeleteSpatialAnchorsAsyncML xrDeleteSpatialAnchorsAsyncML;
+extern PFN_xrDeleteSpatialAnchorsCompleteML xrDeleteSpatialAnchorsCompleteML;
+extern PFN_xrDestroySpatialAnchorsStorageML xrDestroySpatialAnchorsStorageML;
+extern PFN_xrPublishSpatialAnchorsAsyncML xrPublishSpatialAnchorsAsyncML;
+extern PFN_xrPublishSpatialAnchorsCompleteML xrPublishSpatialAnchorsCompleteML;
+extern PFN_xrQuerySpatialAnchorsAsyncML xrQuerySpatialAnchorsAsyncML;
+extern PFN_xrQuerySpatialAnchorsCompleteML xrQuerySpatialAnchorsCompleteML;
+extern PFN_xrUpdateSpatialAnchorsExpirationAsyncML xrUpdateSpatialAnchorsExpirationAsyncML;
+extern PFN_xrUpdateSpatialAnchorsExpirationCompleteML xrUpdateSpatialAnchorsExpirationCompleteML;
+#endif /*  defined(XR_ML_spatial_anchors_storage)   */
+#if defined(XR_ML_system_notifications)
+extern PFN_xrSetSystemNotificationsML xrSetSystemNotificationsML;
+#endif /*  defined(XR_ML_system_notifications)   */
 #if defined(XR_ML_user_calibration)
 extern PFN_xrEnableUserCalibrationEventsML xrEnableUserCalibrationEventsML;
 #endif /*  defined(XR_ML_user_calibration)   */
+#if defined(XR_ML_world_mesh_detection)
+extern PFN_xrAllocateWorldMeshBufferML xrAllocateWorldMeshBufferML;
+extern PFN_xrCreateWorldMeshDetectorML xrCreateWorldMeshDetectorML;
+extern PFN_xrDestroyWorldMeshDetectorML xrDestroyWorldMeshDetectorML;
+extern PFN_xrFreeWorldMeshBufferML xrFreeWorldMeshBufferML;
+extern PFN_xrGetWorldMeshBufferRecommendSizeML xrGetWorldMeshBufferRecommendSizeML;
+extern PFN_xrRequestWorldMeshAsyncML xrRequestWorldMeshAsyncML;
+extern PFN_xrRequestWorldMeshCompleteML xrRequestWorldMeshCompleteML;
+extern PFN_xrRequestWorldMeshStateAsyncML xrRequestWorldMeshStateAsyncML;
+extern PFN_xrRequestWorldMeshStateCompleteML xrRequestWorldMeshStateCompleteML;
+#endif /*  defined(XR_ML_world_mesh_detection)   */
 #if defined(XR_MNDX_force_feedback_curl)
 extern PFN_xrApplyForceFeedbackCurlMNDX xrApplyForceFeedbackCurlMNDX;
 #endif /*  defined(XR_MNDX_force_feedback_curl)   */

@@ -76,6 +76,7 @@ VSTR32_API bool visdigit8(const char In);
 VSTR32_API bool visdigit32(const vchar In);
 VSTR32_API void v32to8char(const vchar* Source, char* Target, u32 Size);
 VSTR32_API void v8to32char(const char* Source, vchar* Target, u32 Size);
+VSTR32_API bool vconargtoi64(const char* Source, const st InSize, i64* Result);
 
 VSTR32_API int vLEGACYstrcmp(const char* s1, const char* s2);
 VSTR32_API void vLEGACYstrcopy(const char* Source, char* Dest);

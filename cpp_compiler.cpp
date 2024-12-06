@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   cpp_compiler.cpp
-//  Version:     v1.00
-//  Created:     09/05/24 by Serial Designation V-X1.
+//  File name:   cpp_compiler.cpp v1.00
+//  Created:     27/11/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 

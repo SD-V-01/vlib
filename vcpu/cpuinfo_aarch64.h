@@ -38,10 +38,10 @@
 // From Armv8.2, an implementation of the Armv8.0 Cryptographic Extension can
 // include either or both of:
 //
-// • The AES functionality, including support for multiplication of 64-bit
+// â€¢ The AES functionality, including support for multiplication of 64-bit
 //   polynomials. The ID_AA64ISAR0_EL1.AES field indicates whether this
 //   functionality is supported.
-// • The SHA1 and SHA2-256 functionality. The ID_AA64ISAR0_EL1.{SHA2, SHA1}
+// â€¢ The SHA1 and SHA2-256 functionality. The ID_AA64ISAR0_EL1.{SHA2, SHA1}
 //   fields indicate whether this functionality is supported.
 //
 // ID_AA64ISAR0_EL1.AES, bits [7:4]:
@@ -72,8 +72,8 @@
 // - 0b0001 Implements instructions: SHA256H, SHA256H2, SHA256SU0, and
 //   SHA256SU1.
 // - 0b0010 Implements instructions:
-//          • SHA256H, SHA256H2, SHA256SU0, and SHA256SU1.
-//          • SHA512H, SHA512H2, SHA512SU0, and SHA512SU1.
+//          â€¢ SHA256H, SHA256H2, SHA256SU0, and SHA256SU1.
+//          â€¢ SHA512H, SHA512H2, SHA512SU0, and SHA512SU1.
 //
 // FEAT_SHA256 implements the functionality identified by the value 0b0001.
 // FEAT_SHA512 implements the functionality identified by the value 0b0010.
@@ -96,9 +96,9 @@
 // implementations targeting specialized markets may support the following
 // combinations:
 //
-// • No NEON or floating-point.
-// • Full floating-point and SIMD support with exception trapping.
-// • Full floating-point and SIMD support without exception trapping.
+// â€¢ No NEON or floating-point.
+// â€¢ Full floating-point and SIMD support with exception trapping.
+// â€¢ Full floating-point and SIMD support without exception trapping.
 //
 // ref:
 // https://developer.arm.com/documentation/den0024/a/AArch64-Floating-point-and-NEON

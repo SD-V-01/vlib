@@ -27,9 +27,14 @@
 
 #endif
 
+#ifdef VLIB_PLATFORM_NT
+#include "windows.h"
+
+#endif
+
 VLIB_CABI
 
-void* vallocimpl(st Size){
+vfinl void* vallocimpl(st Size){
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC //NOTE(V): Mimalloc
 	return mi_malloc(Size);
 
@@ -46,7 +51,7 @@ void* vallocimpl(st Size){
 
 }
 
-void* vaallocimpl(st Size, st Alignment) {
+vfinl void* vaallocimpl(st Size, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_malloc_aligned(Size, Alignment);
 
@@ -63,7 +68,7 @@ void* vaallocimpl(st Size, st Alignment) {
 
 }
 
-void vfreeimpl(void* Size) {
+vfinl void vfreeimpl(void* Size) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	mi_free(Size);
 
@@ -80,7 +85,7 @@ void vfreeimpl(void* Size) {
 
 }
 
-void* vreallocimpl(void* Ptr, st NewSize) {
+vfinl void* vreallocimpl(void* Ptr, st NewSize) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc(Ptr, NewSize);
 
@@ -97,7 +102,7 @@ void* vreallocimpl(void* Ptr, st NewSize) {
 
 }
 
-void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
+vfinl void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_realloc_aligned(Ptr, NewSize, Alignment);
 	
@@ -114,7 +119,7 @@ void* vareallocimpl(void* Ptr, st NewSize, st Alignment) {
 
 }
 
-void* vcallocimpl(st size, st count){
+vfinl void* vcallocimpl(st size, st count){
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_calloc(size, count);
 
@@ -130,7 +135,7 @@ void* vcallocimpl(st size, st count){
 	#endif
 }
 
-void* vzeroalloc(st NewSize) {
+vfinl void* vzeroalloc(st NewSize) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_zalloc(NewSize);
 
@@ -147,7 +152,7 @@ void* vzeroalloc(st NewSize) {
 
 }
 
-void* vzerocalloc(st NewCount, st NewSize) {
+vfinl void* vzerocalloc(st NewCount, st NewSize) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	return mi_zalloc(NewCount * NewSize);
 
@@ -166,7 +171,7 @@ void* vzerocalloc(st NewCount, st NewSize) {
 
 }
 
-void vzerofree(void* Ptr) {
+vfinl void vzerofree(void* Ptr) {
 	#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 	mi_free(Ptr);
 	
@@ -182,44 +187,6 @@ void vzerofree(void* Ptr) {
 	#endif
 
 }
-
-#ifndef VLIB_NO_CRT_REDEFINE
-#ifdef VPP
-void* valloc(st Size) noexcept {
-	#else
-	void* valloc(st Size) {
-	#endif
-
-	return vallocimpl(Size);
-
-}
-
-void* vaalloc(st Size, st Alignment) {
-	return vaallocimpl(Size, Alignment);
-
-}
-
-void vfree(void* Ptr) {
-	vfreeimpl(Ptr);
-
-}
-
-void* vrealloc(void* Ptr, st NewSize) {
-	return vreallocimpl(Ptr, NewSize);
-
-}
-
-void* varealloc(void* Ptr, st NewSize, st Alignment) {
-	return vareallocimpl(Ptr, NewSize, Alignment);
-
-}
-
-void* vcalloc(st size, st count) {
-	return vcallocimpl(size, count);
-
-}
-
-#endif
 
 void* dalloc(size_t size){
 	return vallocimpl(size);
@@ -248,6 +215,26 @@ void* darealloc(void* p, size_t new_size, size_t Alignment){
 
 void dfree(void* p){
 	vfreeimpl(p);
+}
+
+void dsafefree(void* p) {
+	if (p) {
+		vfreeimpl(p);
+		p = NULL;
+
+	}
+
+}
+
+void* vstackalloc(st Size){
+	#if defined(VLIB_PLATFORM_NT) && defined(VLIB_ON_CRT)
+	return _alloca(Size);
+
+	#else
+	#error Implement platform
+
+	#endif
+
 }
 
 bool vIsPow2(u32 In){
@@ -296,8 +283,8 @@ st vAlignUpPow2st(st In, i32 Alignment) {
 }
 
 void* vAlignUpPow2Ptr(void* Ptr, i32 Alignment) {
-	VASSERT(vIsPow2(In), "The alignment value passed to vAlignUpPow2Ptr(void*, i32) is not a power of two, MDos memory error");
 	st In = (st)Ptr;
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignUpPow2Ptr(void*, i32) is not a power of two, MDos memory error");
 	i32 Mask = Alignment - 1;
 	return (void*)((In + Mask) & ~Mask);
 
@@ -310,8 +297,8 @@ i32 vAlignDownPow2(i32 In, i32 Alignment) {
 }
 
 void* vAlignDownPow2Ptr(void* Ptr, i32 Alignment) {
-	VASSERT(vIsPow2(In), "The alignment value passed to vAlignDownPow2Ptr(void*, i32) is not a power of two, MDos memory error");
 	st In = (st)Ptr;
+	VASSERT(vIsPow2(In), "The alignment value passed to vAlignDownPow2Ptr(void*, i32) is not a power of two, MDos memory error");
 	return (void*)(In & ~(Alignment - 1));
 
 }

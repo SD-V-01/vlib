@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   system.cpp
-//  Version:     v1.00
-//  Created:     03/05/24 by Serial Designation V-X1.
+//  File name:   system.c v1.00
+//  Created:     03/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -112,9 +111,9 @@ extern "C"{
 
 		vsys_init();
 
-		vsys_coreMemoryProfile MemProfile;
+		//vsys_coreMemoryProfile MemProfile;
 
-		vsys_initMemory(&MemProfile);
+		//vsys_initMemory(&MemProfile);
 
 	}
 
@@ -143,7 +142,8 @@ extern "C"{
 
 	void vsys_initCoreMemory() {
 		#if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
-		vlib_mimalloc_preinit();
+//        NOTE(V): This is now handleled thru the mimaloc constructor code
+		//vlib_mimalloc_preinit();
 
 		#elif VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_SYSTEM
 //        NOTE(V): We do nothing as the system malloc is by default initialized

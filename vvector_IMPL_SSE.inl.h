@@ -19,11 +19,12 @@
 #endif
 
 #ifndef VLIB_VMATH_IMPL
-#error Try to include "vmath.h"
+#warn Please try to include vmath.h instad of including random headers !!!
 
 #endif
 
 #define vmathVectorSplat(X, E) _mm_shuffle_ps(X, X, _MM_SHUFFLE(E, E, E, E))
+#define vmathVectorDSplat(X, E) _mm_shuffle_pd(X, X, _MM_SHUFFLE(E, E, E, E))
 
 vinl __m128 vmathVectorSelect(__m128 A, __m128 B, __m128 Mask){
 	return _mm_or_ps(_mm_and_ps(Mask, B), _mm_andnot_ps(Mask, A));
@@ -38,6 +39,8 @@ vinl __m128 vmathVectorDot(__m128 A, __m128 B) {
 											_mm_shuffle_ps(Result, Result, _MM_SHUFFLE(3, 3, 3, 3)))));
 
 }
+
+//SECTION(V): 3 Float vector simd SVEC3
 
 VLIB_STRUCT(vec3)
 union {
@@ -359,6 +362,8 @@ vinl void vec3Sdivequal(vec3* A, float Scalar) {
 
 }
 
+//SECTION(V): 4 Float simd vector SVEC4
+
 VLIB_STRUCT(vec4)
 
 union {
@@ -661,7 +666,7 @@ vinl void vec4one(vec4* Vec) {
 
 }
 
-vinl vec4 vec4init4(float X, float Y, float Z, float W) {
+vinl vec4 vec4init(float X, float Y, float Z, float W) {
 	vec4 Result;
 	Result.Simd = _mm_setr_ps(X, Y, Z, W);
 	return Result;
@@ -779,5 +784,278 @@ vinl void vec4Smulequal(vec4* A, float Scalar) {
 
 vinl void vec4Sdivequal(vec4* A, float Scalar) {
 	A->Simd = _mm_div_ps(A->Simd, _mm_set1_ps(Scalar));
+
+}
+
+//SECTION(V): 2 Double simd vector SVEC2D
+
+VLIB_STRUCT(vec2d)
+
+union {
+	__m128d Simd;
+	float FArray[4];
+	double DArray[2];
+	u64 UInt64Array[2];
+	u32 UIntArray[4];
+	i64 SInt64Array[2];
+	i32 SIntArray[4];
+
+	struct {
+		double X;
+		double Y;
+
+	};
+
+	struct {
+		u32 AsUIntX;
+		u32 AsUIntY;
+		u32 AsUIntZ;
+		u32 AsUIntW;
+
+	};
+
+	struct {
+		i32 AsSIntX;
+		i32 AsSIntY;
+		i32 AsSIntZ;
+		i32 AsSIntW;
+
+	};
+
+};
+
+#ifdef VPP
+explicit vinlpp vec2d(){}
+
+explicit vinlpp vec2d(double Xin, double Yin) {
+	Simd = _mm_setr_pd(Xin, Yin);
+
+}
+
+explicit vinlpp vec2d(double Scalar) {
+	Simd = _mm_set1_pd(Scalar);
+
+}
+
+explicit vinlpp vec2d(__m128d In) {
+	Simd = In;
+
+}
+
+vinlpp void setAllLanes(double Scalar) {
+	Simd = _mm_set1_pd(Scalar);
+
+}
+
+vinlpp void zero() {
+	Simd = _mm_setzero_pd();
+
+}
+
+vinlpp void one() {
+	Simd = _mm_setr_pd(1.0l, 1.0l);
+
+}
+
+vinlpp vec2d& operator=(const vec2d& Vec) {
+	Simd = Vec.Simd;
+	return *this;
+
+}
+
+vinlpp void Lset(double In, st Lane) {
+	((double*)&(Simd))[Lane] = In;
+
+}
+
+//TODO(V): Add asserts to check for invalid lane set
+
+vinlpp double Lget(st Lane) {
+	return ((double*)&(Simd))[Lane];
+
+}
+
+vinlpp double operator[](int Lane) {
+	return ((double*)&(Simd))[Lane];
+
+}
+
+vinlpp const double operator[](int Lane) const {
+	return ((double*)&(Simd))[Lane];
+
+}
+
+vinlpp const vec2d operator+(const vec2d& Vec) const {
+	return vec2d(_mm_add_pd(Simd, Vec.Simd));
+
+}
+
+vinlpp const vec2d operator+(double Scalar) const {
+	return vec2d(_mm_add_pd(Simd, _mm_set1_pd(Scalar)));
+
+}
+
+vinlpp const vec2d operator-(const vec2d& Vec) const {
+	return vec2d(_mm_sub_pd(Simd, Vec.Simd));
+
+}
+
+vinlpp const vec2d operator-(double Scalar) const {
+	return vec2d(_mm_sub_pd(Simd, _mm_set1_pd(Scalar)));
+
+}
+
+vinlpp const vec2d operator*(const vec2d& Vec) const {
+	return vec2d(_mm_mul_pd(Simd, Vec.Simd));
+
+}
+
+vinlpp const vec2d operator*(double Scalar) const {
+	return vec2d(_mm_mul_pd(Simd, _mm_set1_pd(Scalar)));
+
+}
+
+vinlpp const vec2d operator/(const vec2d& Vec) const {
+	return vec2d(_mm_div_pd(Simd, Vec.Simd));
+
+}
+
+vinlpp const vec2d operator/(double Scalar) const {
+	return vec2d(_mm_div_pd(Simd, _mm_set1_pd(Scalar)));
+
+}
+
+
+vinlpp const vec2d& operator+=(const vec2d& Vec) {
+	*this = *this + Vec;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator+=(float Scalar) {
+	*this = *this + Scalar;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator-=(const vec2d& Vec) {
+	*this = *this - Vec;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator-=(float Scalar) {
+	*this = *this - Scalar;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator*=(const vec2d& Vec) {
+	*this = *this * Vec;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator*=(float Scalar) {
+	*this = *this * Scalar;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator/=(const vec2d& Vec) {
+	*this = *this / Vec;
+	return *this;
+
+}
+
+vinlpp const vec2d& operator/=(float Scalar) {
+	*this = *this / Scalar;
+	return *this;
+
+}
+
+#endif
+
+VLIB_STRUCTEND(vec2d)
+
+vinl vec2d vec2dsqrt(const vec2d* Vec) {
+	vec2d Result;
+	Result.Simd = _mm_sqrt_pd(Vec->Simd);
+	return Result;
+
+}
+
+vinl vec2d vec2dmin(const vec2d* A, const vec2d* B) {
+	vec2d Result;
+	Result.Simd = _mm_min_pd(A->Simd, B->Simd);
+	return Result;
+
+}
+
+vinl vec2d vec2dmax(const vec2d* A, const vec2d* B) {
+	vec2d Result;
+	Result.Simd = _mm_max_pd(A->Simd, B->Simd);
+	return Result;
+
+}
+
+//TODO(V): Write vec2dsign
+
+//TODO(V): This dosen't compile for some reason, i am probabelly not going to use this so fuck it
+#if 0
+vinl double vec2dEmax(const vec2d* Vec) {
+	const __m128d Result = _mm_max_pd(vmathVectorDSplat(Vec->Simd, 0), vmathVectorDSplat(Vec->Simd, 1));
+	return ((double*)&(Result))[0];
+//    UNTESTED(V):
+
+}
+
+vinl double vec2dEmin(const vec2d* Vec) {
+	const __m128d Result = _mm_min_pd(vmathVectorDSplat(Vec->Simd, 0), vmathVectorDSplat(Vec->Simd, 1));
+	return ((double*)&(Result))[0];
+//    UNTESTED(V):
+
+}
+
+vinl double vec2dEsum(const vec2d* Vec) {
+	const __m128d Result = _mm_add_pd(vmathVectorDSplat(Vec->Simd, 0), vmathVectorDSplat(Vec->Simd, 1));
+	return ((double*)&(Result))[0];
+//    UNTESTED(V):
+
+}
+
+#endif
+
+//TODO(V): Write vec2dEdot
+
+vinl void vec2dLfill(vec2d* Vec, double Scalar) {
+	Vec->Simd = _mm_set1_pd(Scalar);
+
+}
+
+vinl void vec2dzero(vec2d* Vec) {
+	Vec->Simd = _mm_setzero_pd();
+
+}
+
+vinl void vec2done(vec2d* Vec) {
+	Vec->Simd = _mm_setr_pd(1.0l, 1.0l);
+
+}
+
+vinl vec2d vec2dinit(double X, double Y) {
+	vec2d Result;
+	Result.Simd = _mm_setr_pd(X, Y);
+	return Result;
+
+}
+
+vinl void vec2dLset(vec2d* Vec, double In, st Lane) {
+	((double*)&(Vec->Simd))[Lane] = In;
+
+}
+
+vinl double vec2dLget(vec2d* Vec, st Lane) {
+	return ((double*)&(Vec->Simd))[Lane];
 
 }

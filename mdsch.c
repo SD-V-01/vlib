@@ -1,20 +1,21 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLIB Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdsch.cpp
-//  Version:     v1.00
+//  File name:   mdsch.c v1.00
 //  Created:     30/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#include "vstr32.h"
 #include "mdsch.h"
 #include "mderror.h"
 #include "system.h"
+#include "vmem.h"
 
 #define MD_MUTEX_DEFAULT_SPIN 1500
 
@@ -23,7 +24,6 @@
 #include "sched.h"
 #include <unistd.h>
 #include <sys/sysinfo.h>
-#include "vmem.h"
 #include "pthread.h"
 #include "sys/time.h"
 
@@ -49,6 +49,7 @@ int pthread_setaffinity_np(pthread_t thread, size_t cpusetsize, const cpu_set_t 
 
 #endif
 
+
 //SECTION(V): CallOnce impl
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 VLIB_CABI
@@ -65,7 +66,7 @@ typedef struct mdCallOnceWindowsWrapper {
 
 } mdCallOnceWindowsWrapper;
 
-static BOOL mdCallOnceInternal(PINIT_ONCE InitOnce, PVOID Wrapper, PVOID* Context) {
+internal BOOL mdCallOnceInternal(PINIT_ONCE InitOnce, PVOID Wrapper, PVOID* Context) {
 	VUNDEF(InitOnce);
 	VUNDEF(Context);
 	mdCallOnceFunc Func = ((mdCallOnceWindowsWrapper*)Wrapper)->Func;
@@ -187,7 +188,7 @@ bool mdCreateHostMutex(mdHostMutex* Mutex) {
 
 void mdDestroyHostMutex(mdHostMutex* Mutex) {
 	CRITICAL_SECTION* Section = (CRITICAL_SECTION *)&Mutex->MutexImpl;
-	DeleteCretecalSection(Section);
+	DeleteCriticalSection(Section);
 	vset(&Mutex->MutexImpl, 0, sizeof(Mutex->MutexImpl));
 
 }
@@ -268,7 +269,7 @@ VLIB_CABI
 bool mdCreateHostCondVar(mdHostCondVar* Var) {
 	Var->Impl = (pthread_cond_t)PTHREAD_COND_INITIALIZER;
 	int Result = pthread_cond_init(&Var->Impl, NULL);
-	MDASSERT(Result == 0, "Failed to create mdHostCondVar");
+	VASSERT(Result == 0, "Failed to create mdHostCondVar");
 	return Result == 0;
 
 }
@@ -318,14 +319,14 @@ void mdWakeAllHostCondVar(mdHostCondVar* Var) {
 
 #elif defined(VLIB_PLATFORM_NT)
 bool mdCreateHostCondVar(mdHostCondVar* Var) {
-	Var->Impl = (CONDITION_VARIABLE *)vcalloc(1, sizeof(CONDITION_VARIABLE));
+	Var->Impl = (CONDITION_VARIABLE *)dcalloc(1, sizeof(CONDITION_VARIABLE));
 	InitializeConditionVariable((PCONDITION_VARIABLE)Var->Impl);
 	return true;
 
 }
 
 void mdDestroyHostCondVar(mdHostCondVar* Var) {
-	vfree(Var->Impl);
+	dfree(Var->Impl);
 
 }
 
@@ -358,7 +359,7 @@ VLIB_CABIEND
 
 //SECTION(V): Thread impl
 
-static mdThreadId MainThreadId;
+internal mdThreadId MainThreadId;
 
 VLIB_CABI
 
@@ -393,17 +394,17 @@ void mdSetCpuAffinity(mdThreadInits* Thread, u64 Id) {
 #ifdef VLIB_PLATFORM_LINUX
 #ifdef VLIB_ON_CRT
 
-static mdCallOnceGuard KeyInitGuard = MD_CALL_ONCE_GUARD_CREATE;
-static pthread_key_t ThreadIdKey;
+internal mdCallOnceGuard KeyInitGuard = MD_CALL_ONCE_GUARD_CREATE;
+internal pthread_key_t ThreadIdKey;
 
-static void destroyThreadKey() {
+internal void destroyThreadKey() {
 	pthread_key_delete(ThreadIdKey);
 
 }
 
-static void initThreadKey() {
+internal void initThreadKey() {
 	int Result = pthread_key_create(&ThreadIdKey, NULL);
-	MDASSERT(Result == 0, "Could not create pthread key !!!");
+	VASSERT(Result == 0, "Could not create pthread key !!!");
 	VUNDEF(Result);
 	//    TODO(V): Use new init system maybe ?
 	Result = vLEGACYatexit(destroyThreadKey);
@@ -412,7 +413,7 @@ static void initThreadKey() {
 }
 
 mdThreadId mdGetCurrentThreadId() {
-	static volatile u32 Counter;
+	internal volatile u32 Counter;
 	mdCallOnce(&KeyInitGuard, initThreadKey);
 	void* Ptr = pthread_getspecific(ThreadIdKey);
 	uintptr_t PtrId = (uintptr_t)Ptr;
@@ -450,7 +451,7 @@ u32 mdGetNumOfCpuCores(){
 
 }
 
-static void* threadKickstart(void* Data) {
+internal void* threadKickstart(void* Data) {
 	mdThreadInits Inits = * ((mdThreadInits*)Data);
 	vfree(Data);
 
@@ -497,7 +498,7 @@ static void* threadKickstart(void* Data) {
 }
 
 bool mdCreateThread(mdThreadInits* Inits, mdThreadHandle* ResultHandle){
-	mdThreadInits* DataCopy = (mdThreadInits*)valloc(sizeof(mdThreadInits));
+	mdThreadInits* DataCopy = (mdThreadInits*)dalloc(sizeof(mdThreadInits));
 	if (DataCopy == NULL) {
 		return false;
 
@@ -538,8 +539,8 @@ mdThreadId mdGetCurrentThreadId() {
 
 }
 
-static const char* mdSchInternalThreadName() {
-	__declspec(thread) static char Name[MD_THREAD_NAME_LENGTH + 1];
+char* mdSchInternalThreadName() {
+	__declspec(thread) internal char Name[MD_THREAD_NAME_LENGTH + 1];
 	return Name;
 
 }
@@ -567,7 +568,8 @@ void mdGetCurrentThreadName(char* Buf, st BufSize) {
 }
 
 void mdSetCurrentThreadName(char* Buf) {
-	char * const ThreadName = mdSchInternalThreadName();
+
+	char * ThreadName = mdSchInternalThreadName();
 	st StrSize = vstrlen8(Buf);
 	if (StrSize > (MD_THREAD_NAME_LENGTH)) {
 		StrSize = MD_THREAD_NAME_LENGTH;
@@ -592,9 +594,9 @@ u32 mdGetNumOfCpuCores() {
 
 }
 
-static unsigned WINAPI threadKickstart(void* Data) {
+internal unsigned WINAPI threadKickstart(void* Data) {
 	mdThreadInits Item = *((mdThreadInits*)(Data));
-	vfree(Data);
+	dfree(Data);
 
 	if (Item.Name[0] != 0) {
 		mdSetCurrentThreadName(Item.Name);
@@ -603,7 +605,7 @@ static unsigned WINAPI threadKickstart(void* Data) {
 
 	}
 
-	if (Item.AffinityMask) {
+	if (Item.SetAffinityMask) {
 		u32 Cores = mdGetNumOfCpuCores();
 		for (u32 GroupId = 0; GroupId < Cores / 64; ++GroupId) {
 			GROUP_AFFINITY GroupAfinity = { 0 };
@@ -625,7 +627,7 @@ static unsigned WINAPI threadKickstart(void* Data) {
 bool mdCreateThread(mdThreadInits* Inits, mdThreadHandle* ResultHandle) {
 	VASSERT(ResultHandle, "Thread handle ptr passed to mdCreateThread is invalid or NULL");
 	*ResultHandle = NULL;
-	mdThreadInits* InitsCopy = (mdThreadInits*)valloc(sizeof(mdThreadInits));
+	mdThreadInits* InitsCopy = (mdThreadInits*)dalloc(sizeof(mdThreadInits));
 	*InitsCopy = *Inits;
 	*ResultHandle = (mdThreadHandle)_beginthreadex(0, 0, threadKickstart, InitsCopy, 0, 0);
 	return *ResultHandle != NULL;

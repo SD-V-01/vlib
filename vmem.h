@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mem.h
-//  Version:     v1.00
-//  Created:     30/04/24 by Serial Designation V-X1.
+//  File name:   vmem.h v1.00
+//  Created:     30/04/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -27,22 +26,7 @@ MEM_API void* dcalloc(size_t size, size_t count);
 MEM_API void* drealloc(void* p, size_t new_size);
 MEM_API void* darealloc(void* p, size_t new_size, size_t Alignment);
 MEM_API void dfree(void* p);
-
-#ifndef VLIB_NO_CRT_REDEFINE
-#ifdef VPP
-//NOTE(V): I have no clue what the c++ compiler is doing
-MEM_API void* valloc(st Size) noexcept;
-#else
-MEM_API void* valloc(st Size);
-#endif
-
-MEM_API void* vaalloc(st Size, st Alignment);
-MEM_API void vfree(void* Ptr);
-MEM_API void* vrealloc(void* Ptr, st NewSize);
-MEM_API void* varealloc(void* Ptr, st NewSize, st Alignment);
-MEM_API void* vcalloc(st size, st count);
-
-#endif
+MEM_API void dsafefree(void* p);
 
 MEM_API void* vallocimpl(st Size);
 MEM_API void* vaallocimpl(st Size, st Alignment);
@@ -55,7 +39,7 @@ MEM_API void* vzeroalloc(st NewSize);
 MEM_API void* vzerocalloc(st NewCount, st NewSize);
 MEM_API void vzerofree(void* Ptr);
 
-vinl void* vcpy(void* Dest, const void* Source, size_t Size) {
+vfinl void* vcpy(void* Dest, const void* Source, size_t Size) {
     size_t i;
 
     if ((uintptr_t) Dest % sizeof(long) == 0 && (uintptr_t) Source % sizeof(long) == 0 && Size % sizeof(long) == 0) {
@@ -83,7 +67,7 @@ vinl void* vcpy(void* Dest, const void* Source, size_t Size) {
 
 }
 
-vinl void* vset(void* Target, u8 Value, size_t Size) {
+vfinl void* vset(void* Target, u8 Value, size_t Size) {
     unsigned char *ptr = (unsigned char*)Target;
     while (Size-- > 0)
 	*ptr++ = Value;
@@ -91,12 +75,12 @@ vinl void* vset(void* Target, u8 Value, size_t Size) {
 
 }
 
-vinl void* dcpy(void* Dest, const void* Source, size_t Size) {
+vfinl void* dcpy(void* Dest, const void* Source, size_t Size) {
 	return vcpy(Dest, Source, Size);
 
 }
 
-vinl void* vc(const void* Source, void* Dest, st Size) {
+vfinl void* vc(const void* Source, void* Dest, st Size) {
 	return vcpy(Dest, Source, Size);
 
 }
@@ -107,6 +91,8 @@ MEM_API void *vmove(void *dest, const void *src, size_t n);
 MEM_API void* vmemrchr(const void* Array, int Char, st Size);
 MEM_API void* vmemchr(const void* Array, int Char, st Size);
 MEM_API int vmemcmp(const void* Vl, const void* Vr, st Size);
+
+MEM_API void* vstackalloc(st Size);
 
 MEM_API bool vIsPow2(u32 In);
 MEM_API bool vIsPow2b64(u64 In);
@@ -157,6 +143,9 @@ VLIB_CABIEND
 #ifdef VPP
 
 VLIBPP_START
+
+//TODO(V): URGENT check to return nullptr if the size is 0 !!!
+//URGENT(V): 
 
 template <typename iType> struct vmem {
 private:

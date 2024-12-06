@@ -220,9 +220,9 @@ void  LZ4_free(void* p);
 # define FREEMEM(p)        LZ4_free(p)
 #else
 #include "vmem.h"
-# define ALLOC(s)          valloc(s)
-# define ALLOC_AND_ZERO(s) vcalloc(1,s)
-# define FREEMEM(p)        vfree(p)
+# define ALLOC(s)          dalloc(s)
+# define ALLOC_AND_ZERO(s) dcalloc(1,s)
+# define FREEMEM(p)        dfree(p)
 
 //# include <stdlib.h>   /* malloc, calloc, free */
 //# define ALLOC(s)          malloc(s)

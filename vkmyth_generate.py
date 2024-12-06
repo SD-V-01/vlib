@@ -302,9 +302,9 @@ def generate():
                 continue
 
             if Enums.get(Enum) != None:
-                EnumBlocks["VSTR8_PROTO"] += "char* vtostr8_" + Enum + "(" + Enum + " In);\n"
-                EnumBlocks["VSTR32_PROTO"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
-                EnumBlocks["VSTR8_IMPL"] += "char* vtostr8_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR8_PROTO"] += "const char* vtostr8_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR32_PROTO"] += "const vchar* vtostr32_" + Enum + "(" + Enum + " In);\n"
+                EnumBlocks["VSTR8_IMPL"] += "const char* vtostr8_" + Enum + "(" + Enum + " In){\n"
                 EnumBlocks["VSTR8_IMPL"] += "    switch(In){\n\n"
                 
                 for Case in Enums[Enum].findall("enum"):
@@ -331,7 +331,7 @@ def generate():
 
                 EnumBlocks["VSTR8_IMPL"] += "\n}\n\n"
 
-                EnumBlocks["VSTR32_IMPL"] += "vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
+                EnumBlocks["VSTR32_IMPL"] += "const vchar* vtostr32_" + Enum + "(" + Enum + " In){\n"
                 EnumBlocks["VSTR32_IMPL"] += "    switch(In){\n\n"
                 
                 for Case in Enums[Enum].findall("enum"):

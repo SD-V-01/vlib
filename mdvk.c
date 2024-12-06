@@ -1,46 +1,45 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLIB Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdvk.cpp
-//  Version:     v1.00
+//  File name:   mdvk.c v1.00
 //  Created:     11/06/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define VK_NO_PROTOTYPES
-#include "vulkan/vulkan.h"
+//#define VK_NO_PROTOTYPES
+//#include "vulkan/vulkan.h"
+#include "vulkan/vkmyth.h"
 #include "mdvk.h"
 #include "vmem.h"
 #include "system.h"
 #include "mdos.h"
-#include "vulkan/vkmyth.h"
 
-static mdvkState MdvkState;
+intern mdvkState MdvkState;
 
 const mdvkState* mdvkGetVulkanState() {
 	return &MdvkState;
 
 }
 
-static void* vkAllocImpl(void* UserData, st Size, st Alignment, VkSystemAllocationScope Scope) {
-	void* Result = vaalloc(Size, Alignment);
+intern void* vkAllocImpl(void* UserData, st Size, st Alignment, VkSystemAllocationScope Scope) {
+	void* Result = daalloc(Size, Alignment);
 	vset(Result, 0, Size);
 	return Result;
 
 }
 
-static void* vkReallocImpl(void* UserData, void* Original, st Size, st Alignment, VkSystemAllocationScope AllocScope) {
-	return varealloc(Original, Size, Alignment);
+intern void* vkReallocImpl(void* UserData, void* Original, st Size, st Alignment, VkSystemAllocationScope AllocScope) {
+	return darealloc(Original, Size, Alignment);
 
 }
 
-static void vkFreeImpl(void* UserData, void* Ptr) {
-	vfree(Ptr);
+intern void vkFreeImpl(void* UserData, void* Ptr) {
+	dfree(Ptr);
 
 }
 
@@ -314,7 +313,7 @@ MDVK_ERROR mdvkCreateDevice(const char** Layers, st LayerCount, const char** Ext
 
 }
 
-static st mdvkStrlen(const char* String) {
+intern st mdvkStrlen(const char* String) {
 	const char* A = String;
 	for (; *String; String++) {
 

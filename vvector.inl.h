@@ -16,19 +16,3 @@
 #error Try to include "vmath.h"
 
 #endif
-
-#ifdef VLIB_ARM
-//TODO(V): Implement !!!!!!!!!!!!!!!!!!!!
-//#include "vvector_IMPL_NEON.inl.h"
-
-#elif defined(__SSE4_1__) && defined(__AVX2__)
-#include "vvector_IMPL_SSE.inl.h"
-
-#elif defined(__SSE4_1__) && !defined(__AVX2__)
-#include "vvector_IMPL_SSE.inl.h"
-
-#else
-#warning Using scalar math witch is going to slow down the vector operations
-
-
-#endif

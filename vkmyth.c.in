@@ -53,11 +53,21 @@ static PFN_vkVoidFunction mythVkLoad_loadFunc(VkInstance Instance, const char* N
 }
 
 VkResult mythVkLoad(){
+	#ifdef _WIN32
+	mdsoHandle Handle = mdsoOpen(MYTH_VK_LOAD_DLL, mdsoFlags_none);
+	if(!Handle){
+		Handle = mdsoOpen(MYTH_VK_LOAD_DLL_BACKUP, mdsoFlags_none);
+
+	}
+
+	#else
 	mdsoHandle Handle = mdsoOpen(MYTH_VK_LOAD_DLL, mdsoFlags_localSymbols);
 	if(!Handle){
 		Handle = mdsoOpen(MYTH_VK_LOAD_DLL_BACKUP, mdsoFlags_localSymbols);
 
 	}
+
+	#endif
 
 	if(!Handle){
 		VERRNF("VkLoader", "Could not load Vulkan api");
@@ -178,7 +188,11 @@ void _mythVkLoadArrayDevice(mythVkDeviceFuncArray* FuncArray, VkDevice Device, P
 
 }
 
+#ifndef TENX_PARSER
+
 //SECTION(V): VK_PROTOTYPES_IMPL
+
+#endif
 
 #ifdef __cplusplus
 }

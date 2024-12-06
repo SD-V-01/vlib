@@ -1,21 +1,21 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLIB Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdvk.h
-//  Version:     v1.00
+//  File name:   mdvk.h v1.00
 //  Created:     11/06/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
-#define VK_NO_PROTOTYPES
-#include "vulkan/vulkan.h"
+//#define VK_NO_PROTOTYPES
+//#include "vulkan/vulkan.h"
+#include "vulkan/vkmyth.h"
 
 #include "base_types.h"
 

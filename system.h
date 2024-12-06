@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLiB Source File.
-//  Copyright (C), V Studio, 2018-2024.
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   system.h
-//  Version:     v1.00
-//  Created:     03/05/24 by Serial Designation V-X1.
+//  File name:   system.h v1.00
+//  Created:     03/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  History:
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +16,17 @@
 
 #ifdef __unix__
 #include "stddef.h"
+
+#endif
+
+#ifdef _WIN32
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+//TODO(V): Remove this, this is here so the multithreading and maybe other future stuff will not error
+//	on compile but the windows.h header sucks big time so if compile times gose bleak remove this pronto
+#include <Windows.h>
+//TODO(V): IMPORTANT !!!!!!!!!!!!!
+//#warning Windows.h included !
 
 #endif
 

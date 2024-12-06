@@ -1,31 +1,36 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLIB Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdsch.h
-//  Version:     v1.00
+//  File name:   mdsch.h v1.00
 //  Created:     30/05/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
 #include "base_types.h"
+#include "system.h"
 
 //SECTION(V): General
 
 #define MDSCHEDULER_API
-#define MDSCHEDULER_THREAD_NAME_LENGTH 256
 
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
 #include "pthread.h"
 
 #elif defined(VLIB_PLATFORM_NT)
+
+#if 0
 #include <synchapi.h>
+
+#else
+
+#endif
 
 #else
 #error Implement platform
@@ -83,7 +88,7 @@ CRITICAL_SECTION MutexImpl;
 #ifdef VPP
 
 #ifndef VLIB_NO_RAII
-mdHostMutex();
+explicit mdHostMutex();
 ~mdHostMutex();
 
 #endif

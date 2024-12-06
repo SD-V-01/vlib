@@ -16,9 +16,9 @@ terms of the MIT license. A copy of the license can be found in the file
 // Posix & Unix functions definitions
 // ------------------------------------------------------
 
-#include "../mderror.h"
-#include "../system.h"
-#include "../vstr32.h"
+#include <errno.h>
+#include <string.h>  // memset
+#include <stdlib.h>  // getenv
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)  // getenv _wgetenv
@@ -101,26 +101,26 @@ mi_decl_nodiscard mi_decl_restrict void* mi_aligned_alloc(size_t alignment, size
 
 mi_decl_nodiscard void* mi_reallocarray( void* p, size_t count, size_t size ) mi_attr_noexcept {  // BSD
   void* newp = mi_reallocn(p,count,size);
-  if (newp==NULL) { v_errno = ENOMEM; }
+  if (newp==NULL) { errno = ENOMEM; }
   return newp;
 }
 
 mi_decl_nodiscard int mi_reallocarr( void* p, size_t count, size_t size ) mi_attr_noexcept { // NetBSD
   mi_assert(p != NULL);
   if (p == NULL) {
-	  v_errno = EINVAL;
+    errno = EINVAL;
     return EINVAL;
   }
   void** op = (void**)p;
   void* newp = mi_reallocarray(*op, count, size);
-  if mi_unlikely(newp == NULL) { return v_errno; }
+  if mi_unlikely(newp == NULL) { return errno; }
   *op = newp;
   return 0;
 }
 
 void* mi__expand(void* p, size_t newsize) mi_attr_noexcept {  // Microsoft
   void* res = mi_expand(p, newsize);
-  if (res == NULL) { v_errno = ENOMEM; }
+  if (res == NULL) { errno = ENOMEM; }
   return res;
 }
 
@@ -143,9 +143,7 @@ mi_decl_nodiscard mi_decl_restrict unsigned char* mi_mbsdup(const unsigned char*
 int mi_dupenv_s(char** buf, size_t* size, const char* name) mi_attr_noexcept {
   if (buf==NULL || name==NULL) return EINVAL;
   if (size != NULL) *size = 0;
-  //char* p = getenv(name);        // mscver warning 4996
-  char p[1000];
-  _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv(name, p, 1000);
+  char* p = getenv(name);        // mscver warning 4996
   if (p==NULL) {
     *buf = NULL;
   }
@@ -165,17 +163,14 @@ int mi_wdupenv_s(unsigned short** buf, size_t* size, const unsigned short* name)
   *buf = NULL;
   return EINVAL;
 #else
-  //unsigned short* p = (unsigned short*)_wgetenv((const wchar_t*)name);  // msvc warning 4996
-  unsigned short p[1000];
-  _DEPRECATED_DO_NOT_USE_vlib_crtinterop_getenv_32((const wchar_t*)name, (wchar_t*)p, 1000);
-
+  unsigned short* p = (unsigned short*)_wgetenv((const wchar_t*)name);  // msvc warning 4996
   if (p==NULL) {
     *buf = NULL;
   }
   else {
     *buf = mi_wcsdup(p);
     if (*buf==NULL) return ENOMEM;
-    if (size != NULL) *size = vstrlen16((const wchar_t*)p);
+    if (size != NULL) *size = wcslen((const wchar_t*)p);
   }
   return 0;
 #endif

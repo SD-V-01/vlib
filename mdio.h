@@ -1,14 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DISRUPT ENGINE //////////////////////////////
 //
-//  VLib Source File.
-//  Copyright (C) 2024 S/N: V-01
+//  DISRUPT ENGINE Source File.
+//  Copyright (C) 2024 LAVAGANG
 // -------------------------------------------------------------------------
-//  File name:   mdio.h
-//  Version:     v1.00
+//  File name:   mdio.h v1.00
 //  Created:     22/06/24 by V.
 //  Description: 
 // -------------------------------------------------------------------------
-//  This project is licensed under the MIT License
+//  Lava gang roll in, break things, melt stuff, clean up, sign off!!
 //
 ////////////////////////////////////////////////////////////////////////////
 
@@ -101,6 +100,7 @@ MDIO_API bool mdioSeparatorFilter(char Char, char Separator);
 MDIO_API void mdioErrorReportFile(const char* Error, const char* Path, int ErrorCode);
 MDIO_API bool mdioDeleteFile(const char* Filename);
 MDIO_API bool mdioRenameFile(const char* Filename, const char* NewFilename);
+MDIO_API bool mdioMoveFile(const char* Filename, const char* NewFilename);
 MDIO_API bool mdioFileExist(const char* Filename);
 MDIO_API i64 mdioGetModifiedLastTimeUnix(const char* Filename);
 MDIO_API i64 mdioGetAccessedLastTimeUnix(const char* Filename);

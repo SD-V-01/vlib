@@ -18,6 +18,11 @@
 
 #endif
 
+#ifndef VLIB_VMATH_IMPL
+#warn Please try to include vmath.h instad of including random headers !!!
+
+#endif
+
 VLIB_STRUCT(vec4)
 float32x4_t Data;
 
@@ -129,7 +134,7 @@ vinl const vec4 operator-(const vec4& Vector) const {
 
 VLIB_STRUCTEND(vec4)
 
-vinl vec4 vec4init4(float X, float Y, float Z, float W) {
+vinl vec4 vec4init(float X, float Y, float Z, float W) {
 	vec4 Result;
 	float __attribute__ ((aligned(16))) Data[4] = { X, Y, Z, W };
 	Result.Data = vld1q_f32(Data);
@@ -228,3 +233,5 @@ vinl void vec4mulequal(vec4* Vector0, const vec4* Vector1) {
 	Vector0->Data = vmulq_f32(Vector0->Data, Vector1->Data);
 
 }
+
+#error This implementation is not done yet
