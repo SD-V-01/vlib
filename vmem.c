@@ -16,6 +16,8 @@
 #include "base_types.h"
 #include "mderror.h"
 
+#include "alloca.h"
+
 #if VLIB_ALLOCATOR_IMPL == VLIB_ALLOCATOR_IMPL_MIMALLOC
 #include "mimalloc.h"
 
@@ -229,6 +231,9 @@ void dsafefree(void* p) {
 void* vstackalloc(st Size){
 	#if defined(VLIB_PLATFORM_NT) && defined(VLIB_ON_CRT)
 	return _alloca(Size);
+
+	#elif defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+	return alloca(Size);
 
 	#else
 	#error Implement platform

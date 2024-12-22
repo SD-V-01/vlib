@@ -31,6 +31,7 @@ enum DisruptPlatform{
 	DisruptPlatform_Prospero, // data_prospero : PS5
 	DisruptPlatform_Yeti, // data_yeti : Stadia
 	DisruptPlatform_Deckard, // data_deckard : Linux arm
+	DisruptPlatform_Roy, // data_roy : Android arm
 
 };
 

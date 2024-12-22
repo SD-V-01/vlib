@@ -30,6 +30,11 @@
 
 #endif
 
+#if defined(__aarch64__) || defined(_M_ARM64)
+#include "arm_neon.h"
+
+#endif
+
 #ifdef __cplusplus
 extern "C"{
 	#endif

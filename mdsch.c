@@ -20,7 +20,11 @@
 #define MD_MUTEX_DEFAULT_SPIN 1500
 
 #if defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ON_CRT)
+
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
+
 #include "sched.h"
 #include <unistd.h>
 #include <sys/sysinfo.h>
@@ -451,9 +455,14 @@ u32 mdGetNumOfCpuCores(){
 
 }
 
+#ifdef VLIB_ANDROID
+#define USE_SCHED
+
+#endif
+
 internal void* threadKickstart(void* Data) {
 	mdThreadInits Inits = * ((mdThreadInits*)Data);
-	vfree(Data);
+	dfree(Data);
 
 	if (Inits.Name[0] != 0) {
 		mdSetCurrentThreadName(Inits.Name);
@@ -473,7 +482,13 @@ internal void* threadKickstart(void* Data) {
 			u8 Mask = * ((u8 *)Inits.AffinityMask + v);
 			for (st vx = 0; vx < 8; ++vx) {
 				if (Mask & 1) {
+					#ifdef USE_SCHED
+					CPU_SET(v * 8 + vx, &Cpuset);
+
+					#else
 					__CPU_SET_S(v * 8 + vx, sizeof(cpu_set_t), &Cpuset);
+
+					#endif
 
 				}
 
@@ -507,7 +522,7 @@ bool mdCreateThread(mdThreadInits* Inits, mdThreadHandle* ResultHandle){
 	*DataCopy = *Inits;
 	int Result = pthread_create(ResultHandle, NULL, threadKickstart, DataCopy);
 	if (Result) {
-		vfree((void*)DataCopy);
+		dfree((void*)DataCopy);
 
 	}
 

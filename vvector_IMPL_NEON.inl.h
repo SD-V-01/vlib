@@ -11,7 +11,7 @@
 //  This project is licensed under the MIT License
 //
 ////////////////////////////////////////////////////////////////////////////
-
+/*
 #ifdef TENX_PARSER
 #include "base_types.h"
 #include "vmath.h"
@@ -235,3 +235,4 @@ vinl void vec4mulequal(vec4* Vector0, const vec4* Vector1) {
 }
 
 #error This implementation is not done yet
+*/

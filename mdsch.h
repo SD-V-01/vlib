@@ -210,6 +210,7 @@ VLIB_CABIEND
 
 //SECTION(V): Atomics
 
+#ifdef __X86_64__
 MDSCHEDULER_API inline void mdHardwareFullMemoryBarrier() {
 	__sync_synchronize();
 
@@ -219,6 +220,19 @@ MDSCHEDULER_API inline void mdYeildProc() {
 	_mm_pause();
 
 }
+
+#else
+MDSCHEDULER_API inline void mdHardwareFullMemoryBarrier() {
+	__sync_synchronize();
+
+}
+
+MDSCHEDULER_API inline void mdYeildProc() {
+	asm volatile("yield");
+
+}
+
+#endif
 
 //SECTION(V): Scheduler
 

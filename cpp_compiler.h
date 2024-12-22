@@ -142,7 +142,13 @@
 #define VFinishW _WriteBarrier()
 #define VFinishRW _ReadWriteBarrier()
 
+#ifdef _WIN32
 #define vfinl __forceinline
+
+#else
+#define vfinl __attribute__((always_inline)) inline
+
+#endif
 
 #ifdef VPP
 #define vinl inline

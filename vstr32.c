@@ -22,6 +22,12 @@
 #include "vhash.h"
 #include "mderror.h"
 
+#ifdef VLIB_PLATFORM_LINUX
+#include "errno.h"
+#include "string.h"
+
+#endif
+
 #ifdef VPP
 namespace VLIB_NAMESPACE{
 	st mstrlen(const char* String) {
@@ -1480,6 +1486,12 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 
 				#ifdef _WIN32
 				case 0x6f86b57e8eef7f7d: // werr
+				case 0x55205f52e8ea9ce0: // oserr
+					if (FmtHash == 0x55205f52e8ea9ce0) {
+						VASSERT(0, "Linux-specific error string under windows !!");
+
+					}
+
 					if (vstrlen8(FormatParameter) == 0) {
 						DWORD Error = GetLastError();
 						LPSTR ErrorStr = NULL;
@@ -1497,6 +1509,40 @@ st vformat8impl(const char* Fmt, char* Buf, sst BufSize, v_varargList Args){
 					}
 					else {
 						vformaterror("Unknown format specifier for werr");
+
+					}
+
+					#elif defined(VLIB_ON_CRT) && defined(VLIB_PLATFORM_LINUX)
+					if (FmtHash == 0x6f86b57e8eef7f7d) {
+						VASSERT(0, "Windows-specifiec error string uncer linux !!");
+
+					}
+
+					if (vstrlen8(FormatParameter) == 0) {
+						const char* ErrorStr = strerror(errno);
+						if (ErrorStr != NULL) {
+							st InSize = vstrlen8(ErrorStr);
+							if (InSize < (BufSize - BufPosition)) {
+								vcpy(Buf + BufPosition, ErrorStr, vstrlen8(ErrorStr));
+								BufPosition += InSize;
+
+							}
+
+						}
+						else {
+							const char* InStr = "ERRNO_TOSTR_ERROR";
+							st InSize = vstrlen8(InStr);
+							if (InSize < (BufSize - BufPosition)) {
+								vcpy(Buf + BufPosition, InStr, vstrlen8(InStr));
+								BufPosition += InSize;
+
+							}
+
+						}
+
+					}
+					else {
+						vformaterror("Unknown format specifier for oserr");
 
 					}
 

@@ -335,7 +335,7 @@ void mdConStateDumpDbToSelfe(mdConState* State) {
 			#endif
 			char Buff[2048] = { 0 };
 			mdConVarToStr(&(State->HtPtr[v]), Buff, 2048);
-			if (Buff [0] != NULL) {
+			if (Buff [0] != 0) {
 				mdConStatePrint(State, "Dunia", Buff, mdConSeverity_info);
 
 			}
@@ -994,7 +994,7 @@ void mdConStateStrRegister(mdConState* State, const char* Name, const char* Valu
 
 		Flags = mdConSanitizeInFlags(Flags);
 
-		const st ValueLength = vstrlen8(Value);
+		const st ValueLength = vstrlen8(Value) + 1;
 		mdConVar NewVar;
 		NewVar.Var.VarStr = (char*)dalloc(ValueLength);
 		vset(NewVar.Var.VarStr, 0, ValueLength);
@@ -1444,6 +1444,16 @@ i64 mdTimeGetTimerFreq() {
 
 }
 
+void mdCurrentSystemTimeStr(char* Buffer, st Size) {
+	time_t T;
+	struct tm* TimeInfo;
+	T = time(NULL);
+	TimeInfo = localtime(&T);
+//    TODO(V): Make this write miliseconds
+	strftime(Buffer, Size - 1, "%Y-%m-%d %H:%M:%S.000", TimeInfo);
+
+}
+
 #elif defined(VLIB_PLATFORM_NT)
 static mdCallOnceGuard CallOnceTime = MD_CALL_ONCE_GUARD_CREATE;
 static i64 HighResTimerFreq = 0;
@@ -1568,7 +1578,7 @@ mdsoHandle mdsoOpen(const char* Name, const mdsoFlags Flags) {
 	}
 
 	if ((Flags & mdsoFlags_dontLoad) == mdsoFlags_dontLoad) {
-		VDWARN("SharedObject", "Using mdsoFlags_dontLoad is deprecated, please use DISRUPT core to see if module is loaded or not !!!");
+		VDWARNNF("SharedObject", "Using mdsoFlags_dontLoad is deprecated, please use DISRUPT core to see if module is loaded or not !!!");
 		GnuFlags |= RTLD_NOLOAD;
 
 	}

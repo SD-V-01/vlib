@@ -17,7 +17,7 @@
 #include "platform.h"
 #include "vstr32.h"
 
-const char* DisruptBuildDate = __DATE__ " " __TIME__;
+const char* DisruptBuildDate = __DATE__ " " __TIME__ "\0";
 
 const char* disruptPlatformToStr(DisruptPlatform In) {
 	switch (In) {
@@ -57,6 +57,9 @@ const char* disruptPlatformToStr(DisruptPlatform In) {
 		case DisruptPlatform_Deckard:
 			return "deckard";
 
+		case DisruptPlatform_Roy:
+			return "roy";
+
 		default:
 			return "UNKNOWN_PLATFORM";
 
@@ -76,7 +79,7 @@ const char* disruptPlatformDataFolder(DisruptPlatform In) {
 			return "data_win64";
 
 		case DisruptPlatform_Xenon:
-			return "";
+			return "data_xenon";
 
 		case DisruptPlatform_PS3:
 			return "data_ps3";
@@ -102,6 +105,9 @@ const char* disruptPlatformDataFolder(DisruptPlatform In) {
 		case DisruptPlatform_Deckard:
 			return "data_deckard";
 
+		case DisruptPlatform_Roy:
+			return "data_roy";
+
 		default:
 			return "data_unknown";
 
@@ -113,8 +119,11 @@ DisruptPlatform disruptGetCurrentPlatform() {
 	#ifdef VLIB_PLATFORM_NT
 	return DisruptPlatform_Win64;
 
-	#elif defined(VLIB_PLATFORM_LINUX)
+	#elif defined(VLIB_PLATFORM_LINUX) && !defined(VLIB_ANDROID)
 	return DisruptPlatform_Deckard;
+
+	#elif defined(VLIB_PLATFORM_LINUX) && defined(VLIB_ANDROID)
+	return DisruptPlatform_Roy;
 
 	#endif
 

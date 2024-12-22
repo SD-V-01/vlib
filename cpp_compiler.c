@@ -30,6 +30,7 @@
 #endif
 
 #if defined(__ANDROID__) && !defined(VLIB_NO_ENTRY) && !defined(__cplusplus)
-#include "android_glue/android_native_app_glue.c"
+//NOTE(V): This is deprecated ever since we are compiling the engine core with a c++ compiler !!!
+//#include "android_glue/android_native_app_glue.c"
 
 #endif
